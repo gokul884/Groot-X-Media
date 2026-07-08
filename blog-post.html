@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- skill:chrome -->
+<style>
+/* Credit line — bottom-right */
+.design-ui-credit {
+  position: fixed;
+  bottom: 12px;
+  right: 12px;
+  font: 11px/1 system-ui, sans-serif;
+  color: rgba(128,128,128,0.5);
+  pointer-events: none;
+  z-index: 2147483647;
+  transition: opacity 0.4s ease;
+  user-select: none;
+  letter-spacing: 0.02em;
+}
+
+/* Hide chrome on touch devices */
+@media (hover: none) {
+  .design-ui-credit { display: none; }
+}
+
+/* Print fixes */
+@media print {
+  * {
+    transition: none !important;
+    animation: none !important;
+    box-shadow: none !important;
+  }
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .design-ui-credit { display: none !important; }
+}
+
+</style>
+<script>
+(function () {
+    // Design-ui pages are single compositions, so the whole body is editable.
+    function markEditable() {
+        document.body.classList.add('artifact-editable');
+    }
+
+    // Credit badge with idle-fade. Hover devices only.
+    function initChromeUI() {
+        if (!matchMedia('(hover: hover)').matches) return;
+
+        var credit = document.createElement('div');
+        credit.className = 'design-ui-credit';
+        credit.setAttribute('aria-hidden', 'true');
+        credit.innerHTML = '\u{1F49C} by ClickUp Brain';
+        document.body.appendChild(credit);
+
+        var timer = null;
+        var fade = function (out) { credit.style.opacity = out ? '0' : ''; };
+        fade(true);
+        var show = function () {
+            fade(false);
+            clearTimeout(timer);
+            timer = setTimeout(function () { fade(true); }, 3000);
+        };
+        document.addEventListener('mousemove', show);
+        show();
+    }
+
+    function init() {
+        markEditable();
+        initChromeUI();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+
+</script>
+<!-- /skill:chrome -->
+<!-- skill:libraries -->
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.383.0/dist/umd/lucide.min.js" integrity="sha384-wHFvAtjmgnkA2PJcMsDaCgdipf7X7YV44X/igbLHpvGiq6T5/PvFKl93grpvtbQT" crossorigin="anonymous"></script>
+<script>document.addEventListener("DOMContentLoaded",()=>lucide.createIcons())</script>
+<!-- /skill:libraries -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7 Social Media Trends for 2026 — Groot X Media</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --orange:oklch(0.66 0.2 45);--orange-deep:oklch(0.6 0.2 42);
+    --navy:oklch(0.31 0.07 262);--navy-soft:oklch(0.42 0.06 262);
+    --ink:oklch(0.28 0.05 262);--ink-soft:oklch(0.4 0.04 262);
+    --muted:oklch(0.58 0.02 262);--muted-2:oklch(0.66 0.015 262);
+    --line:oklch(0.92 0.006 262);--bg:oklch(0.995 0.003 262);
+    --card:oklch(1 0 0);--card-2:oklch(0.98 0.006 262);
+    --blob-orange:oklch(0.84 0.12 55);--blob-navy:oklch(0.74 0.09 262);--blob-peach:oklch(0.89 0.08 62);
+    --ease:cubic-bezier(0.22,1,0.36,1);
+    --shadow-sm:0 1px 2px oklch(0.4 0.03 262 / .06);
+    --shadow:0 18px 50px -20px oklch(0.35 0.06 262 / .28);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;font-optical-sizing:auto}
+  h1,h2,h3,h4{text-wrap:balance;line-height:1.2;font-weight:700;color:var(--ink)}
+  p{text-wrap:pretty}
+  a{text-decoration:none;color:inherit}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 28px}
+  .accent{color:var(--orange)}
+  .blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.5;z-index:0;pointer-events:none}
+  .float{animation:float 14s var(--ease) infinite alternate}
+  @keyframes float{to{transform:translate(24px,-30px) scale(1.08)}}
+
+  .logo{display:flex;align-items:center;gap:11px}
+  .logo .mark{width:38px;height:38px;flex:none}
+  .logo .word{display:flex;flex-direction:column;line-height:1}
+  .logo .word .main{font-weight:800;font-size:1.1rem;letter-spacing:.02em}
+  .logo .word .main .o{color:var(--orange)}.logo .word .main .n{color:var(--navy)}
+  .logo .word .tag{font-size:.5rem;font-weight:600;letter-spacing:.34em;color:var(--muted);margin-top:3px}
+
+  header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:oklch(0.995 0.003 262 / .82);border-bottom:1px solid transparent;transition:border-color .3s,box-shadow .3s}
+  header.nav.scrolled{border-color:var(--line);box-shadow:0 6px 24px -18px oklch(0.35 0.05 262 / .5)}
+  .navbar{display:flex;align-items:center;justify-content:space-between;height:78px}
+  .navlinks{display:flex;gap:32px;font-size:.95rem;font-weight:500;color:var(--ink-soft)}
+  .navlinks a{position:relative;transition:color .2s}
+  .navlinks a::after{content:"";position:absolute;left:0;bottom:-6px;height:2px;width:0;background:var(--orange);transition:width .3s var(--ease)}
+  .navlinks a:hover,.navlinks a.active{color:var(--orange)}
+  .navlinks a:hover::after,.navlinks a.active::after{width:100%}
+  .nav-right{display:flex;align-items:center;gap:16px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;font-weight:600;font-size:.94rem;cursor:pointer;border:none;border-radius:999px;padding:13px 26px;transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .25s}
+  .btn-primary{background:var(--orange);color:#fff;box-shadow:0 12px 28px -12px oklch(0.66 0.2 45 / .7)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 34px -12px oklch(0.66 0.2 45 / .85);background:var(--orange-deep)}
+  .btn-ghost{background:transparent;color:var(--navy);border:1.5px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-2px)}
+  .theme-toggle{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);transition:transform .3s var(--ease),color .2s}
+  .theme-toggle:hover{transform:rotate(35deg);color:var(--orange)}
+
+  .progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--orange);z-index:60;transition:width .1s linear}
+
+  .art-head{position:relative;padding:56px 0 34px;text-align:center}
+  .crumbs{display:flex;align-items:center;gap:8px;justify-content:center;font-size:.84rem;color:var(--muted);margin-bottom:22px}
+  .crumbs a:hover{color:var(--orange)}
+  .crumbs i{color:var(--muted-2)}
+  .art-cat{display:inline-block;background:oklch(0.95 0.03 55);color:var(--orange);font-size:.8rem;font-weight:600;padding:7px 15px;border-radius:999px;letter-spacing:.03em}
+  .art-head h1{font-size:clamp(2rem,4.2vw,3.2rem);font-weight:800;letter-spacing:-.02em;margin:20px auto 18px;max-width:20ch}
+  .art-head .sub{color:var(--muted);font-size:1.05rem;max-width:60ch;margin:0 auto}
+  .art-byline{display:flex;align-items:center;gap:18px;justify-content:center;margin-top:28px;color:var(--muted-2);font-size:.86rem;flex-wrap:wrap}
+  .art-byline .author{display:flex;align-items:center;gap:10px;color:var(--ink-soft);font-weight:600}
+  .art-byline .avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--navy))}
+  .art-byline .dot{width:4px;height:4px;border-radius:50%;background:var(--muted-2)}
+  .art-byline span{display:flex;align-items:center;gap:6px}
+
+  .cover{max-width:1000px;margin:10px auto 0;padding:0 28px}
+  .cover .img{aspect-ratio:21/9;border-radius:24px;background:linear-gradient(135deg, oklch(0.82 0.12 55), oklch(0.5 0.09 262));box-shadow:var(--shadow)}
+
+  .art-wrap{display:grid;grid-template-columns:1fr minmax(0,720px) 1fr;gap:0;padding:56px 0 40px}
+  .art-rail{position:sticky;top:110px;height:max-content}
+  .share{display:flex;flex-direction:column;gap:12px;align-items:center;padding-top:6px}
+  .share .lbl{font-size:.68rem;letter-spacing:.16em;color:var(--muted-2);writing-mode:vertical-rl;margin-bottom:6px}
+  .share a{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--muted);background:var(--card);transition:all .25s var(--ease)}
+  .share a:hover{color:#fff;background:var(--orange);border-color:var(--orange);transform:translateY(-3px)}
+  .article{padding:0 20px}
+  .article p{font-family:'Lora',Georgia,serif;font-size:1.12rem;line-height:1.8;color:var(--ink-soft);margin-bottom:26px}
+  .article h2{font-size:1.65rem;margin:44px 0 16px}
+  .article h3{font-size:1.25rem;margin:32px 0 12px}
+  .article ul{margin:0 0 26px 0;padding-left:4px;list-style:none;display:grid;gap:12px}
+  .article ul li{font-family:'Lora',Georgia,serif;font-size:1.08rem;color:var(--ink-soft);padding-left:32px;position:relative}
+  .article ul li::before{content:"";position:absolute;left:0;top:11px;width:8px;height:8px;border-radius:50%;background:var(--orange)}
+  .article blockquote{margin:36px 0;padding:26px 30px;background:var(--card-2);border:1px solid var(--line);border-radius:18px;font-family:'Lora',Georgia,serif;font-style:italic;font-size:1.28rem;line-height:1.6;color:var(--navy);position:relative}
+  .article blockquote .qmark{position:absolute;top:-8px;left:22px;font-size:3.4rem;color:var(--orange);font-family:Georgia,serif;line-height:1}
+  .article blockquote cite{display:block;margin-top:14px;font-size:.92rem;font-style:normal;font-weight:600;color:var(--muted);font-family:'Poppins',sans-serif}
+  .article .figure{margin:36px 0}
+  .article .figure .img{aspect-ratio:16/8;border-radius:16px;background:linear-gradient(135deg, oklch(0.86 0.09 62), oklch(0.66 0.18 42))}
+  .article .figure figcaption{text-align:center;font-size:.82rem;color:var(--muted-2);margin-top:12px}
+  .article a.inline{color:var(--orange);font-weight:600;border-bottom:1px solid oklch(0.66 0.2 45 / .3)}
+  .article a.inline:hover{border-color:var(--orange)}
+  .tags{display:flex;gap:10px;flex-wrap:wrap;margin:40px 0 0}
+  .tags a{font-size:.82rem;padding:7px 15px;border-radius:999px;background:var(--card-2);border:1px solid var(--line);color:var(--ink-soft);transition:all .2s}
+  .tags a:hover{border-color:var(--orange);color:var(--orange)}
+
+  .authorbox{max-width:760px;margin:48px auto 0;padding:0 20px}
+  .authorbox .inner{display:flex;gap:20px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px}
+  .authorbox .av{width:66px;height:66px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--navy));flex:none}
+  .authorbox h4{font-size:1.1rem}
+  .authorbox .role{color:var(--orange);font-size:.82rem;font-weight:600;margin:2px 0 8px}
+  .authorbox p{color:var(--muted);font-size:.88rem}
+
+  .related{padding:60px 0 90px}
+  .related h2{font-size:1.6rem;margin-bottom:32px;text-align:center}
+  .rel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+  .post-card{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .35s}
+  .post-card:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:transparent}
+  .post-thumb{aspect-ratio:16/10;position:relative;overflow:hidden}
+  .post-thumb .img{width:100%;height:100%;transition:transform .6s var(--ease)}
+  .post-card:hover .post-thumb .img{transform:scale(1.06)}
+  .t1{background:linear-gradient(135deg, oklch(0.82 0.12 55), oklch(0.7 0.16 45))}
+  .t2{background:linear-gradient(135deg, oklch(0.72 0.09 262), oklch(0.42 0.08 262))}
+  .t3{background:linear-gradient(135deg, oklch(0.86 0.09 62), oklch(0.7 0.15 50))}
+  .post-tag{position:absolute;top:14px;left:14px;background:oklch(1 0 0 / .92);color:var(--navy);font-size:.72rem;font-weight:600;padding:6px 12px;border-radius:999px}
+  .post-body{padding:22px;display:flex;flex-direction:column;flex:1}
+  .post-meta{display:flex;align-items:center;gap:14px;color:var(--muted-2);font-size:.78rem;margin-bottom:10px}
+  .post-meta span{display:flex;align-items:center;gap:5px}
+  .post-body h3{font-size:1.05rem;line-height:1.35}
+  .post-body h3 a{transition:color .2s}
+  .post-card:hover .post-body h3 a{color:var(--orange)}
+  .post-body p{color:var(--muted);font-size:.86rem;margin-top:9px;flex:1}
+  .post-more{margin-top:16px;display:inline-flex;align-items:center;gap:6px;color:var(--orange);font-weight:600;font-size:.86rem}
+  .post-more i{transition:transform .25s var(--ease)}
+  .post-card:hover .post-more i{transform:translateX(4px)}
+
+  footer{background:oklch(0.985 0.005 262);border-top:1px solid var(--line);padding:64px 0 30px;position:relative;overflow:hidden}
+  .foot-grid{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:34px;position:relative;z-index:2}
+  .foot-brand p{color:var(--muted);font-size:.86rem;margin-top:14px;max-width:34ch}
+  .socials{display:flex;gap:12px;margin-top:20px}
+  .socials a{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--muted);transition:all .25s var(--ease);background:var(--card)}
+  .socials a:hover{color:#fff;background:var(--orange);border-color:var(--orange);transform:translateY(-3px)}
+  .foot-col h5{font-size:.95rem;margin-bottom:16px;color:var(--navy)}
+  .foot-col a{display:block;color:var(--muted);font-size:.87rem;margin-bottom:11px;transition:color .2s,padding-left .2s}
+  .foot-col a:hover{color:var(--orange);padding-left:4px}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:48px;padding-top:22px;border-top:1px solid var(--line);font-size:.83rem;color:var(--muted);position:relative;z-index:2;flex-wrap:wrap;gap:10px}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  .stagger>*{opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease),transform .6s var(--ease);transition-delay:calc(var(--i,0)*70ms)}
+  .stagger.in>*{opacity:1;transform:none}
+
+  /* Page transitions */
+  body {
+    opacity: 0;
+    animation: fadeInPage 0.3s ease-out forwards;
+  }
+  @keyframes fadeInPage {
+    to { opacity: 1; }
+  }
+  .page-exit {
+    opacity: 0 !important;
+    transition: opacity 0.22s ease-in-out !important;
+  }
+
+  @media(max-width:1000px){
+    .art-wrap{grid-template-columns:1fr;padding-top:40px}
+    .art-rail{display:none}
+    .article{max-width:720px;margin:0 auto}
+  }
+  @media(max-width:900px){
+    .rel-grid{grid-template-columns:repeat(2,1fr)}
+    .foot-grid{grid-template-columns:1fr 1fr;gap:28px}.foot-brand{grid-column:1/-1}
+    .navlinks{display:none}
+  }
+  @media(max-width:600px){
+    .rel-grid{grid-template-columns:1fr}
+    .foot-grid{grid-template-columns:1fr}
+    .logo .word .tag{display:none}
+    .authorbox .inner{flex-direction:column;text-align:center}
+  }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="gxm-logo" viewBox="0 0 540 120">
+    <style>
+      .logo-dark-fill { fill: #000000; }
+      .dark .logo-dark-fill { fill: #ffffff; }
+      .logo-dark-stroke { stroke: #000000; }
+      .dark .logo-dark-stroke { stroke: #ffffff; }
+    </style>
+    <!-- Monogram -->
+    <path d="M24 96 L24 46 C24 31 42 27 50 40 L60 57 L70 40 C78 27 96 31 96 46 L96 96" fill="none" stroke="#F26522" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M60 40 L60 58" fill="none" stroke="#F26522" stroke-width="12" stroke-linecap="round"/>
+    <path d="M60 58 L60 104 C60 111 68 111 74 105" fill="none" class="logo-dark-stroke" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M60 84 L76 84" fill="none" class="logo-dark-stroke" stroke-width="12" stroke-linecap="round"/>
+    
+    <!-- Text "GROOT X MEDIA" -->
+    <text x="130" y="66" font-family="'Poppins', sans-serif" font-size="44" font-weight="800" letter-spacing="0.04em">
+      <tspan fill="#F26522">GROOT</tspan>
+      <tspan class="logo-dark-fill" font-weight="700"> X </tspan>
+      <tspan fill="#F26522">MEDIA</tspan>
+    </text>
+    
+    <!-- Tagline "— YOUR GROWTH PARTNER —" -->
+    <text x="130" y="96" font-family="'Poppins', sans-serif" font-size="14.5" font-weight="600" class="logo-dark-fill" letter-spacing="0.32em">— YOUR GROWTH PARTNER —</text>
+  </symbol>
+</svg>
+
+<header class="nav" id="nav">
+  <div class="wrap navbar">
+    <a href="index.html" class="logo" aria-label="Groot X Media Logo">
+      <img src="/src/logo-header.png" alt="Groot X Media Logo" style="height: 74px; width: auto; object-fit: contain; display: block;" />
+    </a>
+    <nav class="navlinks">
+      <a href="index.html">Home</a>
+      <a href="index.html#services">Services</a>
+      <a href="testimonials.html">Testimonials</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="blog.html" class="active">Blog</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-right">
+      <a href="contact.html" class="btn btn-primary">Get Started</a>
+      <button class="theme-toggle" aria-label="Toggle theme"><i data-lucide="sun" width="18" height="18"></i></button>
+    </div>
+  </div>
+</header>
+
+<article>
+  <div class="art-head">
+    <div class="blob float" style="width:280px;height:280px;background:var(--blob-orange);top:-20px;left:-40px"></div>
+    <div class="blob float" style="width:220px;height:220px;background:var(--blob-navy);top:20px;right:-40px;animation-delay:-5s"></div>
+    <div class="wrap" style="position:relative;z-index:2">
+      <div class="reveal">
+        <nav class="crumbs"><a href="index.html">Home</a><i data-lucide="chevron-right" width="14" height="14"></i><a href="blog.html">Blog</a><i data-lucide="chevron-right" width="14" height="14"></i><span>Social Media</span></nav>
+        <span class="art-cat">Social Media</span>
+        <h1>7 Social Media Trends That Will Define Growth in 2026</h1>
+        <p class="sub">The algorithms shifted again and most brands are still playing by last year's rules. Here's the field guide to what's actually working now.</p>
+        <div class="art-byline">
+          <span class="author"><span class="avatar"></span>Priya Nair</span>
+          <span class="dot"></span>
+          <span><i data-lucide="calendar" width="15" height="15"></i>July 2, 2026</span>
+          <span class="dot"></span>
+          <span><i data-lucide="clock" width="15" height="15"></i>5 min read</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover reveal"><div class="img"></div></div>
+
+  <div class="wrap art-wrap">
+    <aside class="art-rail">
+      <div class="share">
+        <span class="lbl">SHARE</span>
+        <a href="#" aria-label="Twitter"><i data-lucide="twitter" width="16" height="16"></i></a>
+        <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin" width="16" height="16"></i></a>
+        <a href="#" aria-label="Facebook"><i data-lucide="facebook" width="16" height="16"></i></a>
+        <a href="#" aria-label="Copy link"><i data-lucide="link" width="16" height="16"></i></a>
+      </div>
+    </aside>
+
+    <div class="article reveal">
+      <p>Every January the marketing world publishes its trend lists, and every January most of them age like milk by March. This one is different, not because we can see the future, but because we spend all day watching what actually moves numbers for real clients. Here's what's holding up.</p>
+
+      <h2>1. Search moved into the feed</h2>
+      <p>Your audience stopped opening a search engine to find their next dinner spot or skincare routine. They search inside the app they're already in. That means your captions, on-screen text, and even spoken words are now indexed and ranked. Treat every post like a landing page.</p>
+
+      <blockquote>
+        <span class="qmark">&ldquo;</span>
+        The brands winning right now aren't the loudest. They're the most findable.
+        <cite>— Priya Nair, Head of Strategy</cite>
+      </blockquote>
+
+      <h2>2. Short-form is a funnel, not a stunt</h2>
+      <p>The teams still chasing one viral hit are exhausting themselves. The ones growing steadily built a <a href="#" class="inline">repeatable content system</a>: a hook library, a weekly cadence, and a clear next step in every video. Reach is nice. Reach with a destination is revenue.</p>
+
+      <ul>
+        <li>Lead with the payoff in the first two seconds, not the setup.</li>
+        <li>Give every video one job: save, share, follow, or click.</li>
+        <li>Repurpose the winners across every surface before making something new.</li>
+      </ul>
+
+      <div class="figure">
+        <div class="img"></div>
+        <figcaption>Content velocity beats content perfection nearly every time.</figcaption>
+      </div>
+
+      <h2>3. Community is the new reach</h2>
+      <p>Platforms are rewarding replies, shares, and saves far more than passive likes. A comment section that feels like a conversation signals value in a way the raw view count never will. Show up in your own replies like a human, not a brand account on autopilot.</p>
+
+      <h3>What this means for your calendar</h3>
+      <p>Block time to engage, not just to post. Fifteen minutes of genuine replies after publishing does more for distribution than a second post would. It's the least glamorous growth lever and one of the most reliable.</p>
+
+      <p>The through-line across all seven trends is simple: the platforms keep getting better at detecting what people actually care about. You can't game that anymore. You can only be worth caring about, consistently, and make yourself easy to find. Do that and the algorithm becomes a tailwind instead of a wall.</p>
+
+      <div class="tags">
+        <a href="blog.html">#SocialMedia</a>
+        <a href="blog.html">#Growth</a>
+        <a href="blog.html">#ContentStrategy</a>
+        <a href="blog.html">#2026Trends</a>
+      </div>
+    </div>
+
+    <div></div>
+  </div>
+
+  <div class="authorbox reveal">
+    <div class="inner">
+      <div class="av"></div>
+      <div>
+        <h4>Priya Nair</h4>
+        <div class="role">Head of Strategy · Groot X Media</div>
+        <p>Priya has spent a decade turning marketing guesswork into repeatable systems. She writes about the unglamorous mechanics behind brands that actually grow.</p>
+      </div>
+    </div>
+  </div>
+</article>
+
+<section class="related">
+  <div class="wrap">
+    <h2 class="reveal">Keep reading</h2>
+    <div class="rel-grid stagger reveal">
+      <article class="post-card" style="--i:0">
+        <a href="blog-post.html" class="post-thumb"><div class="img t2"></div><span class="post-tag">Strategy</span></a>
+        <div class="post-body">
+          <div class="post-meta"><span><i data-lucide="calendar" width="13" height="13"></i>Jun 28, 2026</span><span><i data-lucide="clock" width="13" height="13"></i>7 min</span></div>
+          <h3><a href="blog-post.html">Building a Marketing Funnel That Actually Converts</a></h3>
+          <p>Most funnels leak at the same three points. We break down where, why, and the fixes.</p>
+          <a href="blog-post.html" class="post-more">Read more <i data-lucide="arrow-right" width="15" height="15"></i></a>
+        </div>
+      </article>
+      <article class="post-card" style="--i:1">
+        <a href="blog-post.html" class="post-thumb"><div class="img t3"></div><span class="post-tag">Email</span></a>
+        <div class="post-body">
+          <div class="post-meta"><span><i data-lucide="calendar" width="13" height="13"></i>Jun 21, 2026</span><span><i data-lucide="clock" width="13" height="13"></i>4 min</span></div>
+          <h3><a href="blog-post.html">Email Isn't Dead: The Playbook for 40% Open Rates</a></h3>
+          <p>Subject lines, send times, segmentation. The details that quietly drive the numbers.</p>
+          <a href="blog-post.html" class="post-more">Read more <i data-lucide="arrow-right" width="15" height="15"></i></a>
+        </div>
+      </article>
+      <article class="post-card" style="--i:2">
+        <a href="blog-post.html" class="post-thumb"><div class="img t1"></div><span class="post-tag">SEO</span></a>
+        <div class="post-body">
+          <div class="post-meta"><span><i data-lucide="calendar" width="13" height="13"></i>Jun 15, 2026</span><span><i data-lucide="clock" width="13" height="13"></i>6 min</span></div>
+          <h3><a href="blog-post.html">The SEO Checklist We Run on Every New Client</a></h3>
+          <p>Thirty minutes of these checks surface the quick wins hiding in almost every site.</p>
+          <a href="blog-post.html" class="post-more">Read more <i data-lucide="arrow-right" width="15" height="15"></i></a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="blob" style="width:300px;height:300px;background:var(--blob-navy);bottom:-120px;left:20%;opacity:.2"></div>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="index.html" class="logo" aria-label="Groot X Media Logo">
+          <img src="/src/logo-header.png" alt="Groot X Media Logo" style="height: 74px; width: auto; object-fit: contain; display: block;" />
+        </a>
+        <p>Groot X Media is your full-suite digital growth partner, transforming modern platforms into reliable revenue pipelines.</p>
+        <div class="socials">
+          <a href="#" aria-label="Facebook"><i data-lucide="facebook" width="16" height="16"></i></a>
+          <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin" width="16" height="16"></i></a>
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter" width="16" height="16"></i></a>
+          <a href="#" aria-label="Instagram"><i data-lucide="instagram" width="16" height="16"></i></a>
+        </div>
+      </div>
+      <div class="foot-col"><h5>Company</h5><a href="index.html#about">About</a><a href="blog.html">Blog</a><a href="testimonials.html">Testimonials</a><a href="#">Partners</a></div>
+      <div class="foot-col"><h5>Solutions</h5><a href="#">Marketing</a><a href="#">Analytics</a><a href="#">Commerce</a><a href="#">Insights</a></div>
+      <div class="foot-col"><h5>Support</h5><a href="pricing.html">Pricing</a><a href="#">Guides</a><a href="#">FAQ</a><a href="contact.html">Contact</a></div>
+      <div class="foot-col"><h5>Resources</h5><a href="#">Claim</a><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Groot X Media. All rights reserved</span>
+      <span>Your Growth Partner</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  lucide.createIcons();
+  const nav=document.getElementById('nav');
+  const prog=document.getElementById('progress');
+  addEventListener('scroll',()=>{
+    nav.classList.toggle('scrolled',scrollY>10);
+    const h=document.documentElement.scrollHeight-innerHeight;
+    prog.style.width=(scrollY/h*100)+'%';
+  });
+  const io=new IntersectionObserver((e)=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{threshold:.12});
+  document.querySelectorAll('.reveal,.stagger').forEach(el=>io.observe(el));
+  const tog=document.querySelector('.theme-toggle');
+  tog&&tog.addEventListener('click',()=>{const d=document.documentElement.classList.toggle('dark');tog.innerHTML=d?'<i data-lucide="moon" width="18" height="18"></i>':'<i data-lucide="sun" width="18" height="18"></i>';lucide.createIcons();});
+
+  // Smooth page transition script
+  document.querySelectorAll('a').forEach(link => {
+    const href = link.getAttribute('href');
+    if (href && href.endsWith('.html') && !href.startsWith('#') && !link.target) {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.body.classList.add('page-exit');
+        setTimeout(() => { window.location.href = href; }, 200);
+      });
+      link.addEventListener('touchstart', () => { link.style.opacity = '0.7'; }, {passive:true});
+      link.addEventListener('touchend', () => { link.style.opacity = ''; }, {passive:true});
+    }
+  });
+</script>
+</body>
+</html>

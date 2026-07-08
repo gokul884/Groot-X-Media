@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- skill:chrome -->
+<style>
+/* Credit line — bottom-right */
+.design-ui-credit {
+  position: fixed;
+  bottom: 12px;
+  right: 12px;
+  font: 11px/1 system-ui, sans-serif;
+  color: rgba(128,128,128,0.5);
+  pointer-events: none;
+  z-index: 2147483647;
+  transition: opacity 0.4s ease;
+  user-select: none;
+  letter-spacing: 0.02em;
+}
+
+/* Hide chrome on touch devices */
+@media (hover: none) {
+  .design-ui-credit { display: none; }
+}
+
+/* Print fixes */
+@media print {
+  * {
+    transition: none !important;
+    animation: none !important;
+    box-shadow: none !important;
+  }
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .design-ui-credit { display: none !important; }
+}
+
+</style>
+<script>
+(function () {
+    // Design-ui pages are single compositions, so the whole body is editable.
+    function markEditable() {
+        document.body.classList.add('artifact-editable');
+    }
+
+    // Credit badge with idle-fade. Hover devices only.
+    function initChromeUI() {
+        if (!matchMedia('(hover: hover)').matches) return;
+
+        var credit = document.createElement('div');
+        credit.className = 'design-ui-credit';
+        credit.setAttribute('aria-hidden', 'true');
+        credit.innerHTML = '\u{1F49C} by ClickUp Brain';
+        document.body.appendChild(credit);
+
+        var timer = null;
+        var fade = function (out) { credit.style.opacity = out ? '0' : ''; };
+        fade(true);
+        var show = function () {
+            fade(false);
+            clearTimeout(timer);
+            timer = setTimeout(function () { fade(true); }, 3000);
+        };
+        document.addEventListener('mousemove', show);
+        show();
+    }
+
+    function init() {
+        markEditable();
+        initChromeUI();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+
+</script>
+<!-- /skill:chrome -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Groot X Media — Design System</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --orange:oklch(0.66 0.2 45);--orange-deep:oklch(0.6 0.2 42);
+    --navy:oklch(0.31 0.07 262);--navy-soft:oklch(0.42 0.06 262);
+    --ink:oklch(0.28 0.05 262);--ink-soft:oklch(0.4 0.04 262);
+    --muted:oklch(0.58 0.02 262);--muted-2:oklch(0.66 0.015 262);
+    --line:oklch(0.92 0.006 262);--bg:oklch(0.995 0.003 262);
+    --card:oklch(1 0 0);--card-2:oklch(0.98 0.006 262);
+    --blob-orange:oklch(0.84 0.12 55);--blob-navy:oklch(0.74 0.09 262);--blob-peach:oklch(0.89 0.08 62);
+    --ease:cubic-bezier(0.22,1,0.36,1);
+    --shadow-sm:0 1px 2px oklch(0.4 0.03 262 / .06);
+    --shadow:0 18px 50px -20px oklch(0.35 0.06 262 / .28);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:64px 28px 100px}
+  h1{font-size:clamp(2rem,4vw,2.8rem);font-weight:800;letter-spacing:-.02em;margin-bottom:6px}
+  .sub{color:var(--muted);font-size:1.05rem;margin-bottom:40px}
+  h2{font-size:1.5rem;font-weight:700;margin:44px 0 14px;padding-bottom:10px;border-bottom:2px solid var(--line)}
+  h2 .n{color:var(--orange)}
+  h3{font-size:1.15rem;font-weight:600;margin:26px 0 10px;color:var(--navy)}
+  p{margin-bottom:14px}
+  ul{margin:0 0 16px 22px}li{margin-bottom:7px}
+  code{background:var(--card-2);border:1px solid var(--line);border-radius:6px;padding:1px 7px;font-size:.86em;font-family:ui-monospace,Menlo,monospace;color:var(--navy)}
+  strong{font-weight:600;color:var(--ink)}
+  table{width:100%;border-collapse:collapse;margin:14px 0 22px;font-size:.9rem}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:var(--card-2);font-weight:600;color:var(--navy)}
+  .sw{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:middle;margin-right:6px;border:1px solid var(--line)}
+  hr{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .lead{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:12px}
+  .do{color:oklch(0.5 0.15 150);font-weight:600} .dont{color:oklch(0.55 0.2 25);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Groot X Media — Design System</h1>
+<p class="sub">The single source of truth. Five pages, one visual language: orange, white, and navy.</p>
+
+<div class="lead">Clean, energetic, trustworthy. Use this doc to keep every new page and component on-brand.</div>
+
+<h2><span class="n">1.</span> Brand</h2>
+<ul>
+<li><strong>Name:</strong> Groot X Media</li>
+<li><strong>Tagline:</strong> Your Growth Partner</li>
+<li><strong>Personality:</strong> Confident, modern, approachable. Premium but not stiff.</li>
+<li><strong>Logo:</strong> Groot X Media official company logo with custom typography and stylized design. Shipped as a responsive PNG image (<code>/src/logo-header.png</code>) at a beautifully proportioned medium size (68px height) in every navbar and footer.</li>
+</ul>
+<p><strong>Contact details (site-wide):</strong> +91 73977 94418 · info@grootxmedia.com · www.grootxmedia.com</p>
+
+<h2><span class="n">2.</span> Color</h2>
+<p>All colors in <strong>OKLCH</strong>. Neutrals are subtly tinted toward the navy hue (262) so nothing feels dead-gray next to the accent.</p>
+<table>
+<tr><th>Role</th><th>Token</th><th>OKLCH</th><th>Use</th></tr>
+<tr><td><span class="sw" style="background:oklch(0.66 0.2 45)"></span>Primary accent</td><td><code>--orange</code></td><td>oklch(0.66 0.2 45)</td><td>CTAs, links, icons, highlights</td></tr>
+<tr><td><span class="sw" style="background:oklch(0.6 0.2 42)"></span>Accent hover</td><td><code>--orange-deep</code></td><td>oklch(0.6 0.2 42)</td><td>Button hover</td></tr>
+<tr><td><span class="sw" style="background:oklch(0.31 0.07 262)"></span>Brand dark</td><td><code>--navy</code></td><td>oklch(0.31 0.07 262)</td><td>Featured plan, info panels, headings</td></tr>
+<tr><td><span class="sw" style="background:oklch(0.42 0.06 262)"></span>Navy soft</td><td><code>--navy-soft</code></td><td>oklch(0.42 0.06 262)</td><td>Secondary dark text</td></tr>
+<tr><td><span class="sw" style="background:oklch(0.28 0.05 262)"></span>Ink</td><td><code>--ink</code></td><td>oklch(0.28 0.05 262)</td><td>Primary body text</td></tr>
+<tr><td><span class="sw" style="background:oklch(0.4 0.04 262)"></span>Ink soft</td><td><code>--ink-soft</code></td><td>oklch(0.4 0.04 262)</td><td>Secondary text</td></tr>
+<tr><td><span class="sw" style="background:oklch(0.58 0.02 262)"></span>Muted</td><td><code>--muted</code></td><td>oklch(0.58 0.02 262)</td><td>Descriptions, captions</td></tr>
+<tr><td><span class="sw" style="background:oklch(0.66 0.015 262)"></span>Muted 2</td><td><code>--muted-2</code></td><td>oklch(0.66 0.015 262)</td><td>Placeholders, meta</td></tr>
+<tr><td><span class="sw" style="background:oklch(0.92 0.006 262)"></span>Line</td><td><code>--line</code></td><td>oklch(0.92 0.006 262)</td><td>Borders, dividers</td></tr>
+<tr><td><span class="sw" style="background:oklch(0.995 0.003 262)"></span>Background</td><td><code>--bg</code></td><td>oklch(0.995 0.003 262)</td><td>Page background</td></tr>
+<tr><td><span class="sw" style="background:oklch(1 0 0)"></span>Card</td><td><code>--card</code></td><td>oklch(1 0 0)</td><td>Card surfaces</td></tr>
+<tr><td><span class="sw" style="background:oklch(0.98 0.006 262)"></span>Card 2</td><td><code>--card-2</code></td><td>oklch(0.98 0.006 262)</td><td>Raised surfaces, inputs</td></tr>
+</table>
+<h3>Ambient blobs (decorative)</h3>
+<table>
+<tr><th>Token</th><th>OKLCH</th></tr>
+<tr><td><span class="sw" style="background:oklch(0.84 0.12 55)"></span><code>--blob-orange</code></td><td>oklch(0.84 0.12 55)</td></tr>
+<tr><td><span class="sw" style="background:oklch(0.74 0.09 262)"></span><code>--blob-navy</code></td><td>oklch(0.74 0.09 262)</td></tr>
+<tr><td><span class="sw" style="background:oklch(0.89 0.08 62)"></span><code>--blob-peach</code></td><td>oklch(0.89 0.08 62)</td></tr>
+</table>
+<h3>Color strategy</h3>
+<p><strong>Restrained with a strong accent.</strong> ~60% neutral/white surfaces, ~30% navy + ink text and structure, ~10% orange for action. Navy earns bigger blocks in two deliberate places only: the "Most Popular" pricing plan and the contact info panel. Orange never carries large fills except buttons.</p>
+<p><strong>Never</strong> use pure #000 or #fff for text/backgrounds (logo SVG strokes excepted). No gradient text. No side-stripe accent borders.</p>
+
+<h2><span class="n">3.</span> Typography</h2>
+<ul>
+<li><strong>Primary:</strong> Poppins (400/500/600/700/800) via Google Fonts.</li>
+<li><strong>Editorial serif:</strong> Lora (article body + blockquotes on blog-post.html only).</li>
+</ul>
+<table>
+<tr><th>Role</th><th>Size</th><th>Weight</th></tr>
+<tr><td>Display / H1</td><td>clamp(2.2rem, 4.4vw, 3.6rem)</td><td>800</td></tr>
+<tr><td>Section H2</td><td>clamp(1.6rem, 3vw, 2.2rem)</td><td>700</td></tr>
+<tr><td>Card H3</td><td>~1.05–1.1rem</td><td>700</td></tr>
+<tr><td>Body</td><td>1rem (article 1.12rem Lora)</td><td>400</td></tr>
+<tr><td>Small / meta</td><td>0.78–0.88rem</td><td>400–500</td></tr>
+<tr><td>Eyebrow / label</td><td>0.8rem, tracking 0.03–0.14em, caps</td><td>600</td></tr>
+</table>
+<p>Headings use <code>text-wrap:balance</code> and <code>letter-spacing:-0.02em</code> on display sizes. Article paragraphs use <code>text-wrap:pretty</code>. Body measure ~46–75ch.</p>
+
+<h2><span class="n">4.</span> Spacing &amp; layout</h2>
+<ul>
+<li><strong>Base grid:</strong> 4pt system (4, 8, 12, 16, 22, 26, 32, 44, 60, 80px).</li>
+<li><strong>Container:</strong> <code>.wrap</code>, max-width 1160px, 28px side padding.</li>
+<li><strong>Section rhythm:</strong> 70–80px vertical padding, varied intentionally.</li>
+<li><strong>Grids:</strong> 3-up, collapsing to 2-up at 900px and 1-up at 600px.</li>
+<li><strong>Radius:</strong> cards 20–26px, pills/buttons 999px, icon tiles 11–13px.</li>
+</ul>
+<h3>Elevation</h3>
+<table>
+<tr><th>Token</th><th>Value</th></tr>
+<tr><td><code>--shadow-sm</code></td><td>0 1px 2px oklch(0.4 0.03 262 / .06)</td></tr>
+<tr><td><code>--shadow</code></td><td>0 18px 50px -20px oklch(0.35 0.06 262 / .28)</td></tr>
+</table>
+<p>Shadows are soft and low. Depth on hover comes from a lift (<code>translateY(-6px)</code>) plus the larger shadow.</p>
+
+<h2><span class="n">5.</span> Components</h2>
+<ul>
+<li><strong>Buttons:</strong> <code>.btn-primary</code> (orange, glow), <code>.btn-ghost</code> (bordered, orange on hover), <code>.btn-white</code> (on navy). Pill-shaped, lift 2px on hover.</li>
+<li><strong>Cards:</strong> white surface, 1px line border, hover lift + shadow, growing corner-blob (offers) or image zoom (blog). Never nested.</li>
+<li><strong>Nav:</strong> sticky, blurred translucent, gains border + shadow on scroll (<code>.scrolled</code>). Animated orange underline; active link orange. Five links: Home · Services · Pricing · Blog · Contact.</li>
+<li><strong>Footer:</strong> light navy-tinted, 5-column grid, social pills fill orange on hover, ambient blob behind.</li>
+<li><strong>Forms:</strong> rounded inputs on <code>--card-2</code>, orange focus ring. Inline success state, no modals.</li>
+<li><strong>FAQ:</strong> native <code>&lt;details&gt;</code>, orange plus-icon rotating to a cross when open.</li>
+<li><strong>Icons:</strong> Lucide, inline, inheriting color.</li>
+</ul>
+
+<h2><span class="n">6.</span> Motion</h2>
+<ul>
+<li><strong>Easing:</strong> exponential ease-out. <code>--ease: cubic-bezier(0.22, 1, 0.36, 1)</code>. No bounce/elastic.</li>
+<li><strong>Scroll reveal:</strong> <code>.reveal</code> fades + rises 26px via IntersectionObserver (threshold 0.12).</li>
+<li><strong>Stagger:</strong> <code>.stagger</code> children sequence at <code>--i * 70ms</code>.</li>
+<li><strong>Ambient float:</strong> blobs drift on a 14s alternating loop with offset delays.</li>
+<li><strong>Hover:</strong> cards lift, images scale 1.06, arrows nudge right.</li>
+<li><strong>Blog post:</strong> top reading-progress bar + sticky share rail.</li>
+<li>Only <code>transform</code> and <code>opacity</code> animate. Reveals 600–700ms, micro 100–250ms.</li>
+</ul>
+
+<h2><span class="n">7.</span> Pages</h2>
+<table>
+<tr><th>File</th><th>Purpose</th><th>Signature elements</th></tr>
+<tr><td><code>index.html</code></td><td>Home</td><td>Hero + email capture, stats bar, trusted logos, 6 offer cards, mission/vision, features checklist, blog preview, CTA band</td></tr>
+<tr><td><code>blog.html</code></td><td>Blog Hub</td><td>Search hero, category chips, featured article, 6-post grid, load more, newsletter band</td></tr>
+<tr><td><code>blog-post.html</code></td><td>Blog View</td><td>Reading-progress bar, breadcrumb, sticky share rail, Lora body, blockquote, author box, related posts</td></tr>
+<tr><td><code>pricing.html</code></td><td>Pricing</td><td>3 plans (Professional featured navy), monthly/yearly toggle, trust strip, FAQ, contact band</td></tr>
+<tr><td><code>contact.html</code></td><td>Contact</td><td>Navy info panel, message form with success state, location card, quick FAQ</td></tr>
+</table>
+<p>All pages share the same navbar, footer, tokens, type scale, and motion. Keep them in one folder; links resolve by filename.</p>
+
+<h2><span class="n">8.</span> Pricing reference</h2>
+<table>
+<tr><th>Plan</th><th>Monthly</th><th>Position</th></tr>
+<tr><td>Starter</td><td>₹16,999</td><td>Entry, ghost button</td></tr>
+<tr><td>Professional</td><td>₹24,999</td><td><strong>Most Popular</strong>, navy fill, white button</td></tr>
+<tr><td>Premium</td><td>₹39,999</td><td>Full-service, ghost button</td></tr>
+</table>
+<p>Yearly toggle applies a 15% discount visually.</p>
+
+<h2><span class="n">9.</span> Responsive</h2>
+<ul>
+<li><strong>900px:</strong> grids collapse, hero media stacks above copy, desktop nav hides (logo + CTA remain), footer 2-column.</li>
+<li><strong>600px:</strong> single-column, stat bar 2-up, logo tagline hides, tighter padding.</li>
+<li>Tap targets ≥44px throughout.</li>
+</ul>
+
+<h2><span class="n">10.</span> Do / Don't</h2>
+<p class="do">Do</p>
+<ul>
+<li>Keep orange rare, reserved for action.</li>
+<li>Reuse the SVG logo symbol, never retype the wordmark.</li>
+<li>Tint any new neutral toward hue 262.</li>
+<li>Add scroll-reveal to new sections.</li>
+</ul>
+<p class="dont">Don't</p>
+<ul>
+<li>Introduce a second accent color.</li>
+<li>Use gradient text, glassmorphism, or side-stripe borders.</li>
+<li>Nest cards inside cards.</li>
+<li>Animate layout properties. Use transform + opacity.</li>
+<li>Use em dashes in copy.</li>
+</ul>
+</div>
+</body>
+</html>

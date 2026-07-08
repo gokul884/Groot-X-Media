@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- skill:chrome -->
+<style>
+/* Credit line — bottom-right */
+.design-ui-credit {
+  position: fixed;
+  bottom: 12px;
+  right: 12px;
+  font: 11px/1 system-ui, sans-serif;
+  color: rgba(128,128,128,0.5);
+  pointer-events: none;
+  z-index: 2147483647;
+  transition: opacity 0.4s ease;
+  user-select: none;
+  letter-spacing: 0.02em;
+}
+
+/* Hide chrome on touch devices */
+@media (hover: none) {
+  .design-ui-credit { display: none; }
+}
+
+/* Print fixes */
+@media print {
+  * {
+    transition: none !important;
+    animation: none !important;
+    box-shadow: none !important;
+  }
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .design-ui-credit { display: none !important; }
+}
+
+</style>
+<script>
+(function () {
+    // Design-ui pages are single compositions, so the whole body is editable.
+    function markEditable() {
+        document.body.classList.add('artifact-editable');
+    }
+
+    // Credit badge with idle-fade. Hover devices only.
+    function initChromeUI() {
+        if (!matchMedia('(hover: hover)').matches) return;
+
+        var credit = document.createElement('div');
+        credit.className = 'design-ui-credit';
+        credit.setAttribute('aria-hidden', 'true');
+        credit.innerHTML = '\u{1F49C} by ClickUp Brain';
+        document.body.appendChild(credit);
+
+        var timer = null;
+        var fade = function (out) { credit.style.opacity = out ? '0' : ''; };
+        fade(true);
+        var show = function () {
+            fade(false);
+            clearTimeout(timer);
+            timer = setTimeout(function () { fade(true); }, 3000);
+        };
+        document.addEventListener('mousemove', show);
+        show();
+    }
+
+    function init() {
+        markEditable();
+        initChromeUI();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+
+</script>
+<!-- /skill:chrome -->
+<!-- skill:libraries -->
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.383.0/dist/umd/lucide.min.js" integrity="sha384-wHFvAtjmgnkA2PJcMsDaCgdipf7X7YV44X/igbLHpvGiq6T5/PvFKl93grpvtbQT" crossorigin="anonymous"></script>
+<script>document.addEventListener("DOMContentLoaded",()=>lucide.createIcons())</script>
+<!-- /skill:libraries -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing — Groot X Media</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --orange:oklch(0.66 0.2 45);--orange-deep:oklch(0.6 0.2 42);
+    --navy:oklch(0.31 0.07 262);--navy-soft:oklch(0.42 0.06 262);
+    --ink:oklch(0.28 0.05 262);--ink-soft:oklch(0.4 0.04 262);
+    --muted:oklch(0.58 0.02 262);--muted-2:oklch(0.66 0.015 262);
+    --line:oklch(0.92 0.006 262);--bg:oklch(0.995 0.003 262);
+    --card:oklch(1 0 0);--card-2:oklch(0.98 0.006 262);
+    --blob-orange:oklch(0.84 0.12 55);--blob-navy:oklch(0.74 0.09 262);--blob-peach:oklch(0.89 0.08 62);
+    --ease:cubic-bezier(0.22,1,0.36,1);
+    --shadow-sm:0 1px 2px oklch(0.4 0.03 262 / .06);
+    --shadow:0 18px 50px -20px oklch(0.35 0.06 262 / .28);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;font-optical-sizing:auto}
+  h1,h2,h3,h4{text-wrap:balance;line-height:1.15;font-weight:700;color:var(--ink)}
+  p{text-wrap:pretty}
+  a{text-decoration:none;color:inherit}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 28px}
+  .accent{color:var(--orange)}
+  .blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.5;z-index:0;pointer-events:none}
+  .float{animation:float 14s var(--ease) infinite alternate}
+  @keyframes float{to{transform:translate(24px,-30px) scale(1.08)}}
+
+  .logo{display:flex;align-items:center;gap:11px}
+  .logo .mark{width:38px;height:38px;flex:none}
+  .logo .word{display:flex;flex-direction:column;line-height:1}
+  .logo .word .main{font-weight:800;font-size:1.1rem;letter-spacing:.02em}
+  .logo .word .main .o{color:var(--orange)}.logo .word .main .n{color:var(--navy)}
+  .logo .word .tag{font-size:.5rem;font-weight:600;letter-spacing:.34em;color:var(--muted);margin-top:3px}
+
+  header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:oklch(0.995 0.003 262 / .82);border-bottom:1px solid transparent;transition:border-color .3s,box-shadow .3s}
+  header.nav.scrolled{border-color:var(--line);box-shadow:0 6px 24px -18px oklch(0.35 0.05 262 / .5)}
+  .navbar{display:flex;align-items:center;justify-content:space-between;height:78px}
+  .navlinks{display:flex;gap:36px;font-size:.95rem;font-weight:500;color:var(--ink-soft)}
+  .navlinks a{position:relative;transition:color .2s}
+  .navlinks a::after{content:"";position:absolute;left:0;bottom:-6px;height:2px;width:0;background:var(--orange);transition:width .3s var(--ease)}
+  .navlinks a:hover,.navlinks a.active{color:var(--orange)}
+  .navlinks a:hover::after,.navlinks a.active::after{width:100%}
+  .nav-right{display:flex;align-items:center;gap:16px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;font-weight:600;font-size:.94rem;cursor:pointer;border:none;border-radius:999px;padding:13px 26px;transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .25s}
+  .btn-primary{background:var(--orange);color:#fff;box-shadow:0 12px 28px -12px oklch(0.66 0.2 45 / .7)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 34px -12px oklch(0.66 0.2 45 / .85);background:var(--orange-deep)}
+  .btn-ghost{background:transparent;color:var(--navy);border:1.5px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-2px)}
+  .btn-white{background:#fff;color:var(--navy)}
+  .btn-white:hover{transform:translateY(-2px);box-shadow:0 14px 30px -12px oklch(0.2 0.05 262 / .5)}
+  .theme-toggle{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);transition:transform .3s var(--ease),color .2s}
+  .theme-toggle:hover{transform:rotate(35deg);color:var(--orange)}
+
+  .phead{position:relative;padding:64px 0 30px;text-align:center}
+  .phead .eyebrow{display:inline-flex;align-items:center;gap:7px;background:oklch(0.95 0.03 55);color:var(--orange);font-size:.8rem;font-weight:600;padding:7px 15px;border-radius:999px;letter-spacing:.03em}
+  .phead h1{font-size:clamp(2.2rem,4.4vw,3.3rem);font-weight:800;letter-spacing:-.02em;margin:20px 0 14px}
+  .phead p{color:var(--muted);max-width:56ch;margin:0 auto;font-size:1rem}
+
+  /* toggle billing (visual) */
+  .billing{display:inline-flex;align-items:center;gap:14px;margin-top:26px;font-size:.9rem;color:var(--muted)}
+  .switch{width:52px;height:28px;border-radius:999px;background:var(--line);position:relative;cursor:pointer;transition:background .3s}
+  .switch::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:var(--shadow-sm);transition:transform .3s var(--ease)}
+  .switch.on{background:var(--orange)}
+  .switch.on::after{transform:translateX(24px)}
+  .save-badge{font-size:.72rem;font-weight:600;color:var(--orange);background:oklch(0.95 0.03 55);padding:3px 9px;border-radius:999px}
+
+  .pricing{padding:44px 0 30px}
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;align-items:start}
+  .plan{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:34px 30px;position:relative;overflow:hidden;transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+  .plan:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+  .plan .pname{font-size:.82rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .plan .price{display:flex;align-items:baseline;gap:4px;margin:14px 0 4px}
+  .plan .price .cur{font-size:1.4rem;font-weight:700;color:var(--navy)}
+  .plan .price .amt{font-size:2.9rem;font-weight:800;color:var(--navy);letter-spacing:-.02em;line-height:1}
+  .plan .price .per{font-size:.86rem;color:var(--muted-2);font-weight:500}
+  .plan .pdesc{color:var(--muted);font-size:.86rem;margin-bottom:22px}
+  .plan .divider{height:1px;background:var(--line);margin:0 0 22px}
+  .feats{display:grid;gap:15px;margin-bottom:28px}
+  .feat{display:flex;gap:11px;font-size:.88rem;color:var(--ink-soft);line-height:1.45}
+  .feat .tick{width:22px;height:22px;border-radius:50%;flex:none;display:grid;place-items:center;background:oklch(0.95 0.03 55);color:var(--orange);margin-top:1px}
+  .plan .btn{width:100%}
+
+  /* popular plan = navy filled */
+  .plan.popular{background:var(--navy);border-color:var(--navy);color:#fff;box-shadow:0 30px 60px -24px oklch(0.31 0.07 262 / .7)}
+  .plan.popular::before{content:"";position:absolute;top:-60px;right:-60px;width:180px;height:180px;border-radius:50%;background:oklch(1 0 0 / .06)}
+  .plan.popular .pname,.plan.popular .pdesc{color:oklch(0.82 0.02 262)}
+  .plan.popular .price .cur,.plan.popular .price .amt{color:#fff}
+  .plan.popular .price .per{color:oklch(0.8 0.02 262)}
+  .plan.popular .divider{background:oklch(1 0 0 / .16)}
+  .plan.popular .feat{color:oklch(0.9 0.01 262)}
+  .plan.popular .feat .tick{background:var(--orange);color:#fff}
+  .pop-badge{position:absolute;top:20px;right:20px;background:var(--orange);color:#fff;font-size:.72rem;font-weight:700;letter-spacing:.05em;padding:6px 13px;border-radius:999px;display:flex;align-items:center;gap:5px}
+
+  /* comparison / trust strip */
+  .assure{padding:40px 0}
+  .assure-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+  .assure-item{display:flex;gap:12px;align-items:flex-start}
+  .assure-ico{width:42px;height:42px;border-radius:12px;flex:none;display:grid;place-items:center;background:oklch(0.95 0.03 55);color:var(--orange)}
+  .assure-item h4{font-size:.98rem}
+  .assure-item p{color:var(--muted);font-size:.82rem;margin-top:3px}
+
+  /* faq */
+  .faq{padding:56px 0}
+  .faq .sec-head{text-align:center;max-width:600px;margin:0 auto 40px}
+  .faq .sec-head h2{font-size:clamp(1.6rem,3vw,2.1rem)}
+  .faq .sec-head p{color:var(--muted);margin-top:10px}
+  .faq-list{max-width:760px;margin:0 auto;display:grid;gap:14px}
+  .faq-item{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:box-shadow .3s,border-color .3s}
+  .faq-item[open]{box-shadow:var(--shadow-sm);border-color:oklch(0.85 0.04 55)}
+  .faq-item summary{list-style:none;cursor:pointer;padding:20px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-weight:600;font-size:.98rem;color:var(--ink)}
+  .faq-item summary::-webkit-details-marker{display:none}
+  .faq-item summary .ic{width:28px;height:28px;border-radius:50%;background:oklch(0.95 0.03 55);color:var(--orange);display:grid;place-items:center;flex:none;transition:transform .3s var(--ease)}
+  .faq-item[open] summary .ic{transform:rotate(45deg)}
+  .faq-item .ans{padding:0 22px 20px;color:var(--muted);font-size:.9rem}
+
+  /* contact CTA band */
+  .contact-cta{padding:20px 0 90px}
+  .cc-band{position:relative;overflow:hidden;border-radius:28px;padding:56px 44px;background:var(--navy);color:#fff;display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:center}
+  .cc-band h2{color:#fff;font-size:clamp(1.7rem,3vw,2.3rem)}
+  .cc-band p{color:oklch(0.85 0.02 262);margin-top:12px;font-size:.96rem;max-width:42ch}
+  .cc-contacts{display:grid;gap:16px;margin-top:26px}
+  .cc-contacts a{display:flex;align-items:center;gap:12px;color:#fff;font-size:.95rem;font-weight:500}
+  .cc-contacts a .ic{width:40px;height:40px;border-radius:12px;background:oklch(1 0 0 / .12);display:grid;place-items:center;color:var(--orange);flex:none;transition:background .25s}
+  .cc-contacts a:hover .ic{background:var(--orange);color:#fff}
+  .cc-form{background:oklch(1 0 0 / .07);border:1px solid oklch(1 0 0 / .16);border-radius:22px;padding:28px}
+  .cc-form h3{color:#fff;font-size:1.15rem;margin-bottom:6px}
+  .cc-form .fp{color:oklch(0.82 0.02 262);font-size:.84rem;margin-bottom:20px}
+  .field{margin-bottom:14px}
+  .field input,.field textarea,.field select{width:100%;font-family:inherit;font-size:.92rem;color:#fff;background:oklch(1 0 0 / .08);border:1px solid oklch(1 0 0 / .18);border-radius:12px;padding:13px 15px;outline:none;transition:border-color .25s,background .25s}
+  .field input::placeholder,.field textarea::placeholder{color:oklch(0.75 0.02 262)}
+  .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--orange);background:oklch(1 0 0 / .12)}
+  .field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23ffffff' stroke-width='2'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 15px center}
+  .field select option{color:var(--ink)}
+  .cc-form .btn{width:100%;margin-top:6px}
+
+  footer{background:oklch(0.985 0.005 262);border-top:1px solid var(--line);padding:64px 0 30px;position:relative;overflow:hidden}
+  .foot-grid{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:34px;position:relative;z-index:2}
+  .foot-brand p{color:var(--muted);font-size:.86rem;margin-top:14px;max-width:34ch}
+  .socials{display:flex;gap:12px;margin-top:20px}
+  .socials a{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--muted);transition:all .25s var(--ease);background:var(--card)}
+  .socials a:hover{color:#fff;background:var(--orange);border-color:var(--orange);transform:translateY(-3px)}
+  .foot-col h5{font-size:.95rem;margin-bottom:16px;color:var(--navy)}
+  .foot-col a{display:block;color:var(--muted);font-size:.87rem;margin-bottom:11px;transition:color .2s,padding-left .2s}
+  .foot-col a:hover{color:var(--orange);padding-left:4px}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:48px;padding-top:22px;border-top:1px solid var(--line);font-size:.83rem;color:var(--muted);position:relative;z-index:2;flex-wrap:wrap;gap:10px}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  .stagger>*{opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease),transform .6s var(--ease);transition-delay:calc(var(--i,0)*70ms)}
+  .stagger.in>*{opacity:1;transform:none}
+
+  /* Page transitions */
+  body {
+    opacity: 0;
+    animation: fadeInPage 0.3s ease-out forwards;
+  }
+  @keyframes fadeInPage {
+    to { opacity: 1; }
+  }
+  .page-exit {
+    opacity: 0 !important;
+    transition: opacity 0.22s ease-in-out !important;
+  }
+
+  @media(max-width:900px){
+    .plans{grid-template-columns:1fr;max-width:440px;margin:0 auto}
+    .plan.popular{order:-1}
+    .assure-grid{grid-template-columns:1fr 1fr}
+    .cc-band{grid-template-columns:1fr;gap:32px}
+    .foot-grid{grid-template-columns:1fr 1fr;gap:28px}.foot-brand{grid-column:1/-1}
+    .navlinks{display:none}
+  }
+  @media(max-width:600px){
+    .assure-grid{grid-template-columns:1fr}
+    .foot-grid{grid-template-columns:1fr}
+    .logo .word .tag{display:none}
+    .cc-band{padding:36px 24px}
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="gxm-logo" viewBox="0 0 540 120">
+    <style>
+      .logo-dark-fill { fill: #000000; }
+      .dark .logo-dark-fill { fill: #ffffff; }
+      .logo-dark-stroke { stroke: #000000; }
+      .dark .logo-dark-stroke { stroke: #ffffff; }
+    </style>
+    <!-- Monogram -->
+    <path d="M24 96 L24 46 C24 31 42 27 50 40 L60 57 L70 40 C78 27 96 31 96 46 L96 96" fill="none" stroke="#F26522" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M60 40 L60 58" fill="none" stroke="#F26522" stroke-width="12" stroke-linecap="round"/>
+    <path d="M60 58 L60 104 C60 111 68 111 74 105" fill="none" class="logo-dark-stroke" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M60 84 L76 84" fill="none" class="logo-dark-stroke" stroke-width="12" stroke-linecap="round"/>
+    
+    <!-- Text "GROOT X MEDIA" -->
+    <text x="130" y="66" font-family="'Poppins', sans-serif" font-size="44" font-weight="800" letter-spacing="0.04em">
+      <tspan fill="#F26522">GROOT</tspan>
+      <tspan class="logo-dark-fill" font-weight="700"> X </tspan>
+      <tspan fill="#F26522">MEDIA</tspan>
+    </text>
+    
+    <!-- Tagline "— YOUR GROWTH PARTNER —" -->
+    <text x="130" y="96" font-family="'Poppins', sans-serif" font-size="14.5" font-weight="600" class="logo-dark-fill" letter-spacing="0.32em">— YOUR GROWTH PARTNER —</text>
+  </symbol>
+</svg>
+
+<header class="nav" id="nav">
+  <div class="wrap navbar">
+    <a href="index.html" class="logo" aria-label="Groot X Media Logo">
+      <img src="/src/logo-header.png" alt="Groot X Media Logo" style="height: 74px; width: auto; object-fit: contain; display: block;" />
+    </a>
+    <nav class="navlinks">
+      <a href="index.html">Home</a>
+      <a href="index.html#services">Services</a>
+      <a href="testimonials.html">Testimonials</a>
+      <a href="pricing.html" class="active">Pricing</a>
+      <a href="blog.html">Blog</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-right">
+      <a href="contact.html" class="btn btn-primary">Get Started</a>
+      <button class="theme-toggle" aria-label="Toggle theme"><i data-lucide="sun" width="18" height="18"></i></button>
+    </div>
+  </div>
+</header>
+
+<section class="phead">
+  <div class="blob float" style="width:300px;height:300px;background:var(--blob-orange);top:-30px;left:-60px"></div>
+  <div class="blob float" style="width:240px;height:240px;background:var(--blob-navy);top:40px;right:-60px;animation-delay:-5s"></div>
+  <div class="wrap" style="position:relative;z-index:2">
+    <div class="reveal">
+      <span class="eyebrow"><i data-lucide="tag" width="14" height="14"></i>Simple, transparent pricing</span>
+      <h1>Plans that <span class="accent">grow</span> with you.</h1>
+      <p>Pick the plan that fits where you are today. Upgrade, downgrade, or cancel anytime. No lock-in, no surprises.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pricing">
+  <div class="wrap">
+    <div class="plans stagger reveal">
+      <!-- Starter -->
+      <div class="plan" style="--i:0">
+        <div class="pname">Starter Plan</div>
+        <div class="price"><span class="cur">₹</span><span class="amt" data-m="16,999" data-y="14,449">16,999</span><span class="per">/month</span></div>
+        <p class="pdesc">For new brands getting their social presence off the ground.</p>
+        <div class="divider"></div>
+        <div class="feats">
+          <div class="feat"><span class="tick"><i data-lucide="check" width="13" height="13"></i></span>6 social media posts</div>
+          <div class="feat"><span class="tick"><i data-lucide="check" width="13" height="13"></i></span>3 reels / one short video</div>
+          <div class="feat"><span class="tick"><i data-lucide="check" width="13" height="13"></i></span>Instagram + Facebook management</div>
+          <div class="feat"><span class="tick"><i data-lucide="check" width="13" height="13"></i></span>Caption writing + hashtag strategy</div>
+          <div class="feat"><span class="tick"><i data-lucide="check" width="13" height="13"></i></span>Monthly performance report</div>
+          <div class="feat"><span class="tick"><i data-lucide="check" width="13" height="13"></i></span>WhatsApp support</div>
+        </div>
+        <a href="contact.html" class="btn btn-ghost">Select Starter</a>
+      </div>
+
+      <!-- Professional (popular) -->
+      <div class="plan popular" style="--i:1">
+        <span class="pop-badge"><i data-lucide="star" width="12" height="12" fill="currentColor"></i>Most Popular</span>
+        <div class="pname">Professional Plan</div>
+        <div class="price"><span class="cur">₹</span><span class="amt" data-m="24,999" data-y="21,249">24,999</span><span class="per">/month</span></div>
+        <p class="pdesc">For growing brands ready to scale across every channel.</p>
+        <div class="divider"></div>
+        <div class="feats">
+          <div class="feat"><span class="tick"><i data-lucide="check" width="13" height="13"></i></span>8 social media posts</div>
+          <div class="feat"><span class="tick"><i data-lucide="check" width="13" height="13"></i></span>6 reels / promotional videos</div>
+          <div class="feat"><span class="tick"><i data-lucide="check" width="13" height="13"></i></span>Management across 3 platforms</div>
+          <div class="feat"><span class="tick"><i data-lucide="check" width="13" height="13"></i></span>SEO optimization</div>
+          <div class="feat"><span class="tick"><i data-lucide="check" width="13" height="13"></i></span>Google Business Profile setup & management</div>
+          <div class="feat"><span class="tick"><i data-lucide="check" width="13" height="13"></i></span>1 lead generation & ad campaign setup</div>
+          <div class="feat"><span class="tick"><i data-lucide="check" width="13" height="13"></i></span>Monthly analysis + competitor analysis</div>
+        </div>
+        <a href="contact.html" class="btn btn-white">Select Professional</a>
+      </div>
+
+      <!-- Premium -->
+      <div class="plan" style="--i:2">
+        <div class="pname">Premium Plan</div>
+        <div class="price"><span class="cur">₹</span><span class="amt" data-m="39,999" data-y="33,999">39,999</span><span class="per">/month</span></div>
+        <p class="pdesc">Full-service growth for brands that want everything handled.</p>
+        <div class="divider"></div>
+        <div class="feats">
+          <div class="feat"><span class="tick"><i data-lucide="check" width="13" height="13"></i></span>15 posts + creatives</div>
+          <div class="feat"><span class="tick"><i data-lucide="check" width="13" height="13"></i></span>6 reels / promotional videos</div>
+          <div class="feat"><span class="tick"><i data-lucide="check" width="13" height="13"></i></span>Instagram + Facebook + LinkedIn & YouTube management</div>
+          <div class="feat"><span class="tick"><i data-lucide="check" width="13" height="13"></i></span>Advanced SEO optimization</div>
+          <div class="feat"><span class="tick"><i data-lucide="check" width="13" height="13"></i></span>Google Ads + Meta Ads optimization</div>
+          <div class="feat"><span class="tick"><i data-lucide="check" width="13" height="13"></i></span>Landing page optimization</div>
+          <div class="feat"><span class="tick"><i data-lucide="check" width="13" height="13"></i></span>Weekly performance report</div>
+        </div>
+        <a href="contact.html" class="btn btn-ghost">Select Premium</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="assure">
+  <div class="wrap">
+    <div class="assure-grid stagger reveal">
+      <div class="assure-item" style="--i:0"><div class="assure-ico"><i data-lucide="shield-check" width="20" height="20"></i></div><div><h4>No lock-in</h4><p>Cancel or switch plans whenever you need to.</p></div></div>
+      <div class="assure-item" style="--i:1"><div class="assure-ico"><i data-lucide="headphones" width="20" height="20"></i></div><div><h4>Real humans</h4><p>Direct WhatsApp line to your account manager.</p></div></div>
+      <div class="assure-item" style="--i:2"><div class="assure-ico"><i data-lucide="bar-chart-3" width="20" height="20"></i></div><div><h4>Clear reporting</h4><p>Know exactly what's working every month.</p></div></div>
+      <div class="assure-item" style="--i:3"><div class="assure-ico"><i data-lucide="rocket" width="20" height="20"></i></div><div><h4>Fast onboarding</h4><p>Live and posting within your first week.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="wrap">
+    <div class="sec-head reveal"><h2>Pricing questions, answered</h2><p>Still unsure? Reach out and we'll walk you through it.</p></div>
+    <div class="faq-list reveal">
+      <details class="faq-item"><summary>Can I switch plans later?<span class="ic"><i data-lucide="plus" width="15" height="15"></i></span></summary><div class="ans">Absolutely. Upgrade or downgrade anytime and the change applies from your next billing cycle. No penalties.</div></details>
+      <details class="faq-item"><summary>Is there a setup fee?<span class="ic"><i data-lucide="plus" width="15" height="15"></i></span></summary><div class="ans">No setup fees on any plan. The monthly price is what you pay, everything in onboarding is included.</div></details>
+      <details class="faq-item"><summary>What does yearly billing save me?<span class="ic"><i data-lucide="plus" width="15" height="15"></i></span></summary><div class="ans">Paying yearly takes 15% off the monthly rate across every plan. Toggle the switch above to see the yearly numbers.</div></details>
+      <details class="faq-item"><summary>Do you offer custom plans?<span class="ic"><i data-lucide="plus" width="15" height="15"></i></span></summary><div class="ans">Yes. If none of these fit, tell us your goals on the contact page and we'll build a package around them.</div></details>
+    </div>
+  </div>
+</section>
+
+<section class="contact-cta">
+  <div class="wrap">
+    <div class="cc-band reveal">
+      <div class="blob float" style="width:220px;height:220px;background:var(--blob-orange);top:-50px;right:6%;opacity:.3"></div>
+      <div>
+        <h2>Not sure which plan? Let's talk.</h2>
+        <p>Tell us where your brand is today and we'll point you to the right fit. Usually replies within a few hours.</p>
+        <div class="cc-contacts">
+          <a href="tel:+917397794418"><span class="ic"><i data-lucide="phone" width="18" height="18"></i></span>+91 73977 94418</a>
+          <a href="mailto:info@grootxmedia.com"><span class="ic"><i data-lucide="mail" width="18" height="18"></i></span>info@grootxmedia.com</a>
+          <a href="https://www.grootxmedia.com"><span class="ic"><i data-lucide="globe" width="18" height="18"></i></span>www.grootxmedia.com</a>
+        </div>
+      </div>
+      <form class="cc-form" onsubmit="event.preventDefault();this.querySelector('.btn').textContent='Sent ✓'">
+        <h3>Request a callback</h3>
+        <p class="fp">Drop your details and we'll reach out.</p>
+        <div class="field"><input type="text" placeholder="Your name" required></div>
+        <div class="field"><input type="tel" placeholder="Phone / WhatsApp" required></div>
+        <div class="field"><select aria-label="Interested plan"><option>Interested plan</option><option>Starter — ₹16,999</option><option>Professional — ₹24,999</option><option>Premium — ₹39,999</option><option>Not sure yet</option></select></div>
+        <button class="btn btn-primary" type="submit">Request callback</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="blob" style="width:300px;height:300px;background:var(--blob-navy);bottom:-120px;left:20%;opacity:.2"></div>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="index.html" class="logo" aria-label="Groot X Media Logo">
+          <img src="/src/logo-header.png" alt="Groot X Media Logo" style="height: 74px; width: auto; object-fit: contain; display: block;" />
+        </a>
+        <p>Groot X Media is your full-suite digital growth partner, transforming modern platforms into reliable revenue pipelines.</p>
+        <div class="socials">
+          <a href="#" aria-label="Facebook"><i data-lucide="facebook" width="16" height="16"></i></a>
+          <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin" width="16" height="16"></i></a>
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter" width="16" height="16"></i></a>
+          <a href="#" aria-label="Instagram"><i data-lucide="instagram" width="16" height="16"></i></a>
+        </div>
+      </div>
+      <div class="foot-col"><h5>Company</h5><a href="index.html#about">About</a><a href="blog.html">Blog</a><a href="testimonials.html">Testimonials</a><a href="#">Partners</a></div>
+      <div class="foot-col"><h5>Solutions</h5><a href="#">Marketing</a><a href="#">Analytics</a><a href="#">Commerce</a><a href="#">Insights</a></div>
+      <div class="foot-col"><h5>Support</h5><a href="pricing.html">Pricing</a><a href="#">Guides</a><a href="#">FAQ</a><a href="contact.html">Contact</a></div>
+      <div class="foot-col"><h5>Resources</h5><a href="#">Claim</a><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Groot X Media. All rights reserved</span>
+      <span>Your Growth Partner</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  lucide.createIcons();
+  const nav=document.getElementById('nav');
+  addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>10));
+  const io=new IntersectionObserver((e)=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{threshold:.12});
+  document.querySelectorAll('.reveal,.stagger').forEach(el=>io.observe(el));
+  // billing toggle
+  const sw=document.getElementById('switch');
+  if (sw) {
+    sw.addEventListener('click',()=>{
+      const on=sw.classList.toggle('on');
+      document.querySelectorAll('.amt').forEach(a=>{a.textContent=on?a.dataset.y:a.dataset.m});
+      document.querySelectorAll('.per').forEach(p=>p.textContent=on?'/mo billed yearly':'/month');
+    });
+  }
+  const tog=document.querySelector('.theme-toggle');
+  tog&&tog.addEventListener('click',()=>{const d=document.documentElement.classList.toggle('dark');tog.innerHTML=d?'<i data-lucide="moon" width="18" height="18"></i>':'<i data-lucide="sun" width="18" height="18"></i>';lucide.createIcons();});
+
+  // Smooth page transition script
+  document.querySelectorAll('a').forEach(link => {
+    const href = link.getAttribute('href');
+    if (href && href.endsWith('.html') && !href.startsWith('#') && !link.target) {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.body.classList.add('page-exit');
+        setTimeout(() => { window.location.href = href; }, 200);
+      });
+      link.addEventListener('touchstart', () => { link.style.opacity = '0.7'; }, {passive:true});
+      link.addEventListener('touchend', () => { link.style.opacity = ''; }, {passive:true});
+    }
+  });
+</script>
+</body>
+</html>

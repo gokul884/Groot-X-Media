@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- skill:chrome -->
+<style>
+/* Credit line — bottom-right */
+.design-ui-credit {
+  position: fixed;
+  bottom: 12px;
+  right: 12px;
+  font: 11px/1 system-ui, sans-serif;
+  color: rgba(128,128,128,0.5);
+  pointer-events: none;
+  z-index: 2147483647;
+  transition: opacity 0.4s ease;
+  user-select: none;
+  letter-spacing: 0.02em;
+}
+
+/* Hide chrome on touch devices */
+@media (hover: none) {
+  .design-ui-credit { display: none; }
+}
+
+/* Print fixes */
+@media print {
+  * {
+    transition: none !important;
+    animation: none !important;
+    box-shadow: none !important;
+  }
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .design-ui-credit { display: none !important; }
+}
+
+</style>
+<script>
+(function () {
+    // Design-ui pages are single compositions, so the whole body is editable.
+    function markEditable() {
+        document.body.classList.add('artifact-editable');
+    }
+
+    // Credit badge with idle-fade. Hover devices only.
+    function initChromeUI() {
+        if (!matchMedia('(hover: hover)').matches) return;
+
+        var credit = document.createElement('div');
+        credit.className = 'design-ui-credit';
+        credit.setAttribute('aria-hidden', 'true');
+        credit.innerHTML = '\u{1F49C} by ClickUp Brain';
+        document.body.appendChild(credit);
+
+        var timer = null;
+        var fade = function (out) { credit.style.opacity = out ? '0' : ''; };
+        fade(true);
+        var show = function () {
+            fade(false);
+            clearTimeout(timer);
+            timer = setTimeout(function () { fade(true); }, 3000);
+        };
+        document.addEventListener('mousemove', show);
+        show();
+    }
+
+    function init() {
+        markEditable();
+        initChromeUI();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+
+</script>
+<!-- /skill:chrome -->
+<!-- skill:libraries -->
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.383.0/dist/umd/lucide.min.js" integrity="sha384-wHFvAtjmgnkA2PJcMsDaCgdipf7X7YV44X/igbLHpvGiq6T5/PvFKl93grpvtbQT" crossorigin="anonymous"></script>
+<script>document.addEventListener("DOMContentLoaded",()=>lucide.createIcons())</script>
+<!-- /skill:libraries -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Groot X Media</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --orange:oklch(0.66 0.2 45);--orange-deep:oklch(0.6 0.2 42);
+    --navy:oklch(0.31 0.07 262);--navy-soft:oklch(0.42 0.06 262);
+    --ink:oklch(0.28 0.05 262);--ink-soft:oklch(0.4 0.04 262);
+    --muted:oklch(0.58 0.02 262);--muted-2:oklch(0.66 0.015 262);
+    --line:oklch(0.92 0.006 262);--bg:oklch(0.995 0.003 262);
+    --card:oklch(1 0 0);--card-2:oklch(0.98 0.006 262);
+    --blob-orange:oklch(0.84 0.12 55);--blob-navy:oklch(0.74 0.09 262);--blob-peach:oklch(0.89 0.08 62);
+    --ease:cubic-bezier(0.22,1,0.36,1);
+    --shadow-sm:0 1px 2px oklch(0.4 0.03 262 / .06);
+    --shadow:0 18px 50px -20px oklch(0.35 0.06 262 / .28);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;font-optical-sizing:auto}
+  h1,h2,h3,h4{text-wrap:balance;line-height:1.15;font-weight:700;color:var(--ink)}
+  p{text-wrap:pretty}
+  a{text-decoration:none;color:inherit}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 28px}
+  .accent{color:var(--orange)}
+  .blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.5;z-index:0;pointer-events:none}
+  .float{animation:float 14s var(--ease) infinite alternate}
+  @keyframes float{to{transform:translate(24px,-30px) scale(1.08)}}
+
+  .logo{display:flex;align-items:center;gap:11px}
+  .logo .mark{width:38px;height:38px;flex:none}
+  .logo .word{display:flex;flex-direction:column;line-height:1}
+  .logo .word .main{font-weight:800;font-size:1.1rem;letter-spacing:.02em}
+  .logo .word .main .o{color:var(--orange)}.logo .word .main .n{color:var(--navy)}
+  .logo .word .tag{font-size:.5rem;font-weight:600;letter-spacing:.34em;color:var(--muted);margin-top:3px}
+
+  header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:oklch(0.995 0.003 262 / .82);border-bottom:1px solid transparent;transition:border-color .3s,box-shadow .3s}
+  header.nav.scrolled{border-color:var(--line);box-shadow:0 6px 24px -18px oklch(0.35 0.05 262 / .5)}
+  .navbar{display:flex;align-items:center;justify-content:space-between;height:78px}
+  .navlinks{display:flex;gap:36px;font-size:.95rem;font-weight:500;color:var(--ink-soft)}
+  .navlinks a{position:relative;transition:color .2s}
+  .navlinks a::after{content:"";position:absolute;left:0;bottom:-6px;height:2px;width:0;background:var(--orange);transition:width .3s var(--ease)}
+  .navlinks a:hover,.navlinks a.active{color:var(--orange)}
+  .navlinks a:hover::after,.navlinks a.active::after{width:100%}
+  .nav-right{display:flex;align-items:center;gap:16px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;font-weight:600;font-size:.94rem;cursor:pointer;border:none;border-radius:999px;padding:13px 26px;transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .25s}
+  .btn-primary{background:var(--orange);color:#fff;box-shadow:0 12px 28px -12px oklch(0.66 0.2 45 / .7)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 34px -12px oklch(0.66 0.2 45 / .85);background:var(--orange-deep)}
+  .btn-ghost{background:transparent;color:var(--navy);border:1.5px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-2px)}
+  .theme-toggle{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);transition:transform .3s var(--ease),color .2s}
+  .theme-toggle:hover{transform:rotate(35deg);color:var(--orange)}
+
+  .chead{position:relative;padding:64px 0 20px;text-align:center}
+  .chead .eyebrow{display:inline-flex;align-items:center;gap:7px;background:oklch(0.95 0.03 55);color:var(--orange);font-size:.8rem;font-weight:600;padding:7px 15px;border-radius:999px;letter-spacing:.03em}
+  .chead h1{font-size:clamp(2.2rem,4.4vw,3.3rem);font-weight:800;letter-spacing:-.02em;margin:20px 0 14px}
+  .chead p{color:var(--muted);max-width:54ch;margin:0 auto;font-size:1rem}
+
+  .contact-main{padding:40px 0 30px;position:relative}
+  .cm-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:36px;align-items:stretch}
+
+  /* info panel = navy */
+  .cinfo{background:var(--navy);color:#fff;border-radius:26px;padding:40px 34px;position:relative;overflow:hidden}
+  .cinfo::before{content:"";position:absolute;bottom:-70px;right:-70px;width:220px;height:220px;border-radius:50%;background:oklch(1 0 0 / .06)}
+  .cinfo::after{content:"";position:absolute;top:-50px;left:-50px;width:150px;height:150px;border-radius:50%;background:oklch(0.66 0.2 45 / .18)}
+  .cinfo h2{color:#fff;font-size:1.4rem;position:relative;z-index:2}
+  .cinfo .lede{color:oklch(0.82 0.02 262);font-size:.92rem;margin-top:10px;position:relative;z-index:2}
+  .cmethods{display:grid;gap:18px;margin-top:32px;position:relative;z-index:2}
+  .cmethod{display:flex;gap:15px;align-items:flex-start}
+  .cmethod .ic{width:46px;height:46px;border-radius:13px;background:oklch(1 0 0 / .1);display:grid;place-items:center;color:var(--orange);flex:none;transition:background .25s,color .25s}
+  .cmethod:hover .ic{background:var(--orange);color:#fff}
+  .cmethod .lbl{font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;color:oklch(0.72 0.02 262)}
+  .cmethod .val{font-size:1rem;font-weight:600;color:#fff;margin-top:2px}
+  .cmethod .val:hover{color:var(--orange)}
+  .cinfo .hours{margin-top:30px;padding-top:24px;border-top:1px solid oklch(1 0 0 / .14);position:relative;z-index:2}
+  .cinfo .hours h4{color:#fff;font-size:.95rem;display:flex;align-items:center;gap:8px}
+  .cinfo .hours p{color:oklch(0.82 0.02 262);font-size:.86rem;margin-top:6px}
+  .cinfo .csocials{display:flex;gap:12px;margin-top:26px;position:relative;z-index:2}
+  .cinfo .csocials a{width:38px;height:38px;border-radius:50%;border:1px solid oklch(1 0 0 / .18);display:grid;place-items:center;color:#fff;transition:all .25s var(--ease)}
+  .cinfo .csocials a:hover{background:var(--orange);border-color:var(--orange);transform:translateY(-3px)}
+
+  /* form card */
+  .cform{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:40px 36px;box-shadow:var(--shadow-sm)}
+  .cform h2{font-size:1.4rem}
+  .cform .fp{color:var(--muted);font-size:.9rem;margin-top:8px;margin-bottom:26px}
+  .frow{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:.82rem;font-weight:600;color:var(--ink-soft);margin-bottom:7px}
+  .field input,.field textarea,.field select{width:100%;font-family:inherit;font-size:.94rem;color:var(--ink);background:var(--card-2);border:1px solid var(--line);border-radius:12px;padding:13px 15px;outline:none;transition:border-color .25s,box-shadow .25s,background .25s}
+  .field input::placeholder,.field textarea::placeholder{color:var(--muted-2)}
+  .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--orange);background:var(--card);box-shadow:0 0 0 4px oklch(0.66 0.2 45 / .1)}
+  .field textarea{resize:vertical;min-height:130px}
+  .field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23708' stroke-width='2'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%239aa' /%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 15px center}
+  .cform .btn{width:100%;margin-top:6px}
+  .form-note{font-size:.8rem;color:var(--muted-2);text-align:center;margin-top:14px}
+  .ok-msg{display:none;text-align:center;padding:40px 20px}
+  .ok-msg.show{display:block}
+  .ok-msg .ok-ic{width:64px;height:64px;border-radius:50%;background:oklch(0.95 0.03 55);color:var(--orange);display:grid;place-items:center;margin:0 auto 18px}
+  .ok-msg h3{font-size:1.3rem}
+  .ok-msg p{color:var(--muted);margin-top:8px;font-size:.92rem}
+
+  /* map / cta */
+  .map{padding:30px 0 40px}
+  .map-card{border-radius:26px;overflow:hidden;border:1px solid var(--line);position:relative;height:320px;background:
+    linear-gradient(135deg, oklch(0.93 0.02 262), oklch(0.88 0.04 55));display:grid;place-items:center;box-shadow:var(--shadow-sm)}
+  .map-pin{text-align:center;color:var(--navy)}
+  .map-pin .pin{width:56px;height:56px;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;margin:0 auto 12px;box-shadow:0 12px 30px -10px oklch(0.66 0.2 45 / .7);animation:bob 2.6s var(--ease) infinite alternate}
+  @keyframes bob{to{transform:translateY(-8px)}}
+  .map-pin h4{font-size:1.05rem}
+  .map-pin p{color:var(--navy-soft);font-size:.88rem;margin-top:4px}
+
+  /* faq mini */
+  .faq{padding:40px 0 80px}
+  .faq .sec-head{text-align:center;max-width:600px;margin:0 auto 36px}
+  .faq .sec-head h2{font-size:clamp(1.6rem,3vw,2.1rem)}
+  .faq .sec-head p{color:var(--muted);margin-top:10px}
+  .faq-list{max-width:760px;margin:0 auto;display:grid;gap:14px}
+  .faq-item{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:box-shadow .3s,border-color .3s}
+  .faq-item[open]{box-shadow:var(--shadow-sm);border-color:oklch(0.85 0.04 55)}
+  .faq-item summary{list-style:none;cursor:pointer;padding:20px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-weight:600;font-size:.98rem;color:var(--ink)}
+  .faq-item summary::-webkit-details-marker{display:none}
+  .faq-item summary .ic{width:28px;height:28px;border-radius:50%;background:oklch(0.95 0.03 55);color:var(--orange);display:grid;place-items:center;flex:none;transition:transform .3s var(--ease)}
+  .faq-item[open] summary .ic{transform:rotate(45deg)}
+  .faq-item .ans{padding:0 22px 20px;color:var(--muted);font-size:.9rem}
+
+  footer{background:oklch(0.985 0.005 262);border-top:1px solid var(--line);padding:64px 0 30px;position:relative;overflow:hidden}
+  .foot-grid{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:34px;position:relative;z-index:2}
+  .foot-brand p{color:var(--muted);font-size:.86rem;margin-top:14px;max-width:34ch}
+  .socials{display:flex;gap:12px;margin-top:20px}
+  .socials a{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--muted);transition:all .25s var(--ease);background:var(--card)}
+  .socials a:hover{color:#fff;background:var(--orange);border-color:var(--orange);transform:translateY(-3px)}
+  .foot-col h5{font-size:.95rem;margin-bottom:16px;color:var(--navy)}
+  .foot-col a{display:block;color:var(--muted);font-size:.87rem;margin-bottom:11px;transition:color .2s,padding-left .2s}
+  .foot-col a:hover{color:var(--orange);padding-left:4px}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:48px;padding-top:22px;border-top:1px solid var(--line);font-size:.83rem;color:var(--muted);position:relative;z-index:2;flex-wrap:wrap;gap:10px}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  .stagger>*{opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease),transform .6s var(--ease);transition-delay:calc(var(--i,0)*70ms)}
+  .stagger.in>*{opacity:1;transform:none}
+
+  /* Page transitions */
+  body {
+    opacity: 0;
+    animation: fadeInPage 0.3s ease-out forwards;
+  }
+  @keyframes fadeInPage {
+    to { opacity: 1; }
+  }
+  .page-exit {
+    opacity: 0 !important;
+    transition: opacity 0.22s ease-in-out !important;
+  }
+
+  @media(max-width:900px){
+    .cm-grid{grid-template-columns:1fr;gap:26px}
+    .foot-grid{grid-template-columns:1fr 1fr;gap:28px}.foot-brand{grid-column:1/-1}
+    .navlinks{display:none}
+  }
+  @media(max-width:600px){
+    .frow{grid-template-columns:1fr}
+    .foot-grid{grid-template-columns:1fr}
+    .logo .word .tag{display:none}
+    .cform,.cinfo{padding:28px 22px}
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="gxm-logo" viewBox="0 0 540 120">
+    <style>
+      .logo-dark-fill { fill: #000000; }
+      .dark .logo-dark-fill { fill: #ffffff; }
+      .logo-dark-stroke { stroke: #000000; }
+      .dark .logo-dark-stroke { stroke: #ffffff; }
+    </style>
+    <!-- Monogram -->
+    <path d="M24 96 L24 46 C24 31 42 27 50 40 L60 57 L70 40 C78 27 96 31 96 46 L96 96" fill="none" stroke="#F26522" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M60 40 L60 58" fill="none" stroke="#F26522" stroke-width="12" stroke-linecap="round"/>
+    <path d="M60 58 L60 104 C60 111 68 111 74 105" fill="none" class="logo-dark-stroke" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M60 84 L76 84" fill="none" class="logo-dark-stroke" stroke-width="12" stroke-linecap="round"/>
+    
+    <!-- Text "GROOT X MEDIA" -->
+    <text x="130" y="66" font-family="'Poppins', sans-serif" font-size="44" font-weight="800" letter-spacing="0.04em">
+      <tspan fill="#F26522">GROOT</tspan>
+      <tspan class="logo-dark-fill" font-weight="700"> X </tspan>
+      <tspan fill="#F26522">MEDIA</tspan>
+    </text>
+    
+    <!-- Tagline "— YOUR GROWTH PARTNER —" -->
+    <text x="130" y="96" font-family="'Poppins', sans-serif" font-size="14.5" font-weight="600" class="logo-dark-fill" letter-spacing="0.32em">— YOUR GROWTH PARTNER —</text>
+  </symbol>
+</svg>
+
+<header class="nav" id="nav">
+  <div class="wrap navbar">
+    <a href="index.html" class="logo" aria-label="Groot X Media Logo">
+      <img src="/src/logo-header.png" alt="Groot X Media Logo" style="height: 74px; width: auto; object-fit: contain; display: block;" />
+    </a>
+    <nav class="navlinks">
+      <a href="index.html">Home</a>
+      <a href="index.html#services">Services</a>
+      <a href="testimonials.html">Testimonials</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="blog.html">Blog</a>
+      <a href="contact.html" class="active">Contact</a>
+    </nav>
+    <div class="nav-right">
+      <a href="#form" class="btn btn-primary">Get Started</a>
+      <button class="theme-toggle" aria-label="Toggle theme"><i data-lucide="sun" width="18" height="18"></i></button>
+    </div>
+  </div>
+</header>
+
+<section class="chead">
+  <div class="blob float" style="width:300px;height:300px;background:var(--blob-orange);top:-30px;left:-60px"></div>
+  <div class="blob float" style="width:240px;height:240px;background:var(--blob-navy);top:40px;right:-60px;animation-delay:-5s"></div>
+  <div class="wrap" style="position:relative;z-index:2">
+    <div class="reveal">
+      <span class="eyebrow"><i data-lucide="message-circle" width="14" height="14"></i>Let's grow together</span>
+      <h1>Get in <span class="accent">touch</span>.</h1>
+      <p>Questions, project ideas, or just want to talk growth? Reach out through the form or hit us up directly. We usually reply within a few hours.</p>
+    </div>
+  </div>
+</section>
+
+<section class="contact-main" id="form">
+  <div class="wrap">
+    <div class="cm-grid">
+      <!-- info -->
+      <aside class="cinfo reveal">
+        <h2>Contact information</h2>
+        <p class="lede">Prefer to reach out directly? Here's how to find us.</p>
+        <div class="cmethods">
+          <a class="cmethod" href="tel:+917397794418"><span class="ic"><i data-lucide="phone" width="19" height="19"></i></span><span><span class="lbl">Call / WhatsApp</span><span class="val">+91 73977 94418</span></span></a>
+          <a class="cmethod" href="mailto:info@grootxmedia.com"><span class="ic"><i data-lucide="mail" width="19" height="19"></i></span><span><span class="lbl">Email</span><span class="val">info@grootxmedia.com</span></span></a>
+          <a class="cmethod" href="https://www.grootxmedia.com"><span class="ic"><i data-lucide="globe" width="19" height="19"></i></span><span><span class="lbl">Website</span><span class="val">www.grootxmedia.com</span></span></a>
+        </div>
+        <div class="hours">
+          <h4><i data-lucide="clock" width="16" height="16"></i>Working hours</h4>
+          <p>Mon to Sat: 10:00 AM to 7:00 PM IST<br>Sunday: Closed (emails still get read)</p>
+        </div>
+        <div class="csocials">
+          <a href="#" aria-label="Facebook"><i data-lucide="facebook" width="16" height="16"></i></a>
+          <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin" width="16" height="16"></i></a>
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter" width="16" height="16"></i></a>
+          <a href="#" aria-label="Instagram"><i data-lucide="instagram" width="16" height="16"></i></a>
+        </div>
+      </aside>
+
+      <!-- form -->
+      <div class="cform reveal">
+        <div id="formInner">
+          <h2>Send us a message</h2>
+          <p class="fp">Fill this out and we'll get back to you shortly.</p>
+          <form id="contactForm" onsubmit="return sendForm(event)">
+            <div class="frow">
+              <div class="field"><label>Full name</label><input type="text" placeholder="Your name" required></div>
+              <div class="field"><label>Phone</label><input type="tel" placeholder="+91 ..." required></div>
+            </div>
+            <div class="frow">
+              <div class="field"><label>Email</label><input type="email" placeholder="you@example.com" required></div>
+              <div class="field"><label>Interested in</label><select><option>Select a plan</option><option>Starter — ₹16,999</option><option>Professional — ₹24,999</option><option>Premium — ₹39,999</option><option>Custom / not sure</option></select></div>
+            </div>
+            <div class="field"><label>Message</label><textarea placeholder="Tell us about your brand and what you're looking for..." required></textarea></div>
+            <button class="btn btn-primary" type="submit">Send message <i data-lucide="send" width="16" height="16"></i></button>
+            <p class="form-note">We respect your inbox. No spam, ever.</p>
+          </form>
+        </div>
+        <div class="ok-msg" id="okMsg">
+          <div class="ok-ic"><i data-lucide="check" width="30" height="30"></i></div>
+          <h3>Message sent!</h3>
+          <p>Thanks for reaching out. We'll get back to you within a few hours.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="map">
+  <div class="wrap">
+    <div class="map-card reveal">
+      <div class="map-pin">
+        <div class="pin"><i data-lucide="map-pin" width="24" height="24"></i></div>
+        <h4>Groot X Media</h4>
+        <p>Serving brands across India and beyond</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="wrap">
+    <div class="sec-head reveal"><h2>Quick questions</h2><p>The things people usually ask before reaching out.</p></div>
+    <div class="faq-list reveal">
+      <details class="faq-item"><summary>How fast do you respond?<span class="ic"><i data-lucide="plus" width="15" height="15"></i></span></summary><div class="ans">Within a few hours during working hours, and by the next morning otherwise. WhatsApp is fastest.</div></details>
+      <details class="faq-item"><summary>Do you work with small businesses?<span class="ic"><i data-lucide="plus" width="15" height="15"></i></span></summary><div class="ans">Absolutely. Our Starter plan is built exactly for brands just getting going.</div></details>
+      <details class="faq-item"><summary>Can I see your pricing first?<span class="ic"><i data-lucide="plus" width="15" height="15"></i></span></summary><div class="ans">Yep. All plans and what's included live on our <a href="pricing.html" style="color:var(--orange);font-weight:600">pricing page</a>.</div></details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="blob" style="width:300px;height:300px;background:var(--blob-navy);bottom:-120px;left:20%;opacity:.2"></div>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="index.html" class="logo" aria-label="Groot X Media Logo">
+          <img src="/src/logo-header.png" alt="Groot X Media Logo" style="height: 74px; width: auto; object-fit: contain; display: block;" />
+        </a>
+        <p>Groot X Media is your full-suite digital growth partner, transforming modern platforms into reliable revenue pipelines.</p>
+        <div class="socials">
+          <a href="#" aria-label="Facebook"><i data-lucide="facebook" width="16" height="16"></i></a>
+          <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin" width="16" height="16"></i></a>
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter" width="16" height="16"></i></a>
+          <a href="#" aria-label="Instagram"><i data-lucide="instagram" width="16" height="16"></i></a>
+        </div>
+      </div>
+      <div class="foot-col"><h5>Company</h5><a href="index.html#about">About</a><a href="blog.html">Blog</a><a href="testimonials.html">Testimonials</a><a href="#">Partners</a></div>
+      <div class="foot-col"><h5>Solutions</h5><a href="#">Marketing</a><a href="#">Analytics</a><a href="#">Commerce</a><a href="#">Insights</a></div>
+      <div class="foot-col"><h5>Support</h5><a href="pricing.html">Pricing</a><a href="#">Guides</a><a href="#">FAQ</a><a href="contact.html">Contact</a></div>
+      <div class="foot-col"><h5>Resources</h5><a href="#">Claim</a><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Groot X Media. All rights reserved</span>
+      <span>Your Growth Partner</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  lucide.createIcons();
+  const nav=document.getElementById('nav');
+  addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>10));
+  const io=new IntersectionObserver((e)=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{threshold:.12});
+  document.querySelectorAll('.reveal,.stagger').forEach(el=>io.observe(el));
+  function sendForm(e){e.preventDefault();document.getElementById('formInner').style.display='none';document.getElementById('okMsg').classList.add('show');lucide.createIcons();return false;}
+  const tog=document.querySelector('.theme-toggle');
+  tog&&tog.addEventListener('click',()=>{const d=document.documentElement.classList.toggle('dark');tog.innerHTML=d?'<i data-lucide="moon" width="18" height="18"></i>':'<i data-lucide="sun" width="18" height="18"></i>';lucide.createIcons();});
+
+  // Smooth page transition script
+  document.querySelectorAll('a').forEach(link => {
+    const href = link.getAttribute('href');
+    if (href && href.endsWith('.html') && !href.startsWith('#') && !link.target) {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.body.classList.add('page-exit');
+        setTimeout(() => { window.location.href = href; }, 200);
+      });
+      link.addEventListener('touchstart', () => { link.style.opacity = '0.7'; }, {passive:true});
+      link.addEventListener('touchend', () => { link.style.opacity = ''; }, {passive:true});
+    }
+  });
+</script>
+</body>
+</html>

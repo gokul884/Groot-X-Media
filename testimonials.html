@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- skill:chrome -->
+<style>
+/* Credit line — bottom-right */
+.design-ui-credit {
+  position: fixed;
+  bottom: 12px;
+  right: 12px;
+  font: 11px/1 system-ui, sans-serif;
+  color: rgba(128,128,128,0.5);
+  pointer-events: none;
+  z-index: 2147483647;
+  transition: opacity 0.4s ease;
+  user-select: none;
+  letter-spacing: 0.02em;
+}
+
+/* Hide chrome on touch devices */
+@media (hover: none) {
+  .design-ui-credit { display: none; }
+}
+
+/* Print fixes */
+@media print {
+  * {
+    transition: none !important;
+    animation: none !important;
+    box-shadow: none !important;
+  }
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .design-ui-credit { display: none !important; }
+}
+
+</style>
+<script>
+(function () {
+    // Design-ui pages are single compositions, so the whole body is editable.
+    function markEditable() {
+        document.body.classList.add('artifact-editable');
+    }
+
+    // Credit badge with idle-fade. Hover devices only.
+    function initChromeUI() {
+        if (!matchMedia('(hover: hover)').matches) return;
+
+        var credit = document.createElement('div');
+        credit.className = 'design-ui-credit';
+        credit.setAttribute('aria-hidden', 'true');
+        credit.innerHTML = '\u{1F49C} by ClickUp Brain';
+        document.body.appendChild(credit);
+
+        var timer = null;
+        var fade = function (out) { credit.style.opacity = out ? '0' : ''; };
+        fade(true);
+        var show = function () {
+            fade(false);
+            clearTimeout(timer);
+            timer = setTimeout(function () { fade(true); }, 3000);
+        };
+        document.addEventListener('mousemove', show);
+        show();
+    }
+
+    function init() {
+        markEditable();
+        initChromeUI();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+
+</script>
+<!-- /skill:chrome -->
+<!-- skill:libraries -->
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.383.0/dist/umd/lucide.min.js" integrity="sha384-wHFvAtjmgnkA2PJcMsDaCgdipf7X7YV44X/igbLHpvGiq6T5/PvFKl93grpvtbQT" crossorigin="anonymous"></script>
+<script>document.addEventListener("DOMContentLoaded",()=>lucide.createIcons())</script>
+<!-- /skill:libraries -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Testimonials — Groot X Media</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --orange:oklch(0.66 0.2 45);--orange-deep:oklch(0.6 0.2 42);
+    --navy:oklch(0.31 0.07 262);--navy-soft:oklch(0.42 0.06 262);
+    --ink:oklch(0.28 0.05 262);--ink-soft:oklch(0.4 0.04 262);
+    --muted:oklch(0.58 0.02 262);--muted-2:oklch(0.66 0.015 262);
+    --line:oklch(0.92 0.006 262);--bg:oklch(0.995 0.003 262);
+    --card:oklch(1 0 0);--card-2:oklch(0.98 0.006 262);
+    --blob-orange:oklch(0.84 0.12 55);--blob-navy:oklch(0.74 0.09 262);--blob-peach:oklch(0.89 0.08 62);
+    --ease:cubic-bezier(0.22,1,0.36,1);
+    --shadow-sm:0 1px 2px oklch(0.4 0.03 262 / .06);
+    --shadow:0 18px 50px -20px oklch(0.35 0.06 262 / .28);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;font-optical-sizing:auto}
+  h1,h2,h3,h4{text-wrap:balance;line-height:1.15;font-weight:700;color:var(--ink)}
+  p{text-wrap:pretty}
+  a{text-decoration:none;color:inherit}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 28px}
+  .accent{color:var(--orange)}
+  .blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.5;z-index:0;pointer-events:none}
+  .float{animation:float 14s var(--ease) infinite alternate}
+  @keyframes float{to{transform:translate(24px,-30px) scale(1.08)}}
+
+  .logo{display:flex;align-items:center;gap:11px}
+  .logo .mark{width:38px;height:38px;flex:none}
+  .logo .word{display:flex;flex-direction:column;line-height:1}
+  .logo .word .main{font-weight:800;font-size:1.1rem;letter-spacing:.02em}
+  .logo .word .main .o{color:var(--orange)}.logo .word .main .n{color:var(--navy)}
+  .logo .word .tag{font-size:.5rem;font-weight:600;letter-spacing:.34em;color:var(--muted);margin-top:3px}
+
+  header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:oklch(0.995 0.003 262 / .82);border-bottom:1px solid transparent;transition:border-color .3s,box-shadow .3s}
+  header.nav.scrolled{border-color:var(--line);box-shadow:0 6px 24px -18px oklch(0.35 0.05 262 / .5)}
+  .navbar{display:flex;align-items:center;justify-content:space-between;height:78px}
+  .navlinks{display:flex;gap:32px;font-size:.95rem;font-weight:500;color:var(--ink-soft)}
+  .navlinks a{position:relative;transition:color .2s}
+  .navlinks a::after{content:"";position:absolute;left:0;bottom:-6px;height:2px;width:0;background:var(--orange);transition:width .3s var(--ease)}
+  .navlinks a:hover,.navlinks a.active{color:var(--orange)}
+  .navlinks a:hover::after,.navlinks a.active::after{width:100%}
+  .nav-right{display:flex;align-items:center;gap:16px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;font-weight:600;font-size:.94rem;cursor:pointer;border:none;border-radius:999px;padding:13px 26px;transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .25s}
+  .btn-primary{background:var(--orange);color:#fff;box-shadow:0 12px 28px -12px oklch(0.66 0.2 45 / .7)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 34px -12px oklch(0.66 0.2 45 / .85);background:var(--orange-deep)}
+  .btn-ghost{background:transparent;color:var(--navy);border:1.5px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-2px)}
+  .theme-toggle{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);transition:transform .3s var(--ease),color .2s}
+  .theme-toggle:hover{transform:rotate(35deg);color:var(--orange)}
+
+  .thead{position:relative;padding:64px 0 20px;text-align:center}
+  .thead .eyebrow{display:inline-flex;align-items:center;gap:7px;background:oklch(0.95 0.03 55);color:var(--orange);font-size:.8rem;font-weight:600;padding:7px 15px;border-radius:999px;letter-spacing:.03em}
+  .thead h1{font-size:clamp(2.2rem,4.4vw,3.3rem);font-weight:800;letter-spacing:-.02em;margin:20px 0 14px}
+  .thead p{color:var(--muted);max-width:56ch;margin:0 auto;font-size:1rem}
+  .tstats{display:flex;gap:40px;justify-content:center;margin-top:34px;flex-wrap:wrap}
+  .tstat{text-align:center}
+  .tstat .n{font-size:1.8rem;font-weight:800;color:var(--navy)}
+  .tstat .l{font-size:.8rem;color:var(--muted);margin-top:2px}
+
+  /* 3x3 GRID */
+  .tgrid-sec{padding:44px 0 40px;position:relative}
+  .tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .tcard{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px;position:relative;overflow:hidden;transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .35s}
+  .tcard::after{content:"";position:absolute;right:-30px;bottom:-30px;width:110px;height:110px;border-radius:50%;background:oklch(0.66 0.2 45 / .08);transition:transform .5s var(--ease)}
+  .tcard:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:transparent}
+  .tcard:hover::after{transform:scale(1.6)}
+  .tquote-mark{color:var(--orange);opacity:.55;margin-bottom:8px}
+  .tcard .stars{display:flex;gap:3px;color:var(--orange);margin-bottom:12px}
+  .tcard .quote{color:var(--ink-soft);font-size:.93rem;line-height:1.66;position:relative;z-index:1}
+  .tperson{display:flex;align-items:center;gap:13px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line);position:relative;z-index:1}
+  .tavatar{width:52px;height:52px;border-radius:50%;flex:none;overflow:hidden;display:grid;place-items:center;color:#fff;font-weight:700;font-size:1.1rem}
+  .a1{background:linear-gradient(135deg,oklch(0.7 0.16 45),oklch(0.55 0.12 30))}
+  .a2{background:linear-gradient(135deg,oklch(0.55 0.1 262),oklch(0.4 0.08 262))}
+  .a3{background:linear-gradient(135deg,oklch(0.72 0.15 55),oklch(0.6 0.1 40))}
+  .a4{background:linear-gradient(135deg,oklch(0.6 0.09 262),oklch(0.7 0.15 50))}
+  .a5{background:linear-gradient(135deg,oklch(0.68 0.17 40),oklch(0.5 0.1 262))}
+  .a6{background:linear-gradient(135deg,oklch(0.5 0.08 262),oklch(0.68 0.16 55))}
+  .a7{background:linear-gradient(135deg,oklch(0.74 0.15 50),oklch(0.58 0.11 35))}
+  .a8{background:linear-gradient(135deg,oklch(0.58 0.11 262),oklch(0.72 0.16 48))}
+  .a9{background:linear-gradient(135deg,oklch(0.7 0.17 42),oklch(0.45 0.09 262))}
+  .tperson .who .nm{font-weight:600;font-size:.94rem;color:var(--ink)}
+  .tperson .who .rl{font-size:.79rem;color:var(--muted-2)}
+
+  .tcta{padding:30px 0 90px}
+  .tcta-band{position:relative;overflow:hidden;border-radius:28px;text-align:center;padding:60px 24px;background:var(--navy);color:#fff}
+  .tcta-band h2{color:#fff;font-size:clamp(1.7rem,3.2vw,2.4rem);font-weight:800;position:relative;z-index:2}
+  .tcta-band p{color:oklch(0.85 0.02 262);max-width:50ch;margin:14px auto 28px;font-size:.96rem;position:relative;z-index:2}
+  .tcta-band .btn{position:relative;z-index:2}
+
+  footer{background:oklch(0.985 0.005 262);border-top:1px solid var(--line);padding:64px 0 30px;position:relative;overflow:hidden}
+  .foot-grid{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:34px;position:relative;z-index:2}
+  .foot-brand p{color:var(--muted);font-size:.86rem;margin-top:14px;max-width:34ch}
+  .socials{display:flex;gap:12px;margin-top:20px}
+  .socials a{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--muted);transition:all .25s var(--ease);background:var(--card)}
+  .socials a:hover{color:#fff;background:var(--orange);border-color:var(--orange);transform:translateY(-3px)}
+  .foot-col h5{font-size:.95rem;margin-bottom:16px;color:var(--navy)}
+  .foot-col a{display:block;color:var(--muted);font-size:.87rem;margin-bottom:11px;transition:color .2s,padding-left .2s}
+  .foot-col a:hover{color:var(--orange);padding-left:4px}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:48px;padding-top:22px;border-top:1px solid var(--line);font-size:.83rem;color:var(--muted);position:relative;z-index:2;flex-wrap:wrap;gap:10px}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  .stagger>*{opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease),transform .6s var(--ease);transition-delay:calc(var(--i,0)*70ms)}
+  .stagger.in>*{opacity:1;transform:none}
+
+  /* Page transitions */
+  body {
+    opacity: 0;
+    animation: fadeInPage 0.3s ease-out forwards;
+  }
+  @keyframes fadeInPage {
+    to { opacity: 1; }
+  }
+  .page-exit {
+    opacity: 0 !important;
+    transition: opacity 0.22s ease-in-out !important;
+  }
+
+  /* Toggle styles */
+  .media-toggle .toggle-btn.active {
+    background: var(--orange) !important;
+    color: #fff !important;
+  }
+  .media-toggle .toggle-btn:not(.active):hover {
+    color: var(--orange) !important;
+  }
+  
+  /* Video Play button hover scale */
+  .play-btn:hover {
+    transform: translate(-50%, -50%) scale(1.1) !important;
+    background: var(--orange) !important;
+    border-color: var(--orange) !important;
+  }
+
+  @media(max-width:900px){
+    .tgrid{grid-template-columns:repeat(2,1fr)}
+    .foot-grid{grid-template-columns:1fr 1fr;gap:28px}.foot-brand{grid-column:1/-1}
+    .navlinks{display:none}
+  }
+  @media(max-width:600px){
+    .tgrid{grid-template-columns:1fr}
+    .foot-grid{grid-template-columns:1fr}
+    .logo .word .tag{display:none}
+    .tstats{gap:26px}
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="gxm-logo" viewBox="0 0 540 120">
+    <style>
+      .logo-dark-fill { fill: #000000; }
+      .dark .logo-dark-fill { fill: #ffffff; }
+      .logo-dark-stroke { stroke: #000000; }
+      .dark .logo-dark-stroke { stroke: #ffffff; }
+    </style>
+    <!-- Monogram -->
+    <path d="M24 96 L24 46 C24 31 42 27 50 40 L60 57 L70 40 C78 27 96 31 96 46 L96 96" fill="none" stroke="#F26522" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M60 40 L60 58" fill="none" stroke="#F26522" stroke-width="12" stroke-linecap="round"/>
+    <path d="M60 58 L60 104 C60 111 68 111 74 105" fill="none" class="logo-dark-stroke" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M60 84 L76 84" fill="none" class="logo-dark-stroke" stroke-width="12" stroke-linecap="round"/>
+    
+    <!-- Text "GROOT X MEDIA" -->
+    <text x="130" y="66" font-family="'Poppins', sans-serif" font-size="44" font-weight="800" letter-spacing="0.04em">
+      <tspan fill="#F26522">GROOT</tspan>
+      <tspan class="logo-dark-fill" font-weight="700"> X </tspan>
+      <tspan fill="#F26522">MEDIA</tspan>
+    </text>
+    
+    <!-- Tagline "— YOUR GROWTH PARTNER —" -->
+    <text x="130" y="96" font-family="'Poppins', sans-serif" font-size="14.5" font-weight="600" class="logo-dark-fill" letter-spacing="0.32em">— YOUR GROWTH PARTNER —</text>
+  </symbol>
+</svg>
+
+<header class="nav" id="nav">
+  <div class="wrap navbar">
+    <a href="index.html" class="logo" aria-label="Groot X Media Logo">
+      <img src="/src/logo-header.png" alt="Groot X Media Logo" style="height: 74px; width: auto; object-fit: contain; display: block;" />
+    </a>
+    <nav class="navlinks">
+      <a href="index.html">Home</a>
+      <a href="index.html#services">Services</a>
+      <a href="testimonials.html" class="active">Testimonials</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="blog.html">Blog</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-right">
+      <a href="contact.html" class="btn btn-primary">Get Started</a>
+      <button class="theme-toggle" aria-label="Toggle theme"><i data-lucide="sun" width="18" height="18"></i></button>
+    </div>
+  </div>
+</header>
+
+<section class="thead">
+  <div class="blob float" style="width:300px;height:300px;background:var(--blob-orange);top:-30px;left:-60px"></div>
+  <div class="blob float" style="width:240px;height:240px;background:var(--blob-navy);top:40px;right:-60px;animation-delay:-5s"></div>
+  <div class="wrap" style="position:relative;z-index:2">
+    <div class="reveal">
+      <span class="eyebrow"><i data-lucide="quote" width="14" height="14"></i>Client love</span>
+      <h1>What our <span class="accent">clients</span> say.</h1>
+      <p>We measure our success by theirs. Here's what the brands we partner with have to say about working with Groot X Media.</p>
+    </div>
+  </div>
+</section>
+
+<section class="tgrid-sec">
+  <div class="blob float" style="width:220px;height:220px;background:var(--blob-peach);bottom:40px;left:-70px;opacity:.35;animation-delay:-4s"></div>
+  <div class="wrap">
+    <!-- Media Toggle Button -->
+    <div class="reveal" style="display:flex; justify-content:center; margin-bottom:40px;">
+      <div class="media-toggle" style="background:var(--card); border:1px solid var(--line); border-radius:50px; padding:6px; display:inline-flex; gap:6px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+        <button id="showPhotos" class="toggle-btn active" style="border:none; background:none; font-family:inherit; font-size:.9rem; font-weight:600; color:var(--muted); padding:10px 24px; border-radius:50px; cursor:pointer; transition:all 0.25s var(--ease); display:flex; align-items:center; gap:8px;">
+          <i data-lucide="image" width="16" height="16"></i> Client Photos
+        </button>
+        <button id="showVideos" class="toggle-btn" style="border:none; background:none; font-family:inherit; font-size:.9rem; font-weight:600; color:var(--muted); padding:10px 24px; border-radius:50px; cursor:pointer; transition:all 0.25s var(--ease); display:flex; align-items:center; gap:8px;">
+          <i data-lucide="play-circle" width="16" height="16"></i> Client Videos
+        </button>
+      </div>
+    </div>
+
+    <div class="tgrid stagger reveal">
+      <!-- Card 1 -->
+      <div class="tcard" style="--i:0">
+        <div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div>
+        
+        <div class="t-photo-wrapper" style="border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%;">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&h=180&q=80" alt="Rahul Kapoor" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
+        </div>
+        <div class="t-video-wrapper" style="display:none; border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%; position:relative; cursor:pointer;" data-video-url="https://assets.mixkit.co/videos/preview/mixkit-man-working-on-his-laptop-in-a-coffee-shop-42281-large.mp4">
+          <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=300&h=180&q=80" alt="Rahul Kapoor Video" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
+          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); display:flex; justify-content:center; align-items:center;">
+            <button class="play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46px; height:46px; border-radius:50%; background:#fff; border:none; display:flex; justify-content:center; align-items:center; color:var(--orange); cursor:pointer; transition:all 0.25s var(--ease); box-shadow:0 6px 15px rgba(0,0,0,0.2);"><i data-lucide="play" width="18" height="18" fill="currentColor"></i></button>
+          </div>
+        </div>
+
+        <div class="tperson"><div class="tavatar a1">RK</div><div class="who"><div class="nm">Rahul Kapoor</div><div class="rl">Founder, Brewhouse</div></div></div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="tcard" style="--i:1">
+        <div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div>
+        
+        <div class="t-photo-wrapper" style="border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%;">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&h=180&q=80" alt="Sneha Menon" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
+        </div>
+        <div class="t-video-wrapper" style="display:none; border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%; position:relative; cursor:pointer;" data-video-url="https://assets.mixkit.co/videos/preview/mixkit-businesswoman-talking-on-a-video-call-42352-large.mp4">
+          <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=300&h=180&q=80" alt="Sneha Menon Video" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
+          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); display:flex; justify-content:center; align-items:center;">
+            <button class="play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46px; height:46px; border-radius:50%; background:#fff; border:none; display:flex; justify-content:center; align-items:center; color:var(--orange); cursor:pointer; transition:all 0.25s var(--ease); box-shadow:0 6px 15px rgba(0,0,0,0.2);"><i data-lucide="play" width="18" height="18" fill="currentColor"></i></button>
+          </div>
+        </div>
+
+        <div class="tperson"><div class="tavatar a2">SM</div><div class="who"><div class="nm">Sneha Menon</div><div class="rl">CMO, Luxe Skincare</div></div></div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="tcard" style="--i:2">
+        <div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div>
+        
+        <div class="t-photo-wrapper" style="border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%;">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&h=180&q=80" alt="Arjun Verma" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
+        </div>
+        <div class="t-video-wrapper" style="display:none; border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%; position:relative; cursor:pointer;" data-video-url="https://assets.mixkit.co/videos/preview/mixkit-young-woman-working-on-a-laptop-in-a-bright-office-42353-large.mp4">
+          <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=300&h=180&q=80" alt="Arjun Verma Video" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
+          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); display:flex; justify-content:center; align-items:center;">
+            <button class="play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46px; height:46px; border-radius:50%; background:#fff; border:none; display:flex; justify-content:center; align-items:center; color:var(--orange); cursor:pointer; transition:all 0.25s var(--ease); box-shadow:0 6px 15px rgba(0,0,0,0.2);"><i data-lucide="play" width="18" height="18" fill="currentColor"></i></button>
+          </div>
+        </div>
+
+        <div class="tperson"><div class="tavatar a3">AV</div><div class="who"><div class="nm">Arjun Verma</div><div class="rl">Owner, FitZone Gyms</div></div></div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="tcard" style="--i:3">
+        <div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div>
+        
+        <div class="t-photo-wrapper" style="border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%;">
+          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&h=180&q=80" alt="Priya Nair" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
+        </div>
+        <div class="t-video-wrapper" style="display:none; border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%; position:relative; cursor:pointer;" data-video-url="https://assets.mixkit.co/videos/preview/mixkit-executive-smiling-while-looking-at-camera-in-office-42348-large.mp4">
+          <img src="https://images.unsplash.com/photo-1542744094-3a31f103e35f?auto=format&fit=crop&w=300&h=180&q=80" alt="Priya Nair Video" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
+          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); display:flex; justify-content:center; align-items:center;">
+            <button class="play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46px; height:46px; border-radius:50%; background:#fff; border:none; display:flex; justify-content:center; align-items:center; color:var(--orange); cursor:pointer; transition:all 0.25s var(--ease); box-shadow:0 6px 15px rgba(0,0,0,0.2);"><i data-lucide="play" width="18" height="18" fill="currentColor"></i></button>
+          </div>
+        </div>
+
+        <div class="tperson"><div class="tavatar a4">PN</div><div class="who"><div class="nm">Priya Nair</div><div class="rl">Director, Casa Interiors</div></div></div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="tcard" style="--i:4">
+        <div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div>
+        
+        <div class="t-photo-wrapper" style="border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%;">
+          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&h=180&q=80" alt="Deepak Thakur" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
+        </div>
+        <div class="t-video-wrapper" style="display:none; border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%; position:relative; cursor:pointer;" data-video-url="https://assets.mixkit.co/videos/preview/mixkit-man-working-on-his-laptop-in-a-coffee-shop-42281-large.mp4">
+          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=300&h=180&q=80" alt="Deepak Thakur Video" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
+          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); display:flex; justify-content:center; align-items:center;">
+            <button class="play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46px; height:46px; border-radius:50%; background:#fff; border:none; display:flex; justify-content:center; align-items:center; color:var(--orange); cursor:pointer; transition:all 0.25s var(--ease); box-shadow:0 6px 15px rgba(0,0,0,0.2);"><i data-lucide="play" width="18" height="18" fill="currentColor"></i></button>
+          </div>
+        </div>
+
+        <div class="tperson"><div class="tavatar a5">DT</div><div class="who"><div class="nm">Deepak Thakur</div><div class="rl">CEO, Nova Tech</div></div></div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="tcard" style="--i:5">
+        <div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div>
+        
+        <div class="t-photo-wrapper" style="border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%;">
+          <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=300&h=180&q=80" alt="Meera Iyer" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
+        </div>
+        <div class="t-video-wrapper" style="display:none; border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%; position:relative; cursor:pointer;" data-video-url="https://assets.mixkit.co/videos/preview/mixkit-businesswoman-talking-on-a-video-call-42352-large.mp4">
+          <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=300&h=180&q=80" alt="Meera Iyer Video" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
+          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); display:flex; justify-content:center; align-items:center;">
+            <button class="play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46px; height:46px; border-radius:50%; background:#fff; border:none; display:flex; justify-content:center; align-items:center; color:var(--orange); cursor:pointer; transition:all 0.25s var(--ease); box-shadow:0 6px 15px rgba(0,0,0,0.2);"><i data-lucide="play" width="18" height="18" fill="currentColor"></i></button>
+          </div>
+        </div>
+
+        <div class="tperson"><div class="tavatar a6">MI</div><div class="who"><div class="nm">Meera Iyer</div><div class="rl">Founder, Bloom Cafe</div></div></div>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="tcard" style="--i:6">
+        <div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div>
+        
+        <div class="t-photo-wrapper" style="border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%;">
+          <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=300&h=180&q=80" alt="Vikram Singh" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
+        </div>
+        <div class="t-video-wrapper" style="display:none; border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%; position:relative; cursor:pointer;" data-video-url="https://assets.mixkit.co/videos/preview/mixkit-young-woman-working-on-a-laptop-in-a-bright-office-42353-large.mp4">
+          <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=300&h=180&q=80" alt="Vikram Singh Video" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
+          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); display:flex; justify-content:center; align-items:center;">
+            <button class="play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46px; height:46px; border-radius:50%; background:#fff; border:none; display:flex; justify-content:center; align-items:center; color:var(--orange); cursor:pointer; transition:all 0.25s var(--ease); box-shadow:0 6px 15px rgba(0,0,0,0.2);"><i data-lucide="play" width="18" height="18" fill="currentColor"></i></button>
+          </div>
+        </div>
+
+        <div class="tperson"><div class="tavatar a7">VS</div><div class="who"><div class="nm">Vikram Singh</div><div class="rl">Partner, Urban Dental</div></div></div>
+      </div>
+
+      <!-- Card 8 -->
+      <div class="tcard" style="--i:7">
+        <div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div>
+        
+        <div class="t-photo-wrapper" style="border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%;">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&h=180&q=80" alt="Ananya Farah" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
+        </div>
+        <div class="t-video-wrapper" style="display:none; border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%; position:relative; cursor:pointer;" data-video-url="https://assets.mixkit.co/videos/preview/mixkit-executive-smiling-while-looking-at-camera-in-office-42348-large.mp4">
+          <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=300&h=180&q=80" alt="Ananya Farah Video" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
+          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); display:flex; justify-content:center; align-items:center;">
+            <button class="play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46px; height:46px; border-radius:50%; background:#fff; border:none; display:flex; justify-content:center; align-items:center; color:var(--orange); cursor:pointer; transition:all 0.25s var(--ease); box-shadow:0 6px 15px rgba(0,0,0,0.2);"><i data-lucide="play" width="18" height="18" fill="currentColor"></i></button>
+          </div>
+        </div>
+
+        <div class="tperson"><div class="tavatar a8">AF</div><div class="who"><div class="nm">Ananya Farah</div><div class="rl">Head of Growth, Zap Pay</div></div></div>
+      </div>
+
+      <!-- Card 9 -->
+      <div class="tcard" style="--i:8">
+        <div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div>
+        
+        <div class="t-photo-wrapper" style="border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%;">
+          <img src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?auto=format&fit=crop&w=300&h=180&q=80" alt="Harsh Gupta" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
+        </div>
+        <div class="t-video-wrapper" style="display:none; border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%; position:relative; cursor:pointer;" data-video-url="https://assets.mixkit.co/videos/preview/mixkit-man-working-on-his-laptop-in-a-coffee-shop-42281-large.mp4">
+          <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=300&h=180&q=80" alt="Harsh Gupta Video" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
+          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); display:flex; justify-content:center; align-items:center;">
+            <button class="play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46px; height:46px; border-radius:50%; background:#fff; border:none; display:flex; justify-content:center; align-items:center; color:var(--orange); cursor:pointer; transition:all 0.25s var(--ease); box-shadow:0 6px 15px rgba(0,0,0,0.2);"><i data-lucide="play" width="18" height="18" fill="currentColor"></i></button>
+          </div>
+        </div>
+
+        <div class="tperson"><div class="tavatar a9">HG</div><div class="who"><div class="nm">Harsh Gupta</div><div class="rl">MD, Peak Apparel</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tcta">
+  <div class="wrap">
+    <div class="tcta-band reveal">
+      <div class="blob float" style="width:200px;height:200px;background:var(--blob-orange);top:-40px;left:8%;opacity:.35"></div>
+      <div class="blob float" style="width:180px;height:180px;background:var(--blob-navy);bottom:-40px;right:8%;opacity:.4;animation-delay:-4s"></div>
+      <h2>Ready to be our next success story?</h2>
+      <p>Join 120+ brands growing with Groot X Media. Let's talk about where you want to go.</p>
+      <a href="contact.html" class="btn btn-primary">Get In Touch <i data-lucide="arrow-right" width="16" height="16"></i></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="blob" style="width:300px;height:300px;background:var(--blob-navy);bottom:-120px;left:20%;opacity:.2"></div>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="index.html" class="logo" aria-label="Groot X Media Logo">
+          <img src="/src/logo-header.png" alt="Groot X Media Logo" style="height: 74px; width: auto; object-fit: contain; display: block;" />
+        </a>
+        <p>Groot X Media is your full-suite digital growth partner, transforming modern platforms into reliable revenue pipelines.</p>
+        <div class="socials">
+          <a href="#" aria-label="Facebook"><i data-lucide="facebook" width="16" height="16"></i></a>
+          <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin" width="16" height="16"></i></a>
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter" width="16" height="16"></i></a>
+          <a href="#" aria-label="Instagram"><i data-lucide="instagram" width="16" height="16"></i></a>
+        </div>
+      </div>
+      <div class="foot-col"><h5>Company</h5><a href="index.html#about">About</a><a href="blog.html">Blog</a><a href="testimonials.html">Testimonials</a><a href="#">Partners</a></div>
+      <div class="foot-col"><h5>Solutions</h5><a href="#">Marketing</a><a href="#">Analytics</a><a href="#">Commerce</a><a href="#">Insights</a></div>
+      <div class="foot-col"><h5>Support</h5><a href="pricing.html">Pricing</a><a href="#">Guides</a><a href="#">FAQ</a><a href="contact.html">Contact</a></div>
+      <div class="foot-col"><h5>Resources</h5><a href="#">Claim</a><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Groot X Media. All rights reserved</span>
+      <span>Your Growth Partner</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Video Success Modal -->
+<div id="videoModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center; opacity:0; transition:opacity 0.3s ease;">
+  <div style="position:relative; width:90%; max-width:800px; aspect-ratio:16/9; background:#000; border-radius:16px; overflow:hidden; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5);">
+    <button id="closeModal" style="position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.25); border:none; width:36px; height:36px; border-radius:50%; display:grid; place-items:center; color:#fff; cursor:pointer; font-size:1.4rem; transition:background 0.2s; z-index:10;">&times;</button>
+    <video id="modalVideo" controls style="width:100%; height:100%; object-fit:cover;" src=""></video>
+  </div>
+</div>
+
+<script>
+  lucide.createIcons();
+  const nav=document.getElementById('nav');
+  addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>10));
+  const io=new IntersectionObserver((e)=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{threshold:.12});
+  document.querySelectorAll('.reveal,.stagger').forEach(el=>io.observe(el));
+  const tog=document.querySelector('.theme-toggle');
+  tog&&tog.addEventListener('click',()=>{const d=document.documentElement.classList.toggle('dark');tog.innerHTML=d?'<i data-lucide="moon" width="18" height="18"></i>':'<i data-lucide="sun" width="18" height="18"></i>';lucide.createIcons();});
+
+  // Toggle functionality between Photos and Videos
+  const btnPhotos = document.getElementById('showPhotos');
+  const btnVideos = document.getElementById('showVideos');
+  const photoWrappers = document.querySelectorAll('.t-photo-wrapper');
+  const videoWrappers = document.querySelectorAll('.t-video-wrapper');
+
+  btnPhotos.addEventListener('click', () => {
+    btnPhotos.classList.add('active');
+    btnVideos.classList.remove('active');
+    photoWrappers.forEach(el => el.style.display = 'block');
+    videoWrappers.forEach(el => el.style.display = 'none');
+  });
+
+  btnVideos.addEventListener('click', () => {
+    btnVideos.classList.add('active');
+    btnPhotos.classList.remove('active');
+    photoWrappers.forEach(el => el.style.display = 'none');
+    videoWrappers.forEach(el => el.style.display = 'block');
+  });
+
+  // Video Modal handling
+  const modal = document.getElementById('videoModal');
+  const modalVideo = document.getElementById('modalVideo');
+  const closeBtn = document.getElementById('closeModal');
+
+  videoWrappers.forEach(wrapper => {
+    wrapper.addEventListener('click', () => {
+      const url = wrapper.getAttribute('data-video-url');
+      if (url) {
+        modalVideo.src = url;
+        modal.style.display = 'flex';
+        setTimeout(() => {
+          modal.style.opacity = '1';
+        }, 10);
+        modalVideo.play().catch(e => console.log("Auto-play blocked:", e));
+      }
+    });
+  });
+
+  const hideModal = () => {
+    modal.style.opacity = '0';
+    setTimeout(() => {
+      modal.style.display = 'none';
+      modalVideo.pause();
+      modalVideo.src = '';
+    }, 300);
+  };
+
+  closeBtn.addEventListener('click', hideModal);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) hideModal();
+  });
+
+  // Smooth page transition script
+  document.querySelectorAll('a').forEach(link => {
+    const href = link.getAttribute('href');
+    if (href && href.endsWith('.html') && !href.startsWith('#') && !link.target) {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.body.classList.add('page-exit');
+        setTimeout(() => { window.location.href = href; }, 200);
+      });
+      link.addEventListener('touchstart', () => { link.style.opacity = '0.7'; }, {passive:true});
+      link.addEventListener('touchend', () => { link.style.opacity = ''; }, {passive:true});
+    }
+  });
+</script>
+</body>
+</html>
