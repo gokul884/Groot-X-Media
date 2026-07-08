@@ -68,7 +68,7 @@
 
     function init() {
         markEditable();
-        initChromeUI();
+        // initChromeUI();
     }
 
     if (document.readyState === 'loading') {
@@ -482,19 +482,75 @@
   const tog=document.querySelector('.theme-toggle');
   tog&&tog.addEventListener('click',()=>{const d=document.documentElement.classList.toggle('dark');tog.innerHTML=d?'<i data-lucide="moon" width="18" height="18"></i>':'<i data-lucide="sun" width="18" height="18"></i>';lucide.createIcons();});
 
-  // Smooth page transition script
+  // Smooth page transition and internal redirection script
   document.querySelectorAll('a').forEach(link => {
     const href = link.getAttribute('href');
-    if (href && href.endsWith('.html') && !href.startsWith('#') && !link.target) {
+    if (!href) return;
+
+    // Skip external links, mailto, tel, etc.
+    if (href.startsWith('http') && !href.includes(window.location.hostname)) return;
+    if (href.startsWith('mailto:') || href.startsWith('tel:')) return;
+
+    const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+    
+    // Normalize target link path and hash
+    const hashIndex = href.indexOf('#');
+    const targetPath = hashIndex !== -1 ? href.slice(0, hashIndex) : href;
+    const targetHash = hashIndex !== -1 ? href.slice(hashIndex) : '';
+    
+    const isSamePage = targetPath === '' || targetPath === currentPath || (targetPath === 'index.html' && currentPath === '') || (targetPath === '' && currentPath === 'index.html');
+
+    if (isSamePage && targetHash) {
+      // Same-page internal redirection (e.g. #services, index.html#services on index.html)
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetEl = document.querySelector(targetHash);
+        if (targetEl) {
+          const offset = targetEl.getBoundingClientRect().top + window.pageYOffset - 80;
+          window.scrollTo({ top: offset, behavior: 'smooth' });
+          history.pushState(null, '', targetHash);
+        }
+      });
+    } else if (href.startsWith('#')) {
+      // Relative hash link (e.g. #about)
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetEl = document.querySelector(href);
+        if (targetEl) {
+          const offset = targetEl.getBoundingClientRect().top + window.pageYOffset - 80;
+          window.scrollTo({ top: offset, behavior: 'smooth' });
+          history.pushState(null, '', href);
+        }
+      });
+    } else if (targetPath.endsWith('.html')) {
+      // Redirect to other pages
       link.addEventListener('click', (e) => {
         e.preventDefault();
         document.body.classList.add('page-exit');
-        setTimeout(() => { window.location.href = href; }, 200);
+        setTimeout(() => {
+          window.location.href = href;
+        }, 220);
       });
       link.addEventListener('touchstart', () => { link.style.opacity = '0.7'; }, {passive:true});
       link.addEventListener('touchend', () => { link.style.opacity = ''; }, {passive:true});
     }
   });
+
+  // Smooth scroll on page load if there is a hash in the URL
+  if (window.location.hash) {
+    const targetId = window.location.hash;
+    const targetEl = document.querySelector(targetId);
+    if (targetEl) {
+      // Prevent browser default jump by scrolling to top first
+      window.scrollTo(0, 0);
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          const offset = targetEl.getBoundingClientRect().top + window.pageYOffset - 80;
+          window.scrollTo({ top: offset, behavior: 'smooth' });
+        }, 120);
+      });
+    }
+  }
 </script>
 </body>
 </html>
