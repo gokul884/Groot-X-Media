@@ -14,12 +14,22 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase safely
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-const db = getFirestore(app);
+let app;
+let db: any = null;
+try {
+  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+  db = getFirestore(app);
+} catch (e) {
+  console.error("Firebase initialization failed:", e);
+}
 
 // Initialize EmailJS safely
-const emailjsPublicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "1U3orAjQlfk88-sZQ";
-emailjs.init(emailjsPublicKey);
+try {
+  const emailjsPublicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "1U3orAjQlfk88-sZQ";
+  emailjs.init(emailjsPublicKey);
+} catch (e) {
+  console.error("EmailJS initialization failed:", e);
+}
 
 // Direct download backup generator
 const generateAndDownloadDoc = (type: string, filename: string) => {
@@ -813,23 +823,27 @@ const initExitIntentSystem = () => {
     submitBtn.setAttribute('disabled', 'true');
 
     // 1. Try to save to Firebase Firestore
-    try {
-      const firestorePromise = addDoc(collection(db, "leads"), {
-        name: fullname,
-        email: email,
-        website: website,
-        timestamp: serverTimestamp(),
-        source: "exit_intent_audit",
-        status: "audit_requested"
-      });
-      // Add a strict 1500ms timeout to prevent Firestore writes from blocking or hanging on connection issues
-      await Promise.race([
-        firestorePromise,
-        new Promise((_, reject) => setTimeout(() => reject(new Error("Firestore write timed out")), 1500))
-      ]);
-      console.log("Exit audit lead saved to Firebase!");
-    } catch (firebaseError) {
-      console.warn("Firebase Firestore exit lead save failed or timed out:", firebaseError);
+    if (db) {
+      try {
+        const firestorePromise = addDoc(collection(db, "leads"), {
+          name: fullname,
+          email: email,
+          website: website,
+          timestamp: serverTimestamp(),
+          source: "exit_intent_audit",
+          status: "audit_requested"
+        });
+        // Add a strict 1500ms timeout to prevent Firestore writes from blocking or hanging on connection issues
+        await Promise.race([
+          firestorePromise,
+          new Promise((_, reject) => setTimeout(() => reject(new Error("Firestore write timed out")), 1500))
+        ]);
+        console.log("Exit audit lead saved to Firebase!");
+      } catch (firebaseError) {
+        console.warn("Firebase Firestore exit lead save failed or timed out:", firebaseError);
+      }
+    } else {
+      console.warn("Firebase not initialized. Skipping Firestore save.");
     }
 
     // 2. Send email via EmailJS (Primary REST API + Fallback SDK)

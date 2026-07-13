@@ -15,12 +15,22 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase & Firestore safely
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-const db = getFirestore(app);
+let app;
+let db: any = null;
+try {
+  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+  db = getFirestore(app);
+} catch (e) {
+  console.error("Firebase initialization failed:", e);
+}
 
 // Initialize EmailJS
-const emailjsPublicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "1U3orAjQlfk88-sZQ";
-emailjs.init(emailjsPublicKey);
+try {
+  const emailjsPublicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "1U3orAjQlfk88-sZQ";
+  emailjs.init(emailjsPublicKey);
+} catch (e) {
+  console.error("EmailJS initialization failed:", e);
+}
 
 // Document generators for direct download backup
 const generateAndDownloadDoc = (type: string, filename: string) => {
@@ -472,22 +482,26 @@ const handleLeadSubmission = async (email: string, source: string): Promise<{ su
   const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_0z9dwgn";
 
   // 1. Try to save to Firebase Firestore
-  try {
-    const firestorePromise = addDoc(collection(db, "leads"), {
-      email: email,
-      source: source,
-      timestamp: serverTimestamp(),
-      status: "brochure_requested"
-    });
-    // Add a strict 1500ms timeout so Firebase never blocks execution or freezes the "Get Started" button
-    await Promise.race([
-      firestorePromise,
-      new Promise((_, reject) => setTimeout(() => reject(new Error("Firestore write timed out")), 1500))
-    ]);
-    console.log("Lead successfully saved to Firebase!");
-  } catch (firebaseError) {
-    // Fail-safe: log warning but do not block email sending (useful if Firestore permissions are not configured yet)
-    console.warn("Firebase Firestore save failed or timed out (will proceed with EmailJS brochure dispatch):", firebaseError);
+  if (db) {
+    try {
+      const firestorePromise = addDoc(collection(db, "leads"), {
+        email: email,
+        source: source,
+        timestamp: serverTimestamp(),
+        status: "brochure_requested"
+      });
+      // Add a strict 1500ms timeout so Firebase never blocks execution or freezes the "Get Started" button
+      await Promise.race([
+        firestorePromise,
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Firestore write timed out")), 1500))
+      ]);
+      console.log("Lead successfully saved to Firebase!");
+    } catch (firebaseError) {
+      // Fail-safe: log warning but do not block email sending (useful if Firestore permissions are not configured yet)
+      console.warn("Firebase Firestore save failed or timed out (will proceed with EmailJS brochure dispatch):", firebaseError);
+    }
+  } else {
+    console.warn("Firebase not initialized. Skipping Firestore save.");
   }
 
   // 2. Send email via EmailJS (Primary REST API + Fallback SDK)
@@ -783,25 +797,29 @@ const initGetStarted = () => {
       `;
 
       // 1. Try to save to Firebase Firestore
-      try {
-        const firestorePromise = addDoc(collection(db, "leads"), {
-          name,
-          phone,
-          email,
-          plan,
-          message,
-          timestamp: serverTimestamp(),
-          source: "contact_page",
-          status: "contact_requested"
-        });
-        // Add a strict 1500ms timeout to avoid freezing during network offline or database connection delays
-        await Promise.race([
-          firestorePromise,
-          new Promise((_, reject) => setTimeout(() => reject(new Error("Firestore write timed out")), 1500))
-        ]);
-        console.log("Contact request successfully saved to Firebase!");
-      } catch (firebaseError) {
-        console.warn("Firebase Firestore contact save failed or timed out:", firebaseError);
+      if (db) {
+        try {
+          const firestorePromise = addDoc(collection(db, "leads"), {
+            name,
+            phone,
+            email,
+            plan,
+            message,
+            timestamp: serverTimestamp(),
+            source: "contact_page",
+            status: "contact_requested"
+          });
+          // Add a strict 1500ms timeout to avoid freezing during network offline or database connection delays
+          await Promise.race([
+            firestorePromise,
+            new Promise((_, reject) => setTimeout(() => reject(new Error("Firestore write timed out")), 1500))
+          ]);
+          console.log("Contact request successfully saved to Firebase!");
+        } catch (firebaseError) {
+          console.warn("Firebase Firestore contact save failed or timed out:", firebaseError);
+        }
+      } else {
+        console.warn("Firebase not initialized. Skipping Firestore save.");
       }
 
       // 2. Send email via EmailJS (Primary REST API + Fallback SDK)
