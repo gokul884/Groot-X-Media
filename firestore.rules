@@ -1,0 +1,42 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+    
+    // Global Helpers
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+    
+    function incoming() {
+      return request.resource.data;
+    }
+    
+    function isServerTimestamp(ts) {
+      return ts == request.time;
+    }
+
+    // Lead validation blueprint
+    function isValidLead(data) {
+      return data.keys().hasAll(['email', 'source', 'status'])
+        && data.email is string && data.email.size() <= 128
+        && data.source is string && data.source.size() <= 50
+        && data.status is string && data.status.size() <= 50
+        && (!('name' in data) || (data.name is string && data.name.size() <= 128))
+        && (!('phone' in data) || (data.phone is string && data.phone.size() <= 30))
+        && (!('website' in data) || (data.website is string && data.website.size() <= 200))
+        && (!('plan' in data) || (data.plan is string && data.plan.size() <= 50))
+        && (!('message' in data) || (data.message is string && data.message.size() <= 1000))
+        && (!('timestamp' in data) || isServerTimestamp(data.timestamp));
+    }
+
+    match /leads/{leadId} {
+      allow create: if isValidId(leadId) && isValidLead(incoming());
+      // No standard read, update, or delete by public
+      allow read, update, delete: if false;
+    }
+  }
+}

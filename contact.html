@@ -46,24 +46,7 @@
 
     // Credit badge with idle-fade. Hover devices only.
     function initChromeUI() {
-        if (!matchMedia('(hover: hover)').matches) return;
-
-        var credit = document.createElement('div');
-        credit.className = 'design-ui-credit';
-        credit.setAttribute('aria-hidden', 'true');
-        credit.innerHTML = '\u{1F49C} by ClickUp Brain';
-        document.body.appendChild(credit);
-
-        var timer = null;
-        var fade = function (out) { credit.style.opacity = out ? '0' : ''; };
-        fade(true);
-        var show = function () {
-            fade(false);
-            clearTimeout(timer);
-            timer = setTimeout(function () { fade(true); }, 3000);
-        };
-        document.addEventListener('mousemove', show);
-        show();
+        // Disabled to remove "ClickUp Brain" credit
     }
 
     function init() {
@@ -131,13 +114,99 @@
   .navlinks a:hover,.navlinks a.active{color:var(--orange)}
   .navlinks a:hover::after,.navlinks a.active::after{width:100%}
   .nav-right{display:flex;align-items:center;gap:16px}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;font-weight:600;font-size:.94rem;cursor:pointer;border:none;border-radius:999px;padding:13px 26px;transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .25s}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;font-weight:600;font-size:.94rem;cursor:pointer;border:none;border-radius:999px;padding:14px 28px;transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .25s}
   .btn-primary{background:var(--orange);color:#fff;box-shadow:0 12px 28px -12px oklch(0.66 0.2 45 / .7)}
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 34px -12px oklch(0.66 0.2 45 / .85);background:var(--orange-deep)}
   .btn-ghost{background:transparent;color:var(--navy);border:1.5px solid var(--line)}
   .btn-ghost:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-2px)}
-  .theme-toggle{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);transition:transform .3s var(--ease),color .2s}
+  .theme-toggle{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);transition:transform .3s var(--ease),color .2s}
   .theme-toggle:hover{transform:rotate(35deg);color:var(--orange)}
+
+  /* Mobile hamburger button */
+  .mobile-menu-toggle {
+    display: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--card);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--ink-soft);
+    transition: transform 0.3s var(--ease), color 0.2s;
+    position: relative;
+    z-index: 101;
+  }
+  .mobile-menu-toggle:hover {
+    color: var(--orange);
+    transform: scale(1.05);
+  }
+  .mobile-menu-toggle .menu-close-icon {
+    display: none;
+  }
+  .mobile-menu-toggle.open .menu-open-icon {
+    display: none;
+  }
+  .mobile-menu-toggle.open .menu-close-icon {
+    display: block;
+  }
+
+  /* Mobile slide-down drawer */
+  .mobile-drawer {
+    position: fixed;
+    top: 78px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 78px);
+    background: var(--bg);
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    padding: 32px 28px;
+    box-sizing: border-box;
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    overflow-y: auto;
+    border-top: 1px solid var(--line);
+  }
+  .mobile-drawer.open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .mobile-drawer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    margin-bottom: 36px;
+  }
+  .mobile-drawer-links a {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ink);
+    padding: 8px 0;
+    border-bottom: 1px solid oklch(0.28 0.05 262 / 0.04);
+    transition: color 0.2s, padding-left 0.2s;
+  }
+  .mobile-drawer-links a:hover, .mobile-drawer-links a.active {
+    color: var(--orange);
+    padding-left: 6px;
+  }
+  .mobile-drawer-cta {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: auto;
+    padding-bottom: 24px;
+  }
+  .mobile-drawer-cta .btn {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.05rem;
+  }
 
   .chead{position:relative;padding:64px 0 20px;text-align:center}
   .chead .eyebrow{display:inline-flex;align-items:center;gap:7px;background:oklch(0.95 0.03 55);color:var(--orange);font-size:.8rem;font-weight:600;padding:7px 15px;border-radius:999px;letter-spacing:.03em}
@@ -215,7 +284,7 @@
   .foot-grid{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:34px;position:relative;z-index:2}
   .foot-brand p{color:var(--muted);font-size:.86rem;margin-top:14px;max-width:34ch}
   .socials{display:flex;gap:12px;margin-top:20px}
-  .socials a{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--muted);transition:all .25s var(--ease);background:var(--card)}
+  .socials a{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--muted);transition:all .25s var(--ease);background:var(--card)}
   .socials a:hover{color:#fff;background:var(--orange);border-color:var(--orange);transform:translateY(-3px)}
   .foot-col h5{font-size:.95rem;margin-bottom:16px;color:var(--navy)}
   .foot-col a{display:block;color:var(--muted);font-size:.87rem;margin-bottom:11px;transition:color .2s,padding-left .2s}
@@ -243,13 +312,99 @@
   @media(max-width:900px){
     .cm-grid{grid-template-columns:1fr;gap:26px}
     .foot-grid{grid-template-columns:1fr 1fr;gap:28px}.foot-brand{grid-column:1/-1}
-    .navlinks{display:none}
+    .navlinks { display: none !important; }
+    .nav-right .btn-primary { display: none !important; }
+    .mobile-menu-toggle { display: flex; }
   }
   @media(max-width:600px){
     .frow{grid-template-columns:1fr}
     .foot-grid{grid-template-columns:1fr}
     .logo .word .tag{display:none}
     .cform,.cinfo{padding:28px 22px}
+  }
+
+  /* Back to Top Button */
+  .back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(15px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 14px oklch(0.66 0.2 45 / 0.4);
+  }
+  .back-to-top.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+  .back-to-top:hover {
+    background: var(--orange-deep);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 20px oklch(0.6 0.2 42 / 0.5);
+  }
+  .back-to-top:active {
+    transform: translateY(-1px) scale(0.98);
+  }
+
+  #home, #services, #testimonials, #blog, #contact {
+    scroll-margin-top: 100px;
+  }
+
+  /* Toast Notifications */
+  .toast-container {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+  }
+  .toast {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: oklch(0.2 0.04 243 / 0.95);
+    border: 1px solid oklch(1 0 0 / 0.15);
+    color: #fff;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    box-shadow: 0 10px 30px oklch(0.1 0.02 243 / 0.5);
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateX(100px) scale(0.9);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backdrop-filter: blur(8px);
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  .toast-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: oklch(0.66 0.2 45 / 0.15);
+    color: var(--orange);
   }
 </style>
 </head>
@@ -284,7 +439,7 @@
 <header class="nav" id="nav">
   <div class="wrap navbar">
     <a href="index.html" class="logo" aria-label="Groot X Media Logo">
-      <img src="/src/logo-header.png" alt="Groot X Media Logo" style="height: 74px; width: auto; object-fit: contain; display: block;" />
+      <img src="/src/logo-header.png" alt="Groot X Media Logo" width="210" height="78" style="height: 78px; width: auto; object-fit: contain; display: block;" />
     </a>
     <nav class="navlinks">
       <a href="index.html">Home</a>
@@ -297,9 +452,28 @@
     <div class="nav-right">
       <a href="#form" class="btn btn-primary">Get Started</a>
       <button class="theme-toggle" aria-label="Toggle theme"><i data-lucide="sun" width="18" height="18"></i></button>
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile navigation" aria-expanded="false">
+        <i data-lucide="menu" class="menu-open-icon" width="20" height="20"></i>
+        <i data-lucide="x" class="menu-close-icon" width="20" height="20"></i>
+      </button>
     </div>
   </div>
 </header>
+
+<!-- Mobile Navigation Drawer -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <nav class="mobile-drawer-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#services">Services</a>
+    <a href="testimonials.html">Testimonials</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="blog.html">Blog</a>
+    <a href="contact.html" class="active">Contact</a>
+  </nav>
+  <div class="mobile-drawer-cta">
+    <a href="#form" class="btn btn-primary">Get Started</a>
+  </div>
+</div>
 
 <section class="chead">
   <div class="blob float" style="width:300px;height:300px;background:var(--blob-orange);top:-30px;left:-60px"></div>
@@ -321,9 +495,9 @@
         <h2>Contact information</h2>
         <p class="lede">Prefer to reach out directly? Here's how to find us.</p>
         <div class="cmethods">
-          <a class="cmethod" href="tel:+917397794418"><span class="ic"><i data-lucide="phone" width="19" height="19"></i></span><span><span class="lbl">Call / WhatsApp</span><span class="val">+91 73977 94418</span></span></a>
-          <a class="cmethod" href="mailto:info@grootxmedia.com"><span class="ic"><i data-lucide="mail" width="19" height="19"></i></span><span><span class="lbl">Email</span><span class="val">info@grootxmedia.com</span></span></a>
-          <a class="cmethod" href="https://www.grootxmedia.com"><span class="ic"><i data-lucide="globe" width="19" height="19"></i></span><span><span class="lbl">Website</span><span class="val">www.grootxmedia.com</span></span></a>
+          <a class="cmethod" href="tel:+917397794418" style="align-items: center;"><span class="ic"><i data-lucide="phone" width="19" height="19"></i></span><span class="val">+91 73977 94418</span></a>
+          <a class="cmethod" href="mailto:info@grootxmedia.com" style="align-items: center;"><span class="ic"><i data-lucide="mail" width="19" height="19"></i></span><span class="val">info@grootxmedia.com</span></a>
+          <a class="cmethod" href="https://www.grootxmedia.com" style="align-items: center;"><span class="ic"><i data-lucide="globe" width="19" height="19"></i></span><span class="val">www.grootxmedia.com</span></a>
         </div>
         <div class="hours">
           <h4><i data-lucide="clock" width="16" height="16"></i>Working hours</h4>
@@ -342,7 +516,7 @@
         <div id="formInner">
           <h2>Send us a message</h2>
           <p class="fp">Fill this out and we'll get back to you shortly.</p>
-          <form id="contactForm" onsubmit="return sendForm(event)">
+          <form id="contactForm">
             <div class="frow">
               <div class="field"><label>Full name</label><input type="text" placeholder="Your name" required></div>
               <div class="field"><label>Phone</label><input type="tel" placeholder="+91 ..." required></div>
@@ -395,7 +569,7 @@
     <div class="foot-grid">
       <div class="foot-brand">
         <a href="index.html" class="logo" aria-label="Groot X Media Logo">
-          <img src="/src/logo-header.png" alt="Groot X Media Logo" style="height: 74px; width: auto; object-fit: contain; display: block;" />
+          <img src="/src/logo-header.png" alt="Groot X Media Logo" width="210" height="78" style="height: 78px; width: auto; object-fit: contain; display: block;" />
         </a>
         <p>Groot X Media is your full-suite digital growth partner, transforming modern platforms into reliable revenue pipelines.</p>
         <div class="socials">
@@ -419,11 +593,70 @@
 
 <script>
   lucide.createIcons();
+  
+  // Mobile drawer toggle handler
+  const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+  const mobileDrawer = document.getElementById('mobileDrawer');
+  if (mobileMenuToggle && mobileDrawer) {
+    mobileMenuToggle.addEventListener('click', () => {
+      const isOpen = mobileMenuToggle.classList.toggle('open');
+      mobileMenuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      mobileDrawer.classList.toggle('open', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+    // Auto-close on drawer link click
+    mobileDrawer.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenuToggle.classList.remove('open');
+        mobileMenuToggle.setAttribute('aria-expanded', 'false');
+        mobileDrawer.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+  }
+
   const nav=document.getElementById('nav');
   addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>10));
   const io=new IntersectionObserver((e)=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{threshold:.12});
   document.querySelectorAll('.reveal,.stagger').forEach(el=>io.observe(el));
-  function sendForm(e){e.preventDefault();document.getElementById('formInner').style.display='none';document.getElementById('okMsg').classList.add('show');lucide.createIcons();return false;}
+  function sendForm(e){
+    e.preventDefault();
+    document.getElementById('formInner').style.display='none';
+    document.getElementById('okMsg').classList.add('show');
+    lucide.createIcons();
+    showToast('Message sent successfully');
+    return false;
+  }
+
+  function showToast(message) {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+    
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `
+      <div class="toast-icon">
+        <i data-lucide="check" width="16" height="16"></i>
+      </div>
+      <div>${message}</div>
+    `;
+    
+    container.appendChild(toast);
+    lucide.createIcons();
+    
+    // Trigger animation
+    setTimeout(() => {
+      toast.classList.add('show');
+    }, 10);
+    
+    // Auto-remove after 4s
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => {
+        toast.remove();
+      }, 400);
+    }, 4000);
+  }
   const tog=document.querySelector('.theme-toggle');
   tog&&tog.addEventListener('click',()=>{const d=document.documentElement.classList.toggle('dark');tog.innerHTML=d?'<i data-lucide="moon" width="18" height="18"></i>':'<i data-lucide="sun" width="18" height="18"></i>';lucide.createIcons();});
 
@@ -451,8 +684,7 @@
         e.preventDefault();
         const targetEl = document.querySelector(targetHash);
         if (targetEl) {
-          const offset = targetEl.getBoundingClientRect().top + window.pageYOffset - 80;
-          window.scrollTo({ top: offset, behavior: 'smooth' });
+          targetEl.scrollIntoView({ behavior: 'smooth' });
           history.pushState(null, '', targetHash);
         }
       });
@@ -462,8 +694,7 @@
         e.preventDefault();
         const targetEl = document.querySelector(href);
         if (targetEl) {
-          const offset = targetEl.getBoundingClientRect().top + window.pageYOffset - 80;
-          window.scrollTo({ top: offset, behavior: 'smooth' });
+          targetEl.scrollIntoView({ behavior: 'smooth' });
           history.pushState(null, '', href);
         }
       });
@@ -488,14 +719,43 @@
     if (targetEl) {
       // Prevent browser default jump by scrolling to top first
       window.scrollTo(0, 0);
-      window.addEventListener('load', () => {
+      const performScroll = () => {
         setTimeout(() => {
-          const offset = targetEl.getBoundingClientRect().top + window.pageYOffset - 80;
-          window.scrollTo({ top: offset, behavior: 'smooth' });
-        }, 120);
-      });
+          targetEl.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+      };
+      if (document.readyState === 'complete') {
+        performScroll();
+      } else {
+        window.addEventListener('load', performScroll);
+      }
     }
   }
+
+  // Back to top button logic
+  const backToTopBtn = document.getElementById('backToTop');
+  if (backToTopBtn) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('visible');
+      } else {
+        backToTopBtn.classList.remove('visible');
+      }
+    });
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
 </script>
+
+<div id="toastContainer" class="toast-container"></div>
+
+<button id="backToTop" class="back-to-top" aria-label="Back to top">
+  <i data-lucide="arrow-up" width="20" height="20"></i>
+</button>
+
+<script type="module" src="/src/exit-intent.ts"></script>
+<script type="module" src="/src/get-started.ts"></script>
+
 </body>
 </html>
