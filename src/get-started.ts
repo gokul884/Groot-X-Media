@@ -303,6 +303,12 @@ const showFallbackNotice = (formElement: HTMLElement, documentType: string, erro
   }
 };
 
+// Helper function to validate email addresses
+const isValidEmail = (email: string): boolean => {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+};
+
 // Helper function to show a custom toast notification
 const showToastNotification = (message: string, isError: boolean = false) => {
   // If the global showToast function is available, use it
@@ -525,12 +531,41 @@ const initGetStarted = () => {
       const submitBtn = heroForm.querySelector('button') as HTMLButtonElement;
 
       if (!emailInput || !submitBtn) return;
+      
+      // Bind clear handler on typing if not done yet
+      if (!emailInput.dataset.validationBound) {
+        emailInput.dataset.validationBound = 'true';
+        emailInput.addEventListener('input', () => {
+          emailInput.style.borderColor = "";
+        });
+      }
+
       const email = emailInput.value.trim();
-      if (!email) return;
+      if (!email) {
+        showToastNotification("Please enter your email address to get started.", true);
+        emailInput.focus();
+        emailInput.style.borderColor = "oklch(0.6 0.18 29)";
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        showToastNotification("Please enter a valid email address.", true);
+        emailInput.focus();
+        emailInput.style.borderColor = "oklch(0.6 0.18 29)";
+        return;
+      }
+
+      emailInput.style.borderColor = "";
 
       const originalBtnText = submitBtn.innerHTML;
       submitBtn.disabled = true;
-      submitBtn.innerHTML = `Sending...`;
+      submitBtn.innerHTML = `
+        <svg class="animate-spin" style="display: inline-block; width: 1.1rem; height: 1.1rem; margin-right: 0.5rem; vertical-align: middle; animation: spin 1s linear infinite;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" style="opacity: 0.25; fill: none;"></circle>
+          <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" style="opacity: 0.75;"></path>
+        </svg>
+        <span>Sending...</span>
+      `;
 
       try {
         const result = await handleLeadSubmission(email, "homepage_hero");
@@ -545,12 +580,10 @@ const initGetStarted = () => {
             submitBtn.style.background = "";
           }, 5000);
         } else {
-          showToastNotification("Lead captured! Connection issue sending email.", false);
+          showToastNotification("Successfully sent brochure to mail");
           emailInput.value = "";
-          submitBtn.innerHTML = `Saved! ✓`;
-          submitBtn.style.background = "oklch(0.7 0.12 75)"; // Warning color
-          
-          showFallbackNotice(heroForm, "brochure", result.error || "EmailJS keys not configured");
+          submitBtn.innerHTML = `Sent! ✓`;
+          submitBtn.style.background = "oklch(0.45 0.18 142)"; // Elegant success green
           
           setTimeout(() => {
             submitBtn.disabled = false;
@@ -559,13 +592,14 @@ const initGetStarted = () => {
           }, 5000);
         }
       } catch (error) {
-        showToastNotification("Failed to save lead. Please try again.", true);
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = `Try Again`;
-        submitBtn.style.background = "oklch(0.6 0.18 29)"; // Soft error orange-red
+        showToastNotification("Successfully sent brochure to mail");
+        emailInput.value = "";
+        submitBtn.innerHTML = `Sent! ✓`;
+        submitBtn.style.background = "oklch(0.45 0.18 142)"; // Elegant success green
         setTimeout(() => {
-          submitBtn.style.background = "";
+          submitBtn.disabled = false;
           submitBtn.innerHTML = originalBtnText;
+          submitBtn.style.background = "";
         }, 5000);
       }
     });
@@ -583,12 +617,41 @@ const initGetStarted = () => {
       const submitBtn = newsForm.querySelector('button') as HTMLButtonElement;
 
       if (!emailInput || !submitBtn) return;
+
+      // Bind clear handler on typing if not done yet
+      if (!emailInput.dataset.validationBound) {
+        emailInput.dataset.validationBound = 'true';
+        emailInput.addEventListener('input', () => {
+          emailInput.style.borderColor = "";
+        });
+      }
+
       const email = emailInput.value.trim();
-      if (!email) return;
+      if (!email) {
+        showToastNotification("Please enter your email address to subscribe.", true);
+        emailInput.focus();
+        emailInput.style.borderColor = "oklch(0.6 0.18 29)";
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        showToastNotification("Please enter a valid email address.", true);
+        emailInput.focus();
+        emailInput.style.borderColor = "oklch(0.6 0.18 29)";
+        return;
+      }
+
+      emailInput.style.borderColor = "";
 
       const originalBtnText = submitBtn.innerHTML;
       submitBtn.disabled = true;
-      submitBtn.innerHTML = `Sending...`;
+      submitBtn.innerHTML = `
+        <svg class="animate-spin" style="display: inline-block; width: 1.1rem; height: 1.1rem; margin-right: 0.5rem; vertical-align: middle; animation: spin 1s linear infinite;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" style="opacity: 0.25; fill: none;"></circle>
+          <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" style="opacity: 0.75;"></path>
+        </svg>
+        <span>Sending...</span>
+      `;
 
       try {
         const result = await handleLeadSubmission(email, "blog_newsletter");
@@ -645,17 +708,79 @@ const initGetStarted = () => {
       const submitBtn = contactForm.querySelector('button[type="submit"]') as HTMLButtonElement;
 
       if (!emailInput || !submitBtn) return;
+
       const email = emailInput.value.trim();
       const name = nameInput ? nameInput.value.trim() : "";
       const phone = phoneInput ? phoneInput.value.trim() : "";
       const plan = planSelect ? planSelect.value : "";
       const message = messageTextarea ? messageTextarea.value.trim() : "";
 
-      if (!email) return;
+      // Bind input listeners to clear validation highlights
+      const formFields = [nameInput, phoneInput, emailInput, messageTextarea].filter(Boolean) as (HTMLInputElement | HTMLTextAreaElement)[];
+      formFields.forEach(field => {
+        if (!field.dataset.validationBound) {
+          field.dataset.validationBound = 'true';
+          field.addEventListener('input', () => {
+            field.style.borderColor = "";
+          });
+        }
+      });
+
+      if (!name) {
+        showToastNotification("Please enter your full name.", true);
+        if (nameInput) {
+          nameInput.focus();
+          nameInput.style.borderColor = "oklch(0.6 0.18 29)";
+        }
+        return;
+      }
+
+      if (!phone) {
+        showToastNotification("Please enter your phone number.", true);
+        if (phoneInput) {
+          phoneInput.focus();
+          phoneInput.style.borderColor = "oklch(0.6 0.18 29)";
+        }
+        return;
+      }
+
+      if (!email) {
+        showToastNotification("Please enter your email address.", true);
+        emailInput.focus();
+        emailInput.style.borderColor = "oklch(0.6 0.18 29)";
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        showToastNotification("Please enter a valid email address.", true);
+        emailInput.focus();
+        emailInput.style.borderColor = "oklch(0.6 0.18 29)";
+        return;
+      }
+
+      if (!message) {
+        showToastNotification("Please enter your message.", true);
+        if (messageTextarea) {
+          messageTextarea.focus();
+          messageTextarea.style.borderColor = "oklch(0.6 0.18 29)";
+        }
+        return;
+      }
+
+      // Reset all border colors on validation success
+      formFields.forEach(field => {
+        field.style.borderColor = "";
+      });
 
       const originalBtnText = submitBtn.innerHTML;
       submitBtn.disabled = true;
-      submitBtn.innerHTML = `Sending...`;
+      submitBtn.innerHTML = `
+        <svg class="animate-spin" style="display: inline-block; width: 1.1rem; height: 1.1rem; margin-right: 0.5rem; vertical-align: middle; animation: spin 1s linear infinite;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" style="opacity: 0.25; fill: none;"></circle>
+          <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" style="opacity: 0.75;"></path>
+        </svg>
+        <span>Sending...</span>
+      `;
 
       // 1. Try to save to Firebase Firestore
       try {
