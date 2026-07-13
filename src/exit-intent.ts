@@ -834,7 +834,7 @@ const initExitIntentSystem = () => {
 
     // 2. Send email via EmailJS (Primary REST API + Fallback SDK)
     const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_dqbmfj9";
-    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_j2728kt";
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_0z9dwgn";
 
     let emailSent = true;
     let emailError = "";
