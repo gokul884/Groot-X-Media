@@ -94,6 +94,23 @@
     --shadow-sm:0 1px 2px oklch(0.4 0.03 262 / .06);
     --shadow:0 18px 50px -20px oklch(0.35 0.06 262 / .28);
   }
+  .dark {
+    --bg: oklch(0.14 0.02 262);
+    --card: oklch(0.18 0.02 262);
+    --card-2: oklch(0.16 0.02 262);
+    --ink: oklch(0.96 0.01 262);
+    --ink-soft: oklch(0.85 0.01 262);
+    --muted: oklch(0.7 0.01 262);
+    --muted-2: oklch(0.55 0.01 262);
+    --line: oklch(0.25 0.02 262);
+    --navy: oklch(0.9 0.02 262);
+    --navy-soft: oklch(0.8 0.02 262);
+    --blob-orange: oklch(0.35 0.08 55);
+    --blob-navy: oklch(0.25 0.06 262);
+    --blob-peach: oklch(0.38 0.06 62);
+    --shadow-sm: 0 1px 2px oklch(0.1 0.01 262 / .4);
+    --shadow: 0 18px 50px -20px oklch(0.1 0.01 262 / .8);
+  }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;font-optical-sizing:auto}
@@ -246,15 +263,89 @@
   .stat .num{font-size:1.9rem;font-weight:800;color:var(--navy);letter-spacing:-.02em}
   .stat .lab{font-size:.82rem;color:var(--muted);margin-top:2px}
 
-  section{position:relative}
+  section{position:relative;overflow:hidden}
   .sec-head{text-align:center;max-width:620px;margin:0 auto}
   .sec-head h2{font-size:clamp(1.7rem,3vw,2.2rem);font-weight:700}
   .sec-head p{color:var(--muted);margin-top:10px;font-size:.95rem}
+  .sec-head .link{display:inline-flex;align-items:center;gap:7px;margin-top:16px;color:var(--orange);font-weight:600;font-size:.95rem}
+  .sec-head .link i{transition:transform .25s var(--ease)}
+  .sec-head .link:hover i{transform:translateX(4px)}
 
   .trusted{padding:80px 0 30px}
-  .logos{margin-top:38px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:760px;margin-left:auto;margin-right:auto}
-  .brandtile{height:62px;background:var(--card);border:1px solid var(--line);border-radius:16px;display:grid;place-items:center;color:var(--muted-2);font-weight:700;font-size:1.05rem;transition:transform .3s var(--ease),color .3s,box-shadow .3s;opacity:.85}
-  .brandtile:hover{transform:translateY(-4px);color:var(--ink-soft);box-shadow:var(--shadow-sm);opacity:1}
+  .logos{margin-top:38px;display:grid;grid-template-columns:repeat(4,1fr);gap:18px;max-width:960px;margin-left:auto;margin-right:auto}
+  .brandtile{position:relative;height:62px;background:var(--card);border:1px solid var(--line);border-radius:16px;display:flex;align-items:center;padding:0 16px;gap:12px;color:var(--ink-soft);font-weight:600;font-size:1.05rem;transition:transform .3s var(--ease),color .3s,box-shadow .3s,border-color .3s;opacity:.9;overflow:hidden}
+  .brandtile:hover{transform:translateY(-6px) scale(1.05);color:var(--orange);border-color:var(--orange);box-shadow:var(--shadow);opacity:1}
+  
+  /* Shimmer overlay animation */
+  .shimmer-overlay{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,255,255,0) 10%,rgba(255,255,255,0.18) 50%,rgba(255,255,255,0) 90%);transform:translateX(-100%) skewX(-20deg);z-index:1;border-radius:inherit}
+  .brandtile:hover .shimmer-overlay{animation:tile-shimmer 1.2s var(--ease) forwards}
+  @keyframes tile-shimmer{
+    0% { transform: translateX(-105%) skewX(-20deg); }
+    100% { transform: translateX(105%) skewX(-20deg); }
+  }
+
+  .brand-logo-frame{width:36px;height:36px;border-radius:50%;overflow:hidden;background:#000;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .3s, filter .3s var(--ease), opacity .3s var(--ease);position:relative;filter: grayscale(100%); opacity: 0.8; z-index: 2}
+  .brandtile:hover .brand-logo-frame{filter: grayscale(0%); opacity: 1; border-color: var(--orange)}
+  .brand-logo-frame.white-bg{background:#fff}
+  .brand-logo-frame svg{width:80%;height:80%;object-fit:contain}
+  .brand-logo-frame img{width:100%;height:100%;object-fit:contain;display:block}
+
+  /* Skeleton loader animation */
+  @keyframes skeleton-pulse {
+    0% { background-color: var(--line); opacity: 0.8; }
+    50% { background-color: var(--muted-2); opacity: 0.4; }
+    100% { background-color: var(--line); opacity: 0.8; }
+  }
+  .brand-logo-frame.loading {
+    animation: skeleton-pulse 1.5s infinite ease-in-out;
+    background: var(--line) !important;
+    border-color: var(--line) !important;
+  }
+  .brand-logo-frame.loading * {
+    display: none !important;
+  }
+
+  /* Custom popover/tooltip styling for brand tiles */
+  .brandtile::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(6px) scale(0.95);
+    background: var(--ink);
+    color: var(--bg);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    white-space: nowrap;
+    box-shadow: 0 4px 14px oklch(0.1 0.01 262 / .15);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+    z-index: 20;
+    text-align: center;
+    border: 1px solid var(--line);
+  }
+  .brandtile::after {
+    content: "";
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%) translateY(6px);
+    border-width: 6px 6px 0 6px;
+    border-style: solid;
+    border-color: var(--ink) transparent transparent transparent;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+    z-index: 20;
+  }
+  .brandtile:hover::before,
+  .brandtile:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
 
   .offer{padding:80px 0}
   .offer-grid{margin-top:46px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
@@ -291,9 +382,6 @@
 
   /* TESTIMONIALS (home) */
   .tst{padding:80px 0;overflow:hidden}
-  .tst .sec-head .link{display:inline-flex;align-items:center;gap:7px;margin-top:16px;color:var(--orange);font-weight:600;font-size:.95rem}
-  .tst .sec-head .link i{transition:transform .25s var(--ease)}
-  .tst .sec-head .link:hover i{transform:translateX(4px)}
   .marquee{margin-top:48px;position:relative;--gap:22px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
   .marquee-track{display:flex;gap:var(--gap);width:max-content;animation:scroll 42s linear infinite}
   .tst:hover .marquee-track{animation-play-state:paused}
@@ -383,30 +471,85 @@
     .mobile-menu-toggle { display: flex; }
   }
   @media(max-width:600px){
-    .stats-card{grid-template-columns:1fr 1fr;gap:20px 0}
-    .stat + .stat::before{display:none}
-    .offer-grid,.blog-grid,.mv,.logos{grid-template-columns:1fr}
-    .logos{max-width:320px}
-    .foot-grid{grid-template-columns:1fr}
-    .logo .word .tag{display:none}
+    .wrap { padding: 0 16px !important; }
+    header.nav .logo img { height: 46px !important; }
+    .navbar { height: 64px !important; }
+    .mobile-drawer { top: 64px !important; height: calc(100vh - 64px) !important; }
+    .nav-right { gap: 10px !important; }
+    
+    header.nav {
+      background: var(--bg) !important;
+      backdrop-filter: none !important;
+    }
+    .blob {
+      opacity: 0.08 !important;
+    }
+    
+    /* Heading text improvements to prevent overflow truncation */
+    h1 {
+      font-size: clamp(1.8rem, 7vw, 2.3rem) !important;
+      line-height: 1.25 !important;
+      word-break: break-word !important;
+      overflow-wrap: break-word !important;
+    }
+    h2 {
+      font-size: clamp(1.4rem, 6vw, 1.8rem) !important;
+      line-height: 1.3 !important;
+      word-break: break-word !important;
+      overflow-wrap: break-word !important;
+    }
+    h3 {
+      font-size: 1.05rem !important;
+      word-break: break-word !important;
+      overflow-wrap: break-word !important;
+    }
+    
+    .stats-card {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 16px 10px !important;
+      padding: 24px 12px !important;
+    }
+    .stat .num { font-size: 1.6rem !important; }
+    .stat .lab { font-size: 0.76rem !important; }
+    .stat + .stat::before { display: none !important; }
+    
+    .offer-grid, .blog-grid, .mv { grid-template-columns: 1fr !important; }
+    .logos {
+      grid-template-columns: repeat(2, 1fr) !important;
+      max-width: 100% !important;
+      gap: 12px !important;
+    }
+    .brandtile {
+      height: 56px !important;
+      font-size: 0.9rem !important;
+      border-radius: 12px !important;
+      padding: 0 10px !important;
+      gap: 8px !important;
+    }
+    .brand-logo-frame {
+      width: 28px !important;
+      height: 28px !important;
+    }
+    .foot-grid { grid-template-columns: 1fr !important; }
+    .logo .word .tag { display: none !important; }
   }
   @media(max-width:480px){
     .email-field {
-      flex-direction: column;
-      border-radius: 20px;
-      padding: 12px;
-      gap: 12px;
-      max-width: 100%;
+      flex-direction: column !important;
+      border-radius: 20px !important;
+      padding: 12px !important;
+      gap: 12px !important;
+      max-width: 100% !important;
     }
     .email-field input {
-      width: 100%;
-      padding: 8px 4px;
-      text-align: center;
+      width: 100% !important;
+      padding: 8px 4px !important;
+      text-align: center !important;
     }
     .email-field .btn {
-      width: 100%;
-      padding: 12px;
-      justify-content: center;
+      width: 100% !important;
+      padding: 12px !important;
+      justify-content: center !important;
     }
     .email-field .ico {
       display: none;
@@ -455,6 +598,11 @@
 </style>
 </head>
 <body>
+<script>
+  if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.classList.add('dark');
+  }
+</script>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="gxm-logo" viewBox="0 0 540 120">
@@ -553,10 +701,10 @@
 <section class="stats">
   <div class="wrap">
     <div class="stats-card stagger reveal">
-      <div class="stat" style="--i:0"><div class="num">12+</div><div class="lab">Created projects</div></div>
-      <div class="stat" style="--i:1"><div class="num">200+</div><div class="lab">Projects</div></div>
-      <div class="stat" style="--i:2"><div class="num">120</div><div class="lab">Happy Client</div></div>
-      <div class="stat" style="--i:3"><div class="num">5+</div><div class="lab">Years</div></div>
+      <div class="stat" style="--i:0"><div class="num">10+</div><div class="lab">Created projects</div></div>
+      <div class="stat" style="--i:1"><div class="num">20+</div><div class="lab">Projects</div></div>
+      <div class="stat" style="--i:2"><div class="num">10+</div><div class="lab">Happy Client</div></div>
+      <div class="stat" style="--i:3"><div class="num">1</div><div class="lab">Year</div></div>
     </div>
   </div>
 </section>
@@ -565,8 +713,72 @@
   <div class="wrap">
     <div class="sec-head reveal"><h2>Trusted by companies like</h2></div>
     <div class="logos stagger reveal">
-      <div class="brandtile" style="--i:0">Spotify</div><div class="brandtile" style="--i:1">slack</div><div class="brandtile" style="--i:2">PayPal</div>
-      <div class="brandtile" style="--i:3">Spotify</div><div class="brandtile" style="--i:4">slack</div><div class="brandtile" style="--i:5">PayPal</div>
+      <div class="brandtile" style="--i:0" data-tooltip="Luxewalls — Premium Wallpaper & Luxury Wallcoverings" title="Luxewalls">
+        <div class="shimmer-overlay"></div>
+        <div class="brand-logo-frame loading">
+          <img src="/luxewalls.png" alt="Luxewalls Logo" onload="this.parentElement.classList.remove('loading'); this.style.display='block';" onerror="this.parentElement.classList.remove('loading'); if(this.nextElementSibling) this.nextElementSibling.style.display='block';" style="display:none;">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Luxewalls Logo" style="display:none;">
+            <path d="M15 75 L25 35 L40 55 L50 25 L60 55 L75 35 L85 75 Z" fill="#D4AF37" stroke="#D4AF37" stroke-width="4" stroke-linejoin="round"/>
+            <circle cx="25" cy="31" r="4" fill="#D4AF37"/>
+            <circle cx="40" cy="51" r="3" fill="#D4AF37"/>
+            <circle cx="50" cy="21" r="5" fill="#D4AF37"/>
+            <circle cx="60" cy="51" r="3" fill="#D4AF37"/>
+            <circle cx="75" cy="31" r="4" fill="#D4AF37"/>
+            <path d="M15 75 L85 75" stroke="#D4AF37" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span>Luxewalls</span>
+      </div>
+      <div class="brandtile" style="--i:1" data-tooltip="Bestcars_cbe — Quality Certified Pre-Owned Automotive" title="Bestcars_cbe">
+        <div class="shimmer-overlay"></div>
+        <div class="brand-logo-frame loading">
+          <img src="/bestcars_cbe.png" alt="Bestcars_cbe Logo" onload="this.parentElement.classList.remove('loading'); this.style.display='block';" onerror="this.parentElement.classList.remove('loading'); if(this.nextElementSibling) this.nextElementSibling.style.display='block';" style="display:none;">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Bestcars_cbe Logo" style="display:none;">
+            <path d="M12 55 Q20 54 28 50 C38 44 48 44 58 46 C68 48 76 46 84 55 Q88 60 76 60 H20 Q12 60 12 55 Z" stroke="#94A3B8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M28 50 Q45 40 64 47" stroke="#E2E8F0" stroke-width="3" stroke-linecap="round"/>
+            <path d="M15 52 L10 47 L14 47 Z" fill="#94A3B8"/>
+            <circle cx="30" cy="58" r="6" fill="#000" stroke="#E2E8F0" stroke-width="2"/>
+            <circle cx="68" cy="58" r="6" fill="#000" stroke="#E2E8F0" stroke-width="2"/>
+          </svg>
+        </div>
+        <span>Bestcars_cbe</span>
+      </div>
+      <div class="brandtile" style="--i:2" data-tooltip="LinoCars — Premium Performance Vehicle Services" title="LinoCars">
+        <div class="shimmer-overlay"></div>
+        <div class="brand-logo-frame loading">
+          <img src="/linocars.png" alt="LinoCars Logo" onload="this.parentElement.classList.remove('loading'); this.style.display='block';" onerror="this.parentElement.classList.remove('loading'); if(this.nextElementSibling) this.nextElementSibling.style.display='block';" style="display:none;">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="LinoCars Logo" style="display:none;">
+            <path d="M20 52 C35 38 65 38 82 50 C86 52 88 56 82 56 L15 56 C12 56 14 52 20 52 Z" fill="#E11D48"/>
+            <path d="M78 52 L83 53 L78 54 Z" fill="#FFFFFF"/>
+            <path d="M5 48 H15" stroke="#E11D48" stroke-width="2" stroke-linecap="round"/>
+            <path d="M2 52 H12" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+            <path d="M6 56 H14" stroke="#E11D48" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="32" cy="56" r="6" fill="#000" stroke="#E11D48" stroke-width="2"/>
+            <circle cx="70" cy="56" r="6" fill="#000" stroke="#FFFFFF" stroke-width="2"/>
+          </svg>
+        </div>
+        <span>LinoCars</span>
+      </div>
+      <div class="brandtile" style="--i:3" data-tooltip="OnTime — Expert Handyman, Clockwork Services" title="OnTime">
+        <div class="shimmer-overlay"></div>
+        <div class="brand-logo-frame white-bg loading">
+          <img src="/ontime.png" alt="OnTime Logo" onload="this.parentElement.classList.remove('loading'); this.style.display='block';" onerror="this.parentElement.classList.remove('loading'); if(this.nextElementSibling) this.nextElementSibling.style.display='block';" style="display:none;">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="OnTime Logo" style="display:none;">
+            <circle cx="50" cy="50" r="32" stroke="#1E293B" stroke-width="4"/>
+            <rect x="46" y="12" width="8" height="6" fill="#1E293B" rx="1"/>
+            <rect x="42" y="10" width="16" height="3" fill="#F97316" rx="1"/>
+            <circle cx="50" cy="50" r="2" fill="#F97316"/>
+            <line x1="50" y1="50" x2="68" y2="38" stroke="#F97316" stroke-width="3" stroke-linecap="round"/>
+            <path d="M42 32 C44 32 46 30 46 28 C46 26 44 24 42 24 C40 24 38 26 38 28 C38 30 40 32 42 32 Z" fill="#1E293B"/>
+            <path d="M35 38 L44 34 L48 44 L40 52 L32 46 Z" fill="#1E293B"/>
+            <path d="M48 44 L56 46 L62 42" stroke="#1E293B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M36 36 L28 42" stroke="#1E293B" stroke-width="4" stroke-linecap="round"/>
+            <path d="M40 52 L46 64 L54 64" stroke="#F97316" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M35 48 L28 54 L22 52" stroke="#1E293B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span>OnTime</span>
+      </div>
     </div>
   </div>
 </section>
@@ -575,12 +787,36 @@
   <div class="wrap">
     <div class="sec-head reveal"><h2>What we offer</h2><p>Tailored strategies and data-driven execution across every digital milestone.</p></div>
     <div class="offer-grid stagger reveal">
-      <div class="offer-card" style="--i:0"><div class="offer-ico"><i data-lucide="megaphone" width="20" height="20"></i></div><h3>Social media marketing</h3><p>Strategic posting, creative storytelling, and community building that turn followers into brand advocates.</p></div>
-      <div class="offer-card" style="--i:1"><div class="offer-ico"><i data-lucide="shopping-cart" width="20" height="20"></i></div><h3>Search Engine Optimization (SEO)</h3><p>Dominate search engine rankings, drive organic high-intent traffic, and capture leads actively seeking your services.</p></div>
-      <div class="offer-card" style="--i:2"><div class="offer-ico"><i data-lucide="mail" width="20" height="20"></i></div><h3>Website Development</h3><p>Custom-built, high-conversion responsive websites optimized for seamless UX, speed, and sales generation.</p></div>
-      <div class="offer-card" style="--i:3"><div class="offer-ico"><i data-lucide="trending-up" width="20" height="20"></i></div><h3>Content Marketing</h3><p>High-value content production, blogs, and marketing copy designed to educate, engage, and convert your target audience.</p></div>
-      <div class="offer-card" style="--i:4"><div class="offer-ico"><i data-lucide="target" width="20" height="20"></i></div><h3>Paid AD Campaign</h3><p>Highly targeted Meta, Google, and LinkedIn ad campaigns built for maximum ROI and continuous performance optimization.</p></div>
-      <div class="offer-card" style="--i:5"><div class="offer-ico"><i data-lucide="send" width="20" height="20"></i></div><h3>Email marketing</h3><p>Personalized nurture flows, newsletters, and promotional campaigns that maximize customer lifetime value and retention.</p></div>
+      <div class="offer-card" style="--i:0">
+        <div class="offer-ico"><i data-lucide="megaphone" width="20" height="20"></i></div>
+        <h3>Social media marketing</h3>
+        <p>Strategic posting, creative storytelling, and community building that turn followers into brand advocates.</p>
+      </div>
+      <div class="offer-card" style="--i:1">
+        <div class="offer-ico"><i data-lucide="shopping-cart" width="20" height="20"></i></div>
+        <h3>Search Engine Optimization (SEO)</h3>
+        <p>Dominate search engine rankings, drive organic high-intent traffic, and capture leads actively seeking your services.</p>
+      </div>
+      <div class="offer-card" style="--i:2">
+        <div class="offer-ico"><i data-lucide="mail" width="20" height="20"></i></div>
+        <h3>Website Development</h3>
+        <p>Custom-built, high-conversion responsive websites optimized for seamless UX, speed, and sales generation.</p>
+      </div>
+      <div class="offer-card" style="--i:3">
+        <div class="offer-ico"><i data-lucide="trending-up" width="20" height="20"></i></div>
+        <h3>Content Marketing</h3>
+        <p>High-value content production, blogs, and marketing copy designed to educate, engage, and convert your target audience.</p>
+      </div>
+      <div class="offer-card" style="--i:4">
+        <div class="offer-ico"><i data-lucide="target" width="20" height="20"></i></div>
+        <h3>Paid AD Campaign</h3>
+        <p>Highly targeted Meta, Google, and LinkedIn ad campaigns built for maximum ROI and continuous performance optimization.</p>
+      </div>
+      <div class="offer-card" style="--i:5">
+        <div class="offer-ico"><i data-lucide="send" width="20" height="20"></i></div>
+        <h3>Email marketing</h3>
+        <p>Personalized nurture flows, newsletters, and promotional campaigns that maximize customer lifetime value and retention.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -659,12 +895,10 @@
 <section class="blog" id="blog">
   <div class="blob float" style="width:230px;height:230px;background:var(--blob-orange);top:20px;left:-70px;opacity:.4"></div>
   <div class="wrap">
-    <div class="blog-top reveal">
-      <div>
-        <h2>From our <span class="accent">Blog</span></h2>
-        <p>Insights, playbooks and growth tactics from the Groot X Media team.</p>
-      </div>
-      <a href="blog.html" class="btn btn-ghost">View all posts <i data-lucide="arrow-right" width="16" height="16"></i></a>
+    <div class="sec-head reveal">
+      <h2>From our <span class="accent">Blog</span></h2>
+      <p>Insights, playbooks and growth tactics from the Groot X Media team.</p>
+      <a href="blog.html" class="link">View all posts <i data-lucide="arrow-right" width="16" height="16"></i></a>
     </div>
     <div class="blog-grid stagger reveal">
       <article class="post-card" style="--i:0">
@@ -767,7 +1001,16 @@
   const io=new IntersectionObserver((e)=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{threshold:.12});
   document.querySelectorAll('.reveal,.stagger').forEach(el=>io.observe(el));
   const tog=document.querySelector('.theme-toggle');
-  tog&&tog.addEventListener('click',()=>{const d=document.documentElement.classList.toggle('dark');tog.innerHTML=d?'<i data-lucide="moon" width="18" height="18"></i>':'<i data-lucide="sun" width="18" height="18"></i>';lucide.createIcons();});
+  if (tog) {
+    const activeTheme = localStorage.getItem('theme') || 'light';
+    tog.innerHTML = activeTheme === 'dark' ? '<i data-lucide="moon" width="18" height="18"></i>' : '<i data-lucide="sun" width="18" height="18"></i>';
+    tog.addEventListener('click',()=>{
+      const d=document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', d ? 'dark' : 'light');
+      tog.innerHTML=d?'<i data-lucide="moon" width="18" height="18"></i>':'<i data-lucide="sun" width="18" height="18"></i>';
+      lucide.createIcons();
+    });
+  }
 
   // Smooth page transition and internal redirection script
   document.querySelectorAll('a').forEach(link => {

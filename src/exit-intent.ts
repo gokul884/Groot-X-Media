@@ -690,6 +690,8 @@ const createExitIntentHTML = () => {
 };
 
 const initExitIntentSystem = () => {
+  // Completely disabled as per user request to remove complementary resource and startup popups.
+  return;
   injectExitIntentStyles();
   createExitIntentHTML();
 
