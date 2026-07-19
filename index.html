@@ -4,7 +4,9 @@
 
 <!-- skill:libraries -->
 <script src="https://cdn.jsdelivr.net/npm/lucide@0.383.0/dist/umd/lucide.min.js" integrity="sha384-wHFvAtjmgnkA2PJcMsDaCgdipf7X7YV44X/igbLHpvGiq6T5/PvFKl93grpvtbQT" crossorigin="anonymous"></script>
-<script>document.addEventListener("DOMContentLoaded",()=>lucide.createIcons())</script>
+<script>
+  document.addEventListener("DOMContentLoaded",()=>lucide.createIcons())
+</script>
 <!-- /skill:libraries -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,25 +37,6 @@
     --header-bg:oklch(0.995 0.003 262 / .82);
     --footer-bg:oklch(0.985 0.005 262);
     --logo-color: #ff5e2e;
-  }
-  .dark {
-    --bg: oklch(0.14 0.02 262);
-    --card: oklch(0.18 0.02 262);
-    --card-2: oklch(0.16 0.02 262);
-    --ink: oklch(0.96 0.01 262);
-    --ink-soft: oklch(0.85 0.01 262);
-    --muted: oklch(0.7 0.01 262);
-    --muted-2: oklch(0.55 0.01 262);
-    --line: oklch(0.25 0.02 262);
-    --navy: oklch(0.9 0.02 262);
-    --navy-soft: oklch(0.8 0.02 262);
-    --blob-orange: oklch(0.35 0.08 55);
-    --blob-navy: oklch(0.25 0.06 262);
-    --blob-peach: oklch(0.38 0.06 62);
-    --shadow-sm: 0 1px 2px oklch(0.1 0.01 262 / .4);
-    --shadow: 0 18px 50px -20px oklch(0.1 0.01 262 / .8);
-    --header-bg: oklch(0.14 0.02 262 / .82);
-    --footer-bg: oklch(0.16 0.02 262);
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -87,7 +70,7 @@
   .theme-toggle{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);transition:transform .3s var(--ease),color .2s}
   .theme-toggle:hover{transform:rotate(35deg);color:var(--orange)}
 
-  /* Semi-transparent dark overlay behind the drawer */
+  /* Semi-transparent overlay behind the drawer */
   .drawer-overlay {
     position: fixed;
     inset: 0;
@@ -519,7 +502,7 @@
   }
   @media(max-width:768px){
     .wrap { padding: 0 20px !important; }
-    header.nav .logo svg { height: 56px !important; width: auto !important; }
+    header.nav .logo img { height: 80px !important; width: auto !important; }
     .navbar { height: 80px !important; }
     .nav-right { gap: 12px !important; }
     
@@ -653,58 +636,13 @@
 </style>
 </head>
 <body>
-<script>
-  if (localStorage.getItem('theme') === 'dark') {
-    document.documentElement.classList.add('dark');
-  }
-</script>
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="gxm-logo" viewBox="0 0 540 120">
-    <style>
-      .logo-dark-fill { fill: #000000; }
-      .dark .logo-dark-fill { fill: #ffffff; }
-      .logo-dark-stroke { stroke: #000000; }
-      .dark .logo-dark-stroke { stroke: #ffffff; }
-    </style>
-    <!-- Monogram -->
-    <path d="M24 96 L24 46 C24 31 42 27 50 40 L60 57 L70 40 C78 27 96 31 96 46 L96 96" fill="none" stroke="#F26522" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M60 40 L60 58" fill="none" stroke="#F26522" stroke-width="12" stroke-linecap="round"/>
-    <path d="M60 58 L60 104 C60 111 68 111 74 105" fill="none" class="logo-dark-stroke" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M60 84 L76 84" fill="none" class="logo-dark-stroke" stroke-width="12" stroke-linecap="round"/>
-    
-    <!-- Text "GROOT X MEDIA" -->
-    <text x="130" y="66" font-family="'Poppins', sans-serif" font-size="44" font-weight="800" letter-spacing="0.04em">
-      <tspan fill="#F26522">GROOT</tspan>
-      <tspan class="logo-dark-fill" font-weight="700"> X </tspan>
-      <tspan fill="#F26522">MEDIA</tspan>
-    </text>
-    
-    <!-- Tagline "— YOUR GROWTH PARTNER —" -->
-    <text x="130" y="96" font-family="'Poppins', sans-serif" font-size="14.5" font-weight="600" class="logo-dark-fill" letter-spacing="0.32em">— YOUR GROWTH PARTNER —</text>
-  </symbol>
-</svg>
+
 
 <header class="nav" id="nav">
   <div class="wrap navbar">
     <a href="index.html" class="logo" aria-label="Groot X Media Logo">
-      <svg class="gxm-logo-svg" viewBox="0 0 540 120" style="height: 68px; width: auto; display: block;" aria-hidden="true">
-        <!-- Monogram -->
-        <path d="M24 96 L24 46 C24 31 42 27 50 40 L60 57 L70 40 C78 27 96 31 96 46 L96 96" fill="none" stroke="var(--logo-color, #ff5e2e)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M60 40 L60 58" fill="none" stroke="var(--logo-color, #ff5e2e)" stroke-width="12" stroke-linecap="round"/>
-        <path d="M60 58 L60 104 C60 111 68 111 74 105" fill="none" stroke="var(--logo-color, #ff5e2e)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M60 84 L76 84" fill="none" stroke="var(--logo-color, #ff5e2e)" stroke-width="12" stroke-linecap="round"/>
-        
-        <!-- Text "GROOT X MEDIA" -->
-        <text x="130" y="66" font-family="'Poppins', sans-serif" font-size="44" font-weight="800" letter-spacing="0.04em">
-          <tspan fill="var(--logo-color, #ff5e2e)">GROOT</tspan>
-          <tspan fill="var(--logo-color, #ff5e2e)" font-weight="700"> X </tspan>
-          <tspan fill="var(--logo-color, #ff5e2e)">MEDIA</tspan>
-        </text>
-        
-        <!-- Tagline "— YOUR GROWTH PARTNER —" -->
-        <text x="130" y="96" font-family="'Poppins', sans-serif" font-size="14.5" font-weight="600" fill="var(--logo-color, #ff5e2e)" letter-spacing="0.32em">— YOUR GROWTH PARTNER —</text>
-      </svg>
+      <img src="/logo.png" alt="Groot X Media Logo" style="height: 90px; width: auto; display: block;" />
     </a>
     <nav class="navlinks">
       <a href="index.html" class="active">Home</a>
@@ -716,11 +654,8 @@
     </nav>
     <div class="nav-right">
       <a href="contact.html" class="btn btn-primary">Get Started</a>
-      <button class="theme-toggle" aria-label="Toggle theme"><i data-lucide="sun" width="18" height="18"></i></button>
       <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile navigation" aria-expanded="false">
-        <span class="hamburger-box">
-          <span class="hamburger-inner"></span>
-        </span>
+        <i data-lucide="menu" width="24" height="24"></i>
       </button>
     </div>
   </div>
@@ -1018,23 +953,7 @@
     <div class="foot-grid">
       <div class="foot-brand">
         <a href="index.html" class="logo" aria-label="Groot X Media Logo">
-          <svg class="gxm-logo-svg" viewBox="0 0 540 120" style="height: 64px; width: auto; display: block;" aria-hidden="true">
-            <!-- Monogram -->
-            <path d="M24 96 L24 46 C24 31 42 27 50 40 L60 57 L70 40 C78 27 96 31 96 46 L96 96" fill="none" stroke="var(--logo-color, #ff5e2e)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M60 40 L60 58" fill="none" stroke="var(--logo-color, #ff5e2e)" stroke-width="12" stroke-linecap="round"/>
-            <path d="M60 58 L60 104 C60 111 68 111 74 105" fill="none" stroke="var(--logo-color, #ff5e2e)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M60 84 L76 84" fill="none" stroke="var(--logo-color, #ff5e2e)" stroke-width="12" stroke-linecap="round"/>
-            
-            <!-- Text "GROOT X MEDIA" -->
-            <text x="130" y="66" font-family="'Poppins', sans-serif" font-size="44" font-weight="800" letter-spacing="0.04em">
-              <tspan fill="var(--logo-color, #ff5e2e)">GROOT</tspan>
-              <tspan fill="var(--logo-color, #ff5e2e)" font-weight="700"> X </tspan>
-              <tspan fill="var(--logo-color, #ff5e2e)">MEDIA</tspan>
-            </text>
-            
-            <!-- Tagline "— YOUR GROWTH PARTNER —" -->
-            <text x="130" y="96" font-family="'Poppins', sans-serif" font-size="14.5" font-weight="600" fill="var(--logo-color, #ff5e2e)" letter-spacing="0.32em">— YOUR GROWTH PARTNER —</text>
-          </svg>
+          <img src="/logo.png" alt="Groot X Media Logo" style="height: 90px; width: auto; display: block;" />
         </a>
         <p>Groot X Media is your full-suite digital growth partner, transforming modern platforms into reliable revenue pipelines.</p>
         <div class="socials">
@@ -1103,17 +1022,6 @@
     setTimeout(forceReveal, 600); // Trigger sooner in preview iframe
   }
   setTimeout(forceReveal, 2500); // Global fail-safe fallback after 2.5 seconds
-  const tog=document.querySelector('.theme-toggle');
-  if (tog) {
-    const activeTheme = localStorage.getItem('theme') || 'light';
-    tog.innerHTML = activeTheme === 'dark' ? '<i data-lucide="moon" width="18" height="18"></i>' : '<i data-lucide="sun" width="18" height="18"></i>';
-    tog.addEventListener('click',()=>{
-      const d=document.documentElement.classList.toggle('dark');
-      localStorage.setItem('theme', d ? 'dark' : 'light');
-      tog.innerHTML=d?'<i data-lucide="moon" width="18" height="18"></i>':'<i data-lucide="sun" width="18" height="18"></i>';
-      lucide.createIcons();
-    });
-  }
 
   // Smooth page transition and internal redirection script
   document.querySelectorAll('a').forEach(link => {
@@ -1254,18 +1162,7 @@
     );
     animation: skeleton-shimmer 1.6s infinite;
   }
-  .dark .skeleton-block {
-    background: oklch(0.28 0.02 262 / 0.35);
-  }
-  .dark .skeleton-block::after {
-    background-image: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.06) 20%,
-      rgba(255, 255, 255, 0.12) 60%,
-      rgba(255, 255, 255, 0) 100%
-    );
-  }
+
 </style>
 
 <script type="module" src="/src/blog-controller.ts"></script>
