@@ -1,7 +1,7 @@
 // /src/exit-intent.ts
 
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { getFirestore, initializeFirestore, collection, addDoc, serverTimestamp, setLogLevel } from "firebase/firestore";
 import emailjs from "@emailjs/browser";
 
 const firebaseConfig = {
@@ -18,7 +18,21 @@ let app;
 let db: any = null;
 try {
   app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-  db = getFirestore(app);
+  
+  // Configure log level and long polling to prevent gRPC stream timeout warnings in sandboxed environments
+  try {
+    setLogLevel("error");
+  } catch (e) {
+    console.warn("Could not set Firestore log level:", e);
+  }
+
+  try {
+    db = initializeFirestore(app, {
+      experimentalForceLongPolling: true,
+    });
+  } catch (e) {
+    db = getFirestore(app);
+  }
 } catch (e) {
   console.error("Firebase initialization failed:", e);
 }

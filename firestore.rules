@@ -33,10 +33,34 @@ service cloud.firestore {
         && (!('timestamp' in data) || isServerTimestamp(data.timestamp));
     }
 
+    // Blog validation blueprint
+    function isValidBlog(data) {
+      return data.keys().hasAll(['id', 'title', 'content', 'published'])
+        && data.id is string && data.id.size() <= 128
+        && data.title is string && data.title.size() <= 512
+        && data.content is string && data.content.size() <= 500000
+        && data.published is string && data.published.size() <= 64
+        && (!('updated' in data) || (data.updated is string && data.updated.size() <= 64))
+        && (!('description' in data) || (data.description is string && data.description.size() <= 2000))
+        && (!('category' in data) || (data.category is string && data.category.size() <= 128))
+        && (!('date' in data) || (data.date is string && data.date.size() <= 64))
+        && (!('image' in data) || (data.image is string && data.image.size() <= 1024))
+        && (!('author' in data) || (data.author is string && data.author.size() <= 128))
+        && (!('readTime' in data) || (data.readTime is string && data.readTime.size() <= 64))
+        && (!('originalUrl' in data) || (data.originalUrl is string && data.originalUrl.size() <= 1024))
+        && (!('labels' in data) || (data.labels is list));
+    }
+
     match /leads/{leadId} {
       allow create: if isValidId(leadId) && isValidLead(incoming());
       // No standard read, update, or delete by public
       allow read, update, delete: if false;
+    }
+
+    match /blogs/{blogId} {
+      allow read: if true;
+      allow create, update: if isValidId(blogId) && isValidBlog(incoming());
+      allow delete: if false;
     }
   }
 }

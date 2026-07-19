@@ -1,68 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- skill:chrome -->
-<style>
-/* Credit line — bottom-right */
-.design-ui-credit {
-  position: fixed;
-  bottom: 12px;
-  right: 12px;
-  font: 11px/1 system-ui, sans-serif;
-  color: rgba(128,128,128,0.5);
-  pointer-events: none;
-  z-index: 2147483647;
-  transition: opacity 0.4s ease;
-  user-select: none;
-  letter-spacing: 0.02em;
-}
 
-/* Hide chrome on touch devices */
-@media (hover: none) {
-  .design-ui-credit { display: none; }
-}
-
-/* Print fixes */
-@media print {
-  * {
-    transition: none !important;
-    animation: none !important;
-    box-shadow: none !important;
-  }
-  body {
-    print-color-adjust: exact;
-    -webkit-print-color-adjust: exact;
-  }
-  .design-ui-credit { display: none !important; }
-}
-
-</style>
-<script>
-(function () {
-    // Design-ui pages are single compositions, so the whole body is editable.
-    function markEditable() {
-        document.body.classList.add('artifact-editable');
-    }
-
-    // Credit badge with idle-fade. Hover devices only.
-    function initChromeUI() {
-        // Disabled to remove "ClickUp Brain" credit
-    }
-
-    function init() {
-        markEditable();
-        // initChromeUI();
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
-})();
-
-</script>
-<!-- /skill:chrome -->
 <!-- skill:libraries -->
 <script src="https://cdn.jsdelivr.net/npm/lucide@0.383.0/dist/umd/lucide.min.js" integrity="sha384-wHFvAtjmgnkA2PJcMsDaCgdipf7X7YV44X/igbLHpvGiq6T5/PvFKl93grpvtbQT" crossorigin="anonymous"></script>
 <script>document.addEventListener("DOMContentLoaded",()=>lucide.createIcons())</script>
@@ -85,6 +24,9 @@
     --ease:cubic-bezier(0.22,1,0.36,1);
     --shadow-sm:0 1px 2px oklch(0.4 0.03 262 / .06);
     --shadow:0 18px 50px -20px oklch(0.35 0.06 262 / .28);
+    --header-bg:oklch(0.995 0.003 262 / .82);
+    --footer-bg:oklch(0.985 0.005 262);
+    --logo-color: #ff5e2e;
   }
   .dark {
     --bg: oklch(0.14 0.02 262);
@@ -102,6 +44,8 @@
     --blob-peach: oklch(0.38 0.06 62);
     --shadow-sm: 0 1px 2px oklch(0.1 0.01 262 / .4);
     --shadow: 0 18px 50px -20px oklch(0.1 0.01 262 / .8);
+    --header-bg: oklch(0.14 0.02 262 / .82);
+    --footer-bg: oklch(0.16 0.02 262);
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -115,16 +59,11 @@
   .float{animation:float 14s var(--ease) infinite alternate}
   @keyframes float{to{transform:translate(24px,-30px) scale(1.08)}}
 
-  .logo{display:flex;align-items:center;gap:11px}
-  .logo .mark{width:38px;height:38px;flex:none}
-  .logo .word{display:flex;flex-direction:column;line-height:1}
-  .logo .word .main{font-weight:800;font-size:1.1rem;letter-spacing:.02em}
-  .logo .word .main .o{color:var(--orange)}.logo .word .main .n{color:var(--navy)}
-  .logo .word .tag{font-size:.5rem;font-weight:600;letter-spacing:.34em;color:var(--muted);margin-top:3px}
+  .logo{display:flex;align-items:center;gap:11px;--logo-color:#ff5e2e}
 
-  header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:oklch(0.995 0.003 262 / .82);border-bottom:1px solid transparent;transition:border-color .3s,box-shadow .3s}
+  header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:var(--header-bg);border-bottom:1px solid transparent;transition:border-color .3s,box-shadow .3s,background .3s}
   header.nav.scrolled{border-color:var(--line);box-shadow:0 6px 24px -18px oklch(0.35 0.05 262 / .5)}
-  .navbar{display:flex;align-items:center;justify-content:space-between;height:78px}
+  .navbar{display:flex;align-items:center;justify-content:space-between;height:88px}
   .navlinks{display:flex;gap:36px;font-size:.95rem;font-weight:500;color:var(--ink-soft)}
   .navlinks a{position:relative;transition:color .2s}
   .navlinks a::after{content:"";position:absolute;left:0;bottom:-6px;height:2px;width:0;background:var(--orange);transition:width .3s var(--ease)}
@@ -136,8 +75,23 @@
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 34px -12px oklch(0.66 0.2 45 / .85);background:var(--orange-deep)}
   .btn-ghost{background:transparent;color:var(--navy);border:1.5px solid var(--line)}
   .btn-ghost:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-2px)}
-  .theme-toggle{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);transition:transform .3s var(--ease),color .2s}
+  .theme-toggle{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);transition:transform .3s var(--ease),color .2s}
   .theme-toggle:hover{transform:rotate(35deg);color:var(--orange)}
+
+  /* Semi-transparent dark overlay behind the drawer */
+  .drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 98;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .drawer-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
 
   /* Mobile hamburger button */
   .mobile-menu-toggle {
@@ -150,80 +104,154 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: var(--ink-soft);
-    transition: transform 0.3s var(--ease), color 0.2s;
     position: relative;
     z-index: 101;
+    outline: none;
+    transition: border-color 0.2s, background-color 0.2s;
   }
-  .mobile-menu-toggle:hover {
-    color: var(--orange);
-    transform: scale(1.05);
+  .mobile-menu-toggle:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 2px;
   }
-  .mobile-menu-toggle .menu-close-icon {
-    display: none;
-  }
-  .mobile-menu-toggle.open .menu-open-icon {
-    display: none;
-  }
-  .mobile-menu-toggle.open .menu-close-icon {
+  .hamburger-box {
+    width: 20px;
+    height: 14px;
     display: block;
+    position: relative;
+  }
+  .hamburger-inner {
+    display: block;
+    top: 50%;
+    margin-top: -1px;
+    transition: background-color 0.2s ease;
+  }
+  .hamburger-inner,
+  .hamburger-inner::before,
+  .hamburger-inner::after {
+    width: 20px;
+    height: 2px;
+    background-color: var(--ink);
+    border-radius: 4px;
+    position: absolute;
+    transition: transform 0.2s ease, top 0.2s ease, bottom 0.2s ease, background-color 0.2s ease;
+  }
+  .hamburger-inner::before {
+    content: "";
+    top: -6px;
+  }
+  .hamburger-inner::after {
+    content: "";
+    bottom: -6px;
   }
 
-  /* Mobile slide-down drawer */
+  /* Morph to 'X' on open */
+  .mobile-menu-toggle.open .hamburger-inner {
+    background-color: transparent !important;
+  }
+  .mobile-menu-toggle.open .hamburger-inner::before {
+    top: 0;
+    transform: rotate(45deg);
+    background-color: #ff5e2e;
+  }
+  .mobile-menu-toggle.open .hamburger-inner::after {
+    bottom: 0;
+    transform: rotate(-45deg);
+    background-color: #ff5e2e;
+  }
+
+  /* Right-side sliding drawer with blur backdrop */
   .mobile-drawer {
     position: fixed;
-    top: 78px;
-    left: 0;
-    width: 100%;
-    height: calc(100vh - 78px);
-    background: var(--bg);
+    top: 0;
+    right: 0;
+    width: 300px;
+    max-width: 85vw;
+    height: 100vh;
+    background: rgba(16, 22, 42, 0.75);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
     z-index: 99;
     display: flex;
     flex-direction: column;
-    padding: 32px 28px;
+    padding: 100px 24px 40px;
     box-sizing: border-box;
-    transform: translateY(-100%);
-    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+    opacity: 1;
     pointer-events: none;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
     overflow-y: auto;
-    border-top: 1px solid var(--line);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: none;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
   }
   .mobile-drawer.open {
-    transform: translateY(0);
-    opacity: 1;
+    transform: translate3d(0, 0, 0);
     pointer-events: auto;
   }
+
+  /* Navigation links in drawer with staggered entry animations */
   .mobile-drawer-links {
     display: flex;
     flex-direction: column;
-    gap: 22px;
-    margin-bottom: 36px;
+    gap: 8px;
+    margin-bottom: 24px;
   }
   .mobile-drawer-links a {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 600;
-    color: var(--ink);
-    padding: 8px 0;
-    border-bottom: 1px solid oklch(0.28 0.05 262 / 0.04);
-    transition: color 0.2s, padding-left 0.2s;
+    color: rgba(255, 255, 255, 0.85) !important;
+    padding: 12px 16px !important;
+    margin: 1px 0 !important;
+    display: block !important;
+    border-radius: 8px !important;
+    border-bottom: none !important;
+    text-decoration: none;
+    opacity: 0;
+    transform: translate3d(15px, 0, 0);
+    transition: opacity 0.35s ease, transform 0.35s ease !important;
   }
-  .mobile-drawer-links a:hover, .mobile-drawer-links a.active {
-    color: var(--orange);
-    padding-left: 6px;
+  .mobile-drawer-links a.active {
+    color: #ff5e2e !important;
+    background: rgba(255, 94, 46, 0.15) !important;
+    border-left: 3px solid #ff5e2e !important;
+    font-weight: 700 !important;
+    padding-left: 13px !important;
   }
+  .mobile-drawer-links a:hover {
+    color: #ff5e2e !important;
+    background: rgba(255, 94, 46, 0.08) !important;
+  }
+
   .mobile-drawer-cta {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 16px;
     margin-top: auto;
     padding-bottom: 24px;
+    opacity: 0;
+    transform: translate3d(15px, 0, 0);
+    transition: opacity 0.35s ease, transform 0.35s ease !important;
   }
-  .mobile-drawer-cta .btn {
-    width: 100%;
-    padding: 16px;
-    font-size: 1.05rem;
+  
+  /* Stagger delays for transition when drawer opens */
+  .mobile-drawer.open .mobile-drawer-links a {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
+  .mobile-drawer.open .mobile-drawer-cta {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  .mobile-drawer.open .mobile-drawer-links a:nth-child(1) { transition-delay: 0.10s !important; }
+  .mobile-drawer.open .mobile-drawer-links a:nth-child(2) { transition-delay: 0.15s !important; }
+  .mobile-drawer.open .mobile-drawer-links a:nth-child(3) { transition-delay: 0.20s !important; }
+  .mobile-drawer.open .mobile-drawer-links a:nth-child(4) { transition-delay: 0.25s !important; }
+  .mobile-drawer.open .mobile-drawer-links a:nth-child(5) { transition-delay: 0.30s !important; }
+  .mobile-drawer.open .mobile-drawer-links a:nth-child(6) { transition-delay: 0.35s !important; }
+  .mobile-drawer.open .mobile-drawer-links a:nth-child(7) { transition-delay: 0.40s !important; }
+  .mobile-drawer.open .mobile-drawer-cta { transition-delay: 0.45s !important; }
 
   .chead{position:relative;padding:64px 0 20px;text-align:center}
   .chead .eyebrow{display:inline-flex;align-items:center;gap:7px;background:oklch(0.95 0.03 55);color:var(--orange);font-size:.8rem;font-weight:600;padding:7px 15px;border-radius:999px;letter-spacing:.03em}
@@ -297,11 +325,11 @@
   .faq-item[open] summary .ic{transform:rotate(45deg)}
   .faq-item .ans{padding:0 22px 20px;color:var(--muted);font-size:.9rem}
 
-  footer{background:oklch(0.985 0.005 262);border-top:1px solid var(--line);padding:64px 0 30px;position:relative;overflow:hidden}
-  .foot-grid{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:34px;position:relative;z-index:2}
+  footer{background:var(--footer-bg);border-top:1px solid var(--line);padding:64px 0 30px;position:relative;overflow:hidden;transition:background .3s}
+  .foot-grid{display:grid;grid-template-columns:1.6fr 0.8fr 1.6fr 0.8fr 1.2fr;gap:34px;position:relative;z-index:2}
   .foot-brand p{color:var(--muted);font-size:.86rem;margin-top:14px;max-width:34ch}
   .socials{display:flex;gap:12px;margin-top:20px}
-  .socials a{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--muted);transition:all .25s var(--ease);background:var(--card)}
+  .socials a{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--muted);transition:all .25s var(--ease);background:var(--card)}
   .socials a:hover{color:#fff;background:var(--orange);border-color:var(--orange);transform:translateY(-3px)}
   .foot-col h5{font-size:.95rem;margin-bottom:16px;color:var(--navy)}
   .foot-col a{display:block;color:var(--muted);font-size:.87rem;margin-bottom:11px;transition:color .2s,padding-left .2s}
@@ -333,16 +361,16 @@
     .nav-right .btn-primary { display: none !important; }
     .mobile-menu-toggle { display: flex; }
   }
-  @media(max-width:600px){
-    .wrap { padding: 0 16px !important; }
-    header.nav .logo img { height: 46px !important; }
-    .navbar { height: 64px !important; }
-    .mobile-drawer { top: 64px !important; height: calc(100vh - 64px) !important; }
-    .nav-right { gap: 10px !important; }
+  @media(max-width:768px){
+    .wrap { padding: 0 20px !important; }
+    header.nav .logo svg { height: 56px !important; width: auto !important; }
+    .navbar { height: 80px !important; }
+    .nav-right { gap: 12px !important; }
     
     header.nav {
-      background: var(--bg) !important;
-      backdrop-filter: none !important;
+      background: var(--header-bg) !important;
+      backdrop-filter: blur(14px) !important;
+      -webkit-backdrop-filter: blur(14px) !important;
     }
     .blob {
       opacity: 0.08 !important;
@@ -368,7 +396,14 @@
     }
 
     .frow{grid-template-columns:1fr}
-    .foot-grid{grid-template-columns:1fr}
+    .foot-grid{
+      grid-template-columns:1fr !important;
+      gap:32px !important;
+    }
+    .foot-brand {
+      grid-column: 1/-1 !important;
+      margin-bottom: 12px !important;
+    }
     .logo .word .tag{display:none}
     .cform,.cinfo{padding:28px 22px}
   }
@@ -494,7 +529,23 @@
 <header class="nav" id="nav">
   <div class="wrap navbar">
     <a href="index.html" class="logo" aria-label="Groot X Media Logo">
-      <img src="/src/logo-header.png" alt="Groot X Media Logo" width="210" height="78" style="height: 78px; width: auto; object-fit: contain; display: block;" />
+      <svg class="gxm-logo-svg" viewBox="0 0 540 120" style="height: 68px; width: auto; display: block;" aria-hidden="true">
+        <!-- Monogram -->
+        <path d="M24 96 L24 46 C24 31 42 27 50 40 L60 57 L70 40 C78 27 96 31 96 46 L96 96" fill="none" stroke="var(--logo-color, #ff5e2e)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M60 40 L60 58" fill="none" stroke="var(--logo-color, #ff5e2e)" stroke-width="12" stroke-linecap="round"/>
+        <path d="M60 58 L60 104 C60 111 68 111 74 105" fill="none" stroke="var(--logo-color, #ff5e2e)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M60 84 L76 84" fill="none" stroke="var(--logo-color, #ff5e2e)" stroke-width="12" stroke-linecap="round"/>
+        
+        <!-- Text "GROOT X MEDIA" -->
+        <text x="130" y="66" font-family="'Poppins', sans-serif" font-size="44" font-weight="800" letter-spacing="0.04em">
+          <tspan fill="var(--logo-color, #ff5e2e)">GROOT</tspan>
+          <tspan fill="var(--logo-color, #ff5e2e)" font-weight="700"> X </tspan>
+          <tspan fill="var(--logo-color, #ff5e2e)">MEDIA</tspan>
+        </text>
+        
+        <!-- Tagline "— YOUR GROWTH PARTNER —" -->
+        <text x="130" y="96" font-family="'Poppins', sans-serif" font-size="14.5" font-weight="600" fill="var(--logo-color, #ff5e2e)" letter-spacing="0.32em">— YOUR GROWTH PARTNER —</text>
+      </svg>
     </a>
     <nav class="navlinks">
       <a href="index.html">Home</a>
@@ -508,12 +559,16 @@
       <a href="#form" class="btn btn-primary">Get Started</a>
       <button class="theme-toggle" aria-label="Toggle theme"><i data-lucide="sun" width="18" height="18"></i></button>
       <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile navigation" aria-expanded="false">
-        <i data-lucide="menu" class="menu-open-icon" width="20" height="20"></i>
-        <i data-lucide="x" class="menu-close-icon" width="20" height="20"></i>
+        <span class="hamburger-box">
+          <span class="hamburger-inner"></span>
+        </span>
       </button>
     </div>
   </div>
 </header>
+
+<!-- Overlay for Mobile Drawer -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
 
 <!-- Mobile Navigation Drawer -->
 <div class="mobile-drawer" id="mobileDrawer">
@@ -559,10 +614,10 @@
           <p>Mon to Sat: 10:00 AM to 7:00 PM IST<br>Sunday: Closed (emails still get read)</p>
         </div>
         <div class="csocials">
-          <a href="#" aria-label="Facebook"><i data-lucide="facebook" width="16" height="16"></i></a>
-          <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin" width="16" height="16"></i></a>
+          <a href="https://www.facebook.com/share/1EJU7sCEDm/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i data-lucide="facebook" width="16" height="16"></i></a>
+          <a href="https://www.linkedin.com/company/groot-x-media" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i data-lucide="linkedin" width="16" height="16"></i></a>
           <a href="#" aria-label="Twitter"><i data-lucide="twitter" width="16" height="16"></i></a>
-          <a href="#" aria-label="Instagram"><i data-lucide="instagram" width="16" height="16"></i></a>
+          <a href="https://www.instagram.com/groot_x_media?igsh=MWhvNjk1ZWhzcTgxbg==" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i data-lucide="instagram" width="16" height="16"></i></a>
         </div>
       </aside>
 
@@ -624,20 +679,36 @@
     <div class="foot-grid">
       <div class="foot-brand">
         <a href="index.html" class="logo" aria-label="Groot X Media Logo">
-          <img src="/src/logo-header.png" alt="Groot X Media Logo" width="210" height="78" style="height: 78px; width: auto; object-fit: contain; display: block;" />
+          <svg class="gxm-logo-svg" viewBox="0 0 540 120" style="height: 64px; width: auto; display: block;" aria-hidden="true">
+            <!-- Monogram -->
+            <path d="M24 96 L24 46 C24 31 42 27 50 40 L60 57 L70 40 C78 27 96 31 96 46 L96 96" fill="none" stroke="var(--logo-color, #ff5e2e)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M60 40 L60 58" fill="none" stroke="var(--logo-color, #ff5e2e)" stroke-width="12" stroke-linecap="round"/>
+            <path d="M60 58 L60 104 C60 111 68 111 74 105" fill="none" stroke="var(--logo-color, #ff5e2e)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M60 84 L76 84" fill="none" stroke="var(--logo-color, #ff5e2e)" stroke-width="12" stroke-linecap="round"/>
+            
+            <!-- Text "GROOT X MEDIA" -->
+            <text x="130" y="66" font-family="'Poppins', sans-serif" font-size="44" font-weight="800" letter-spacing="0.04em">
+              <tspan fill="var(--logo-color, #ff5e2e)">GROOT</tspan>
+              <tspan fill="var(--logo-color, #ff5e2e)" font-weight="700"> X </tspan>
+              <tspan fill="var(--logo-color, #ff5e2e)">MEDIA</tspan>
+            </text>
+            
+            <!-- Tagline "— YOUR GROWTH PARTNER —" -->
+            <text x="130" y="96" font-family="'Poppins', sans-serif" font-size="14.5" font-weight="600" fill="var(--logo-color, #ff5e2e)" letter-spacing="0.32em">— YOUR GROWTH PARTNER —</text>
+          </svg>
         </a>
         <p>Groot X Media is your full-suite digital growth partner, transforming modern platforms into reliable revenue pipelines.</p>
         <div class="socials">
-          <a href="#" aria-label="Facebook"><i data-lucide="facebook" width="16" height="16"></i></a>
-          <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin" width="16" height="16"></i></a>
+          <a href="https://www.facebook.com/share/1EJU7sCEDm/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i data-lucide="facebook" width="16" height="16"></i></a>
+          <a href="https://www.linkedin.com/company/groot-x-media" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i data-lucide="linkedin" width="16" height="16"></i></a>
           <a href="#" aria-label="Twitter"><i data-lucide="twitter" width="16" height="16"></i></a>
-          <a href="#" aria-label="Instagram"><i data-lucide="instagram" width="16" height="16"></i></a>
+          <a href="https://www.instagram.com/groot_x_media?igsh=MWhvNjk1ZWhzcTgxbg==" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i data-lucide="instagram" width="16" height="16"></i></a>
         </div>
       </div>
       <div class="foot-col"><h5>Company</h5><a href="index.html#about">About</a><a href="blog.html">Blog</a><a href="testimonials.html">Testimonials</a><a href="#">Partners</a></div>
-      <div class="foot-col"><h5>Solutions</h5><a href="#">Marketing</a><a href="#">Analytics</a><a href="#">Commerce</a><a href="#">Insights</a></div>
+      <div class="foot-col"><h5>Solutions</h5><a href="index.html#services">Social Media Marketing</a><a href="index.html#services">Search Engine Optimization (SEO)</a><a href="index.html#services">Website Development</a><a href="index.html#services">Content Marketing</a><a href="index.html#services">Paid AD Campaign</a><a href="index.html#services">Email Marketing</a></div>
       <div class="foot-col"><h5>Support</h5><a href="pricing.html">Pricing</a><a href="#">Guides</a><a href="#">FAQ</a><a href="contact.html">Contact</a></div>
-      <div class="foot-col"><h5>Resources</h5><a href="#">Claim</a><a href="#">Privacy</a><a href="#">Terms</a></div>
+      <div class="foot-col"><h5>Contact info</h5><a href="tel:+917397794418" style="display:flex;align-items:center;gap:8px;margin-bottom:11px"><i data-lucide="phone" width="14" height="14"></i> +91 73977 94418</a><a href="mailto:info@grootxmedia.com" style="display:flex;align-items:center;gap:8px;margin-bottom:11px"><i data-lucide="mail" width="14" height="14"></i> info@grootxmedia.com</a><span style="display:flex;align-items:flex-start;gap:8px;color:var(--muted);font-size:.87rem;line-height:1.4"><i data-lucide="map-pin" width="14" height="14" style="margin-top:3px;flex-shrink:0"></i> Coimbatore, India</span></div>
     </div>
     <div class="foot-bottom">
       <span>© 2026 Groot X Media. All rights reserved</span>
@@ -652,20 +723,30 @@
   // Mobile drawer toggle handler
   const mobileMenuToggle = document.getElementById('mobileMenuToggle');
   const mobileDrawer = document.getElementById('mobileDrawer');
-  if (mobileMenuToggle && mobileDrawer) {
+  const drawerOverlay = document.getElementById('drawerOverlay');
+
+  if (mobileMenuToggle && mobileDrawer && drawerOverlay) {
+    const toggleMenu = (open) => {
+      mobileMenuToggle.classList.toggle('open', open);
+      mobileMenuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      mobileDrawer.classList.toggle('open', open);
+      drawerOverlay.classList.toggle('open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    };
+
     mobileMenuToggle.addEventListener('click', () => {
-      const isOpen = mobileMenuToggle.classList.toggle('open');
-      mobileMenuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-      mobileDrawer.classList.toggle('open', isOpen);
-      document.body.style.overflow = isOpen ? 'hidden' : '';
+      const isOpen = mobileMenuToggle.classList.contains('open');
+      toggleMenu(!isOpen);
     });
+
+    drawerOverlay.addEventListener('click', () => {
+      toggleMenu(false);
+    });
+
     // Auto-close on drawer link click
     mobileDrawer.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
-        mobileMenuToggle.classList.remove('open');
-        mobileMenuToggle.setAttribute('aria-expanded', 'false');
-        mobileDrawer.classList.remove('open');
-        document.body.style.overflow = '';
+        toggleMenu(false);
       });
     });
   }
@@ -742,24 +823,32 @@
     
     const isSamePage = targetPath === '' || targetPath === currentPath || (targetPath === 'index.html' && currentPath === '') || (targetPath === '' && currentPath === 'index.html');
 
-    if (isSamePage && targetHash) {
+    if (isSamePage && targetHash && targetHash !== '#') {
       // Same-page internal redirection (e.g. #services, index.html#services on index.html)
       link.addEventListener('click', (e) => {
         e.preventDefault();
-        const targetEl = document.querySelector(targetHash);
-        if (targetEl) {
-          targetEl.scrollIntoView({ behavior: 'smooth' });
-          history.pushState(null, '', targetHash);
+        try {
+          const targetEl = document.querySelector(targetHash);
+          if (targetEl) {
+            targetEl.scrollIntoView({ behavior: 'smooth' });
+            history.pushState(null, '', targetHash);
+          }
+        } catch (err) {
+          console.warn("Invalid selector:", targetHash, err);
         }
       });
-    } else if (href.startsWith('#')) {
+    } else if (href.startsWith('#') && href !== '#') {
       // Relative hash link (e.g. #about)
       link.addEventListener('click', (e) => {
         e.preventDefault();
-        const targetEl = document.querySelector(href);
-        if (targetEl) {
-          targetEl.scrollIntoView({ behavior: 'smooth' });
-          history.pushState(null, '', href);
+        try {
+          const targetEl = document.querySelector(href);
+          if (targetEl) {
+            targetEl.scrollIntoView({ behavior: 'smooth' });
+            history.pushState(null, '', href);
+          }
+        } catch (err) {
+          console.warn("Invalid selector:", href, err);
         }
       });
     } else if (targetPath.endsWith('.html')) {
@@ -777,22 +866,26 @@
   });
 
   // Smooth scroll on page load if there is a hash in the URL
-  if (window.location.hash) {
+  if (window.location.hash && window.location.hash !== '#') {
     const targetId = window.location.hash;
-    const targetEl = document.querySelector(targetId);
-    if (targetEl) {
-      // Prevent browser default jump by scrolling to top first
-      window.scrollTo(0, 0);
-      const performScroll = () => {
-        setTimeout(() => {
-          targetEl.scrollIntoView({ behavior: 'smooth' });
-        }, 150);
-      };
-      if (document.readyState === 'complete') {
-        performScroll();
-      } else {
-        window.addEventListener('load', performScroll);
+    try {
+      const targetEl = document.querySelector(targetId);
+      if (targetEl) {
+        // Prevent browser default jump by scrolling to top first
+        window.scrollTo(0, 0);
+        const performScroll = () => {
+          setTimeout(() => {
+            targetEl.scrollIntoView({ behavior: 'smooth' });
+          }, 150);
+        };
+        if (document.readyState === 'complete') {
+          performScroll();
+        } else {
+          window.addEventListener('load', performScroll);
+        }
       }
+    } catch (err) {
+      console.warn("Invalid hash selector on load:", targetId, err);
     }
   }
 

@@ -22,6 +22,22 @@ export default defineConfig(() => {
           blog: path.resolve(__dirname, 'blog.html'),
           testimonials: path.resolve(__dirname, 'testimonials.html'),
         },
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('firebase')) {
+                return 'vendor-firebase';
+              }
+              if (id.includes('motion')) {
+                return 'vendor-motion';
+              }
+              if (id.includes('react') || id.includes('scheduler')) {
+                return 'vendor-react';
+              }
+              return 'vendor';
+            }
+          },
+        },
       },
     },
     server: {

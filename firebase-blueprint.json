@@ -52,12 +52,78 @@
         }
       },
       "required": ["email", "source", "status"]
+    },
+    "BlogPost": {
+      "title": "BlogPost",
+      "description": "Cached blog post content fetched from Blogger/Blogspot",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique post identifier from Blogspot",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the blog post",
+          "maxLength": 512
+        },
+        "content": {
+          "type": "string",
+          "description": "HTML content of the blog post",
+          "maxLength": 500000
+        },
+        "published": {
+          "type": "string",
+          "description": "Publish ISO timestamp",
+          "maxLength": 64
+        },
+        "updated": {
+          "type": "string",
+          "description": "Update ISO timestamp",
+          "maxLength": 64
+        },
+        "authorName": {
+          "type": "string",
+          "description": "Name of the author",
+          "maxLength": 128
+        },
+        "authorImage": {
+          "type": "string",
+          "description": "URL to author avatar",
+          "maxLength": 1024
+        },
+        "url": {
+          "type": "string",
+          "description": "Original URL of the Blogger post",
+          "maxLength": 1024
+        },
+        "labels": {
+          "type": "array",
+          "description": "List of tags or categories"
+        },
+        "featuredImage": {
+          "type": "string",
+          "description": "Optimized main header image URL",
+          "maxLength": 1024
+        },
+        "summary": {
+          "type": "string",
+          "description": "Extracted plain text summary of the post content",
+          "maxLength": 1000
+        }
+      },
+      "required": ["id", "title", "content", "published"]
     }
   },
   "firestore": {
     "leads/{leadId}": {
       "schema": "Lead",
       "description": "Collection of captured leads and inquiries"
+    },
+    "blogs/{blogId}": {
+      "schema": "BlogPost",
+      "description": "Collection of cached Blogspot blog posts"
     }
   }
 }
