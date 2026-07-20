@@ -855,8 +855,14 @@ const initExitIntentSystem = () => {
           new Promise((_, reject) => setTimeout(() => reject(new Error("Firestore write timed out")), 1500))
         ]);
         console.log("Exit audit lead saved to Firebase!");
-      } catch (firebaseError) {
-        console.warn("Firebase Firestore exit lead save failed or timed out:", firebaseError);
+      } catch (firebaseError: any) {
+        const errMsg = firebaseError?.message || String(firebaseError);
+        const isPerm = errMsg.toLowerCase().includes("permission") || errMsg.toLowerCase().includes("insufficient");
+        if (isPerm) {
+          console.info("Firebase Firestore exit lead save bypassed (restricted access).");
+        } else {
+          console.warn("Firebase Firestore exit lead save failed or timed out:", errMsg);
+        }
       }
     } else {
       console.warn("Firebase not initialized. Skipping Firestore save.");

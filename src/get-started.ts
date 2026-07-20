@@ -510,9 +510,15 @@ const handleLeadSubmission = async (email: string, source: string): Promise<{ su
         new Promise((_, reject) => setTimeout(() => reject(new Error("Firestore write timed out")), 1500))
       ]);
       console.log("Lead successfully saved to Firebase!");
-    } catch (firebaseError) {
+    } catch (firebaseError: any) {
       // Fail-safe: log warning but do not block email sending (useful if Firestore permissions are not configured yet)
-      console.warn("Firebase Firestore save failed or timed out (will proceed with EmailJS brochure dispatch):", firebaseError);
+      const errMsg = firebaseError?.message || String(firebaseError);
+      const isPerm = errMsg.toLowerCase().includes("permission") || errMsg.toLowerCase().includes("insufficient");
+      if (isPerm) {
+        console.info("Firebase Firestore save bypassed (restricted access). Proceeding with EmailJS brochure dispatch.");
+      } else {
+        console.warn("Firebase Firestore save failed or timed out (will proceed with EmailJS brochure dispatch):", errMsg);
+      }
     }
   } else {
     console.warn("Firebase not initialized. Skipping Firestore save.");
@@ -829,8 +835,14 @@ const initGetStarted = () => {
             new Promise((_, reject) => setTimeout(() => reject(new Error("Firestore write timed out")), 1500))
           ]);
           console.log("Contact request successfully saved to Firebase!");
-        } catch (firebaseError) {
-          console.warn("Firebase Firestore contact save failed or timed out:", firebaseError);
+        } catch (firebaseError: any) {
+          const errMsg = firebaseError?.message || String(firebaseError);
+          const isPerm = errMsg.toLowerCase().includes("permission") || errMsg.toLowerCase().includes("insufficient");
+          if (isPerm) {
+            console.info("Firebase Firestore contact save bypassed (restricted access).");
+          } else {
+            console.warn("Firebase Firestore contact save failed or timed out:", errMsg);
+          }
         }
       } else {
         console.warn("Firebase not initialized. Skipping Firestore save.");

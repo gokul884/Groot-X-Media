@@ -67,9 +67,6 @@
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 34px -12px oklch(0.66 0.2 45 / .85);background:var(--orange-deep)}
   .btn-ghost{background:transparent;color:var(--navy);border:1.5px solid var(--line)}
   .btn-ghost:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-2px)}
-  .theme-toggle{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);transition:transform .3s var(--ease),color .2s}
-  .theme-toggle:hover{transform:rotate(35deg);color:var(--orange)}
-
   /* Semi-transparent overlay behind the drawer */
   .drawer-overlay {
     position: fixed;
@@ -100,55 +97,11 @@
     z-index: 101;
     outline: none;
     transition: border-color 0.2s, background-color 0.2s;
+    color: var(--ink);
   }
   .mobile-menu-toggle:focus-visible {
     outline: 2px solid var(--orange);
     outline-offset: 2px;
-  }
-  .hamburger-box {
-    width: 20px;
-    height: 14px;
-    display: block;
-    position: relative;
-  }
-  .hamburger-inner {
-    display: block;
-    top: 50%;
-    margin-top: -1px;
-    transition: background-color 0.2s ease;
-  }
-  .hamburger-inner,
-  .hamburger-inner::before,
-  .hamburger-inner::after {
-    width: 20px;
-    height: 2px;
-    background-color: var(--ink);
-    border-radius: 4px;
-    position: absolute;
-    transition: transform 0.2s ease, top 0.2s ease, bottom 0.2s ease, background-color 0.2s ease;
-  }
-  .hamburger-inner::before {
-    content: "";
-    top: -6px;
-  }
-  .hamburger-inner::after {
-    content: "";
-    bottom: -6px;
-  }
-
-  /* Morph to 'X' on open */
-  .mobile-menu-toggle.open .hamburger-inner {
-    background-color: transparent !important;
-  }
-  .mobile-menu-toggle.open .hamburger-inner::before {
-    top: 0;
-    transform: rotate(45deg);
-    background-color: #ff5e2e;
-  }
-  .mobile-menu-toggle.open .hamburger-inner::after {
-    bottom: 0;
-    transform: rotate(-45deg);
-    background-color: #ff5e2e;
   }
 
   /* Right-side sliding drawer with blur backdrop */
@@ -410,14 +363,47 @@
 
   /* TESTIMONIALS (home) */
   .tst{padding:80px 0;overflow:hidden}
-  .marquee{margin-top:48px;position:relative;--gap:22px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-  .marquee-track{display:flex;gap:var(--gap);width:max-content;animation:scroll 42s linear infinite}
-  .tst:hover .marquee-track{animation-play-state:paused}
-  @keyframes scroll{to{transform:translateX(calc(-50% - (var(--gap) / 2)))}}
-  .tcard{width:330px;flex:none;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px;transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .35s}
+  .tst-slider-container {
+    margin-top: 48px;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding: 10px 4px;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+  }
+  @media (max-width: 640px) {
+    .tst-slider-container {
+      padding: 10px 24px;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+  }
+  .tst-slider-track {
+    display: flex;
+    gap: 24px;
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    width: max-content;
+  }
+  .tcard{width:460px;flex:none;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:8px 8px 26px 8px;transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .35s}
+  @media (max-width: 1160px) {
+    .tcard {
+      width: 400px;
+    }
+  }
+  @media (max-width: 1024px) {
+    .tcard {
+      width: calc(50vw - 24px);
+    }
+  }
+  @media (max-width: 640px) {
+    .tcard {
+      width: calc(100vw - 32px);
+    }
+  }
   .tcard:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:transparent}
   .tcard .quote{color:var(--ink-soft);font-size:.92rem;line-height:1.65}
-  .tcard .stars{display:flex;gap:3px;color:var(--orange);margin-bottom:14px}
+  .tcard .stars{display:none}
   .tperson{display:flex;align-items:center;gap:13px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
   .tavatar{width:48px;height:48px;border-radius:50%;flex:none;overflow:hidden;display:grid;place-items:center;color:#fff;font-weight:700;font-size:1.05rem}
   .a1{background:linear-gradient(135deg,oklch(0.7 0.16 45),oklch(0.55 0.12 30))}
@@ -502,7 +488,7 @@
   }
   @media(max-width:768px){
     .wrap { padding: 0 20px !important; }
-    header.nav .logo img { height: 80px !important; width: auto !important; }
+    .logo img { height: 80px !important; width: auto !important; }
     .navbar { height: 80px !important; }
     .nav-right { gap: 12px !important; }
     
@@ -515,6 +501,50 @@
       opacity: 0.08 !important;
     }
     
+    /* Optimize Typography Size for Google SEO structure to get a good Lighthouse score */
+    body {
+      font-size: 16px !important;
+    }
+    .ph-caption {
+      font-size: 12px !important;
+    }
+    .post-tag {
+      font-size: 12px !important;
+    }
+    .post-meta {
+      font-size: 13px !important;
+    }
+    .tperson .who .rl {
+      font-size: 13px !important;
+    }
+    .stat .lab {
+      font-size: 13px !important;
+    }
+    .brandtile {
+      font-size: 14px !important;
+    }
+    .foot-col a, .foot-bottom, .foot-brand p {
+      font-size: 14px !important;
+    }
+    .check {
+      font-size: 15px !important;
+    }
+    .tcard .quote {
+      font-size: 15px !important;
+    }
+    .post-body p {
+      font-size: 15px !important;
+    }
+    .post-more {
+      font-size: 14px !important;
+    }
+    .offer-card p {
+      font-size: 15px !important;
+    }
+    .mv-card p {
+      font-size: 14px !important;
+    }
+
     /* Heading text improvements to prevent overflow truncation */
     h1 {
       font-size: clamp(1.8rem, 7vw, 2.3rem) !important;
@@ -642,7 +672,7 @@
 <header class="nav" id="nav">
   <div class="wrap navbar">
     <a href="index.html" class="logo" aria-label="Groot X Media Logo">
-      <img src="/logo.png" alt="Groot X Media Logo" style="height: 90px; width: auto; display: block;" />
+      <img src="/logo_head.png" alt="Groot X Media Logo" style="height: 80px; width: auto; display: block;" />
     </a>
     <nav class="navlinks">
       <a href="index.html" class="active">Home</a>
@@ -809,7 +839,7 @@
       <div class="person reveal">
         <div class="blob" style="width:170px;height:170px;background:var(--blob-orange);bottom:-20px;left:-10px;opacity:.5"></div>
         <div class="ph" style="position:relative;z-index:2;overflow:hidden;border-radius:28px;">
-          <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80" alt="We help drive your business forward faster" style="width:100%; height:100%; object-fit:cover; display:block;" />
+          <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80" alt="We help drive your business forward faster" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
         </div>
       </div>
       <div class="bf-copy reveal">
@@ -842,7 +872,7 @@
       <div class="person reveal">
         <div class="blob" style="width:180px;height:180px;background:var(--blob-peach);bottom:0;right:-10px;opacity:.5"></div>
         <div class="ph" style="position:relative;z-index:2;aspect-ratio:1/1;border-radius:28px;overflow:hidden;">
-          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80" alt="We provide Important Features for Digital Marketing" style="width:100%; height:100%; object-fit:cover; display:block;" />
+          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80" alt="We provide Important Features for Digital Marketing" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
         </div>
       </div>
     </div>
@@ -859,21 +889,20 @@
       <a href="testimonials.html" class="link">View Our Testimonials <i data-lucide="arrow-right" width="16" height="16"></i></a>
     </div>
   </div>
-  <div class="marquee reveal">
-    <div class="marquee-track">
-      <!-- set A -->
-      <div class="tcard"><div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div><div class="t-photo-container" style="border-radius:12px; overflow:hidden; margin:12px 0 16px; aspect-ratio:16/10; width:100%;"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&h=180&q=80" alt="Rahul Kapoor" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" /></div><div class="tperson"><div class="tavatar a1">RK</div><div class="who"><div class="nm">Rahul Kapoor</div><div class="rl">Founder, Brewhouse</div></div></div></div>
-      <div class="tcard"><div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div><div class="t-photo-container" style="border-radius:12px; overflow:hidden; margin:12px 0 16px; aspect-ratio:16/10; width:100%;"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&h=180&q=80" alt="Sneha Menon" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" /></div><div class="tperson"><div class="tavatar a2">SM</div><div class="who"><div class="nm">Sneha Menon</div><div class="rl">CMO, Luxe Skincare</div></div></div></div>
-      <div class="tcard"><div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div><div class="t-photo-container" style="border-radius:12px; overflow:hidden; margin:12px 0 16px; aspect-ratio:16/10; width:100%;"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&h=180&q=80" alt="Arjun Verma" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" /></div><div class="tperson"><div class="tavatar a3">AV</div><div class="who"><div class="nm">Arjun Verma</div><div class="rl">Owner, FitZone Gyms</div></div></div></div>
-      <div class="tcard"><div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div><div class="t-photo-container" style="border-radius:12px; overflow:hidden; margin:12px 0 16px; aspect-ratio:16/10; width:100%;"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&h=180&q=80" alt="Priya Nair" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" /></div><div class="tperson"><div class="tavatar a4">PN</div><div class="who"><div class="nm">Priya Nair</div><div class="rl">Director, Casa Interiors</div></div></div></div>
-      <div class="tcard"><div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div><div class="t-photo-container" style="border-radius:12px; overflow:hidden; margin:12px 0 16px; aspect-ratio:16/10; width:100%;"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&h=180&q=80" alt="Deepak Thakur" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" /></div><div class="tperson"><div class="tavatar a5">DT</div><div class="who"><div class="nm">Deepak Thakur</div><div class="rl">CEO, Nova Tech</div></div></div></div>
-      <!-- set B (duplicate for seamless loop) -->
-      <div class="tcard" aria-hidden="true"><div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div><div class="t-photo-container" style="border-radius:12px; overflow:hidden; margin:12px 0 16px; aspect-ratio:16/10; width:100%;"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&h=180&q=80" alt="Rahul Kapoor" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" /></div><div class="tperson"><div class="tavatar a1">RK</div><div class="who"><div class="nm">Rahul Kapoor</div><div class="rl">Founder, Brewhouse</div></div></div></div>
-      <div class="tcard" aria-hidden="true"><div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div><div class="t-photo-container" style="border-radius:12px; overflow:hidden; margin:12px 0 16px; aspect-ratio:16/10; width:100%;"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&h=180&q=80" alt="Sneha Menon" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" /></div><div class="tperson"><div class="tavatar a2">SM</div><div class="who"><div class="nm">Sneha Menon</div><div class="rl">CMO, Luxe Skincare</div></div></div></div>
-      <div class="tcard" aria-hidden="true"><div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div><div class="t-photo-container" style="border-radius:12px; overflow:hidden; margin:12px 0 16px; aspect-ratio:16/10; width:100%;"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&h=180&q=80" alt="Arjun Verma" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" /></div><div class="tperson"><div class="tavatar a3">AV</div><div class="who"><div class="nm">Arjun Verma</div><div class="rl">Owner, FitZone Gyms</div></div></div></div>
-      <div class="tcard" aria-hidden="true"><div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div><div class="t-photo-container" style="border-radius:12px; overflow:hidden; margin:12px 0 16px; aspect-ratio:16/10; width:100%;"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&h=180&q=80" alt="Priya Nair" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" /></div><div class="tperson"><div class="tavatar a4">PN</div><div class="who"><div class="nm">Priya Nair</div><div class="rl">Director, Casa Interiors</div></div></div></div>
-      <div class="tcard" aria-hidden="true"><div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div><div class="t-photo-container" style="border-radius:12px; overflow:hidden; margin:12px 0 16px; aspect-ratio:16/10; width:100%;"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&h=180&q=80" alt="Deepak Thakur" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" /></div><div class="tperson"><div class="tavatar a5">DT</div><div class="who"><div class="nm">Deepak Thakur</div><div class="rl">CEO, Nova Tech</div></div></div></div>
+  <div class="tst-slider-container reveal">
+    <div class="tst-slider-track">
+      <!-- Testimonials -->
     </div>
+  </div>
+  
+  <!-- Slider Controls (Round Buttons Down) -->
+  <div class="slider-controls" style="display: flex; justify-content: center; gap: 16px; margin-top: 32px; position: relative; z-index: 10;">
+    <button class="slider-btn prev-btn" aria-label="Previous slide" style="width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--ink); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s var(--ease); box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+      <i data-lucide="arrow-left" width="20" height="20"></i>
+    </button>
+    <button class="slider-btn next-btn" aria-label="Next slide" style="width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--ink); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s var(--ease); box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+      <i data-lucide="arrow-right" width="20" height="20"></i>
+    </button>
   </div>
 </section>
 
@@ -953,7 +982,7 @@
     <div class="foot-grid">
       <div class="foot-brand">
         <a href="index.html" class="logo" aria-label="Groot X Media Logo">
-          <img src="/logo.png" alt="Groot X Media Logo" style="height: 90px; width: auto; display: block;" />
+          <img src="/logo_head.png" alt="Groot X Media Logo" style="height: 80px; width: auto; display: block;" />
         </a>
         <p>Groot X Media is your full-suite digital growth partner, transforming modern platforms into reliable revenue pipelines.</p>
         <div class="socials">
@@ -990,6 +1019,12 @@
       mobileDrawer.classList.toggle('open', open);
       drawerOverlay.classList.toggle('open', open);
       document.body.style.overflow = open ? 'hidden' : '';
+      
+      const icon = mobileMenuToggle.querySelector('i');
+      if (icon) {
+        icon.setAttribute('data-lucide', open ? 'x' : 'menu');
+        lucide.createIcons();
+      }
     };
 
     mobileMenuToggle.addEventListener('click', () => {
@@ -1166,6 +1201,7 @@
 </style>
 
 <script type="module" src="/src/blog-controller.ts"></script>
+<script type="module" src="/src/testimonial-controller.ts"></script>
 
 <script type="module" src="/src/exit-intent.ts"></script>
 <script type="module" src="/src/get-started.ts"></script>

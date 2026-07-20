@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+.skeleton-block {
+  background: linear-gradient(90deg, oklch(0.95 0.006 262) 0%, oklch(0.98 0.006 262) 50%, oklch(0.95 0.006 262) 100%);
+  background-size: 200% 100%;
+  animation: skeleton-pulse 1.5s infinite;
+  border-radius: 4px;
+}
+@keyframes skeleton-pulse {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}

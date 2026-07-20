@@ -51,6 +51,19 @@ service cloud.firestore {
         && (!('labels' in data) || (data.labels is list));
     }
 
+    // Testimonial validation blueprint
+    function isValidTestimonial(data) {
+      return data.keys().hasAll(['id', 'name', 'role', 'avatar', 'avatarColor', 'photoUrl'])
+        && data.id is string && data.id.size() <= 128
+        && data.name is string && data.name.size() <= 128
+        && data.role is string && data.role.size() <= 128
+        && data.avatar is string && data.avatar.size() <= 32
+        && data.avatarColor is string && data.avatarColor.size() <= 256
+        && data.photoUrl is string && data.photoUrl.size() <= 1024
+        && (!('videoUrl' in data) || (data.videoUrl is string && data.videoUrl.size() <= 1024))
+        && (!('type' in data) || (data.type is string && data.type.size() <= 32));
+    }
+
     match /leads/{leadId} {
       allow create: if isValidId(leadId) && isValidLead(incoming());
       // No standard read, update, or delete by public
@@ -61,6 +74,11 @@ service cloud.firestore {
       allow read: if true;
       allow create, update: if isValidId(blogId) && isValidBlog(incoming());
       allow delete: if false;
+    }
+
+    match /testimonials/{testimonialId} {
+      allow read: if true;
+      allow write: if false;
     }
   }
 }

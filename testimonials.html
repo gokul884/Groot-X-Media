@@ -75,9 +75,6 @@
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 34px -12px oklch(0.66 0.2 45 / .85);background:var(--orange-deep)}
   .btn-ghost{background:transparent;color:var(--navy);border:1.5px solid var(--line)}
   .btn-ghost:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-2px)}
-  .theme-toggle{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);transition:transform .3s var(--ease),color .2s}
-  .theme-toggle:hover{transform:rotate(35deg);color:var(--orange)}
-
   /* Semi-transparent dark overlay behind the drawer */
   .drawer-overlay {
     position: fixed;
@@ -108,55 +105,11 @@
     z-index: 101;
     outline: none;
     transition: border-color 0.2s, background-color 0.2s;
+    color: var(--ink);
   }
   .mobile-menu-toggle:focus-visible {
     outline: 2px solid var(--orange);
     outline-offset: 2px;
-  }
-  .hamburger-box {
-    width: 20px;
-    height: 14px;
-    display: block;
-    position: relative;
-  }
-  .hamburger-inner {
-    display: block;
-    top: 50%;
-    margin-top: -1px;
-    transition: background-color 0.2s ease;
-  }
-  .hamburger-inner,
-  .hamburger-inner::before,
-  .hamburger-inner::after {
-    width: 20px;
-    height: 2px;
-    background-color: var(--ink);
-    border-radius: 4px;
-    position: absolute;
-    transition: transform 0.2s ease, top 0.2s ease, bottom 0.2s ease, background-color 0.2s ease;
-  }
-  .hamburger-inner::before {
-    content: "";
-    top: -6px;
-  }
-  .hamburger-inner::after {
-    content: "";
-    bottom: -6px;
-  }
-
-  /* Morph to 'X' on open */
-  .mobile-menu-toggle.open .hamburger-inner {
-    background-color: transparent !important;
-  }
-  .mobile-menu-toggle.open .hamburger-inner::before {
-    top: 0;
-    transform: rotate(45deg);
-    background-color: #ff5e2e;
-  }
-  .mobile-menu-toggle.open .hamburger-inner::after {
-    bottom: 0;
-    transform: rotate(-45deg);
-    background-color: #ff5e2e;
   }
 
   /* Right-side sliding drawer with blur backdrop */
@@ -265,12 +218,13 @@
   /* 3x3 GRID */
   .tgrid-sec{padding:44px 0 40px;position:relative}
   .tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-  .tcard{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px;position:relative;overflow:hidden;transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .35s}
+  .tcard{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:8px 8px 24px 8px;position:relative;overflow:hidden;transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .35s}
   .tcard::after{content:"";position:absolute;right:-30px;bottom:-30px;width:110px;height:110px;border-radius:50%;background:oklch(0.66 0.2 45 / .08);transition:transform .5s var(--ease)}
   .tcard:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:transparent}
   .tcard:hover::after{transform:scale(1.6)}
   .tquote-mark{color:var(--orange);opacity:.55;margin-bottom:8px}
-  .tcard .stars{display:flex;gap:3px;color:var(--orange);margin-bottom:12px}
+  .tcard .stars{display:none !important}
+  .t-photo-wrapper, .t-video-wrapper{aspect-ratio:3/2 !important}
   .tcard .quote{color:var(--ink-soft);font-size:.93rem;line-height:1.66;position:relative;z-index:1}
   .tperson{display:flex;align-items:center;gap:13px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line);position:relative;z-index:1}
   .tavatar{width:52px;height:52px;border-radius:50%;flex:none;overflow:hidden;display:grid;place-items:center;color:#fff;font-weight:700;font-size:1.1rem}
@@ -346,9 +300,35 @@
   }
   @media(max-width:768px){
     .wrap { padding: 0 20px !important; }
-    header.nav .logo svg { height: 56px !important; width: auto !important; }
+    .logo img { height: 80px !important; width: auto !important; }
     .navbar { height: 80px !important; }
     .nav-right { gap: 12px !important; }
+    
+    /* Optimize Typography Size for Google SEO structure to get a good Lighthouse score */
+    body {
+      font-size: 16px !important;
+    }
+    .post-tag {
+      font-size: 12px !important;
+    }
+    .post-meta {
+      font-size: 13px !important;
+    }
+    .stat .lab {
+      font-size: 13px !important;
+    }
+    .foot-col a, .foot-bottom, .foot-brand p {
+      font-size: 14px !important;
+    }
+    .post-body p {
+      font-size: 15px !important;
+    }
+    .tcard .quote {
+      font-size: 15px !important;
+    }
+    .tperson .who .rl {
+      font-size: 13px !important;
+    }
     
     header.nav {
       background: var(--header-bg) !important;
@@ -433,58 +413,11 @@
 </style>
 </head>
 <body>
-<script>
-  if (localStorage.getItem('theme') === 'dark') {
-    document.documentElement.classList.add('dark');
-  }
-</script>
-
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="gxm-logo" viewBox="0 0 540 120">
-    <style>
-      .logo-dark-fill { fill: #000000; }
-      .dark .logo-dark-fill { fill: #ffffff; }
-      .logo-dark-stroke { stroke: #000000; }
-      .dark .logo-dark-stroke { stroke: #ffffff; }
-    </style>
-    <!-- Monogram -->
-    <path d="M24 96 L24 46 C24 31 42 27 50 40 L60 57 L70 40 C78 27 96 31 96 46 L96 96" fill="none" stroke="#F26522" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M60 40 L60 58" fill="none" stroke="#F26522" stroke-width="12" stroke-linecap="round"/>
-    <path d="M60 58 L60 104 C60 111 68 111 74 105" fill="none" class="logo-dark-stroke" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M60 84 L76 84" fill="none" class="logo-dark-stroke" stroke-width="12" stroke-linecap="round"/>
-    
-    <!-- Text "GROOT X MEDIA" -->
-    <text x="130" y="66" font-family="'Poppins', sans-serif" font-size="44" font-weight="800" letter-spacing="0.04em">
-      <tspan fill="#F26522">GROOT</tspan>
-      <tspan class="logo-dark-fill" font-weight="700"> X </tspan>
-      <tspan fill="#F26522">MEDIA</tspan>
-    </text>
-    
-    <!-- Tagline "— YOUR GROWTH PARTNER —" -->
-    <text x="130" y="96" font-family="'Poppins', sans-serif" font-size="14.5" font-weight="600" class="logo-dark-fill" letter-spacing="0.32em">— YOUR GROWTH PARTNER —</text>
-  </symbol>
-</svg>
 
 <header class="nav" id="nav">
   <div class="wrap navbar">
     <a href="index.html" class="logo" aria-label="Groot X Media Logo">
-      <svg class="gxm-logo-svg" viewBox="0 0 540 120" style="height: 90px; width: auto; display: block;" aria-hidden="true">
-        <!-- Monogram -->
-        <path d="M24 96 L24 46 C24 31 42 27 50 40 L60 57 L70 40 C78 27 96 31 96 46 L96 96" fill="none" stroke="#ff5e2e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M60 40 L60 58" fill="none" stroke="#ff5e2e" stroke-width="12" stroke-linecap="round"/>
-        <path d="M60 58 L60 104 C60 111 68 111 74 105" fill="none" stroke="#ff5e2e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M60 84 L76 84" fill="none" stroke="#ff5e2e" stroke-width="12" stroke-linecap="round"/>
-        
-        <!-- Text "GROOT X MEDIA" -->
-        <text x="130" y="66" font-family="'Poppins', sans-serif" font-size="44" font-weight="800" letter-spacing="0.04em">
-          <tspan fill="#ff5e2e">GROOT</tspan>
-          <tspan fill="#ff5e2e" font-weight="700"> X </tspan>
-          <tspan fill="#ff5e2e">MEDIA</tspan>
-        </text>
-        
-        <!-- Tagline "— YOUR GROWTH PARTNER —" -->
-        <text x="130" y="96" font-family="'Poppins', sans-serif" font-size="14.5" font-weight="600" fill="#ff5e2e" letter-spacing="0.32em">— YOUR GROWTH PARTNER —</text>
-      </svg>
+      <img src="/logo_head.png" alt="Groot X Media Logo" style="height: 80px; width: auto; display: block;" />
     </a>
     <nav class="navlinks">
       <a href="index.html">Home</a>
@@ -496,11 +429,8 @@
     </nav>
     <div class="nav-right">
       <a href="contact.html" class="btn btn-primary">Get Started</a>
-      <button class="theme-toggle" aria-label="Toggle theme"><i data-lucide="sun" width="18" height="18"></i></button>
       <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile navigation" aria-expanded="false">
-        <span class="hamburger-box">
-          <span class="hamburger-inner"></span>
-        </span>
+        <i data-lucide="menu" width="24" height="24"></i>
       </button>
     </div>
   </div>
@@ -552,158 +482,7 @@
     </div>
 
     <div class="tgrid stagger reveal">
-      <!-- Card 1 -->
-      <div class="tcard" style="--i:0">
-        <div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div>
-        
-        <div class="t-photo-wrapper" style="border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%;">
-          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&h=180&q=80" alt="Rahul Kapoor" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
-        </div>
-        <div class="t-video-wrapper" style="display:none; border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%; position:relative; cursor:pointer;" data-video-url="https://assets.mixkit.co/videos/preview/mixkit-man-working-on-his-laptop-in-a-coffee-shop-42281-large.mp4">
-          <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=300&h=180&q=80" alt="Rahul Kapoor Video" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
-          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); display:flex; justify-content:center; align-items:center;">
-            <button class="play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46px; height:46px; border-radius:50%; background:#fff; border:none; display:flex; justify-content:center; align-items:center; color:var(--orange); cursor:pointer; transition:all 0.25s var(--ease); box-shadow:0 6px 15px rgba(0,0,0,0.2);"><i data-lucide="play" width="18" height="18" fill="currentColor"></i></button>
-          </div>
-        </div>
-
-        <div class="tperson"><div class="tavatar a1">RK</div><div class="who"><div class="nm">Rahul Kapoor</div><div class="rl">Founder, Brewhouse</div></div></div>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="tcard" style="--i:1">
-        <div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div>
-        
-        <div class="t-photo-wrapper" style="border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%;">
-          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&h=180&q=80" alt="Sneha Menon" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
-        </div>
-        <div class="t-video-wrapper" style="display:none; border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%; position:relative; cursor:pointer;" data-video-url="https://assets.mixkit.co/videos/preview/mixkit-businesswoman-talking-on-a-video-call-42352-large.mp4">
-          <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=300&h=180&q=80" alt="Sneha Menon Video" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
-          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); display:flex; justify-content:center; align-items:center;">
-            <button class="play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46px; height:46px; border-radius:50%; background:#fff; border:none; display:flex; justify-content:center; align-items:center; color:var(--orange); cursor:pointer; transition:all 0.25s var(--ease); box-shadow:0 6px 15px rgba(0,0,0,0.2);"><i data-lucide="play" width="18" height="18" fill="currentColor"></i></button>
-          </div>
-        </div>
-
-        <div class="tperson"><div class="tavatar a2">SM</div><div class="who"><div class="nm">Sneha Menon</div><div class="rl">CMO, Luxe Skincare</div></div></div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="tcard" style="--i:2">
-        <div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div>
-        
-        <div class="t-photo-wrapper" style="border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%;">
-          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&h=180&q=80" alt="Arjun Verma" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
-        </div>
-        <div class="t-video-wrapper" style="display:none; border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%; position:relative; cursor:pointer;" data-video-url="https://assets.mixkit.co/videos/preview/mixkit-young-woman-working-on-a-laptop-in-a-bright-office-42353-large.mp4">
-          <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=300&h=180&q=80" alt="Arjun Verma Video" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
-          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); display:flex; justify-content:center; align-items:center;">
-            <button class="play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46px; height:46px; border-radius:50%; background:#fff; border:none; display:flex; justify-content:center; align-items:center; color:var(--orange); cursor:pointer; transition:all 0.25s var(--ease); box-shadow:0 6px 15px rgba(0,0,0,0.2);"><i data-lucide="play" width="18" height="18" fill="currentColor"></i></button>
-          </div>
-        </div>
-
-        <div class="tperson"><div class="tavatar a3">AV</div><div class="who"><div class="nm">Arjun Verma</div><div class="rl">Owner, FitZone Gyms</div></div></div>
-      </div>
-
-      <!-- Card 4 -->
-      <div class="tcard" style="--i:3">
-        <div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div>
-        
-        <div class="t-photo-wrapper" style="border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%;">
-          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&h=180&q=80" alt="Priya Nair" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
-        </div>
-        <div class="t-video-wrapper" style="display:none; border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%; position:relative; cursor:pointer;" data-video-url="https://assets.mixkit.co/videos/preview/mixkit-executive-smiling-while-looking-at-camera-in-office-42348-large.mp4">
-          <img src="https://images.unsplash.com/photo-1542744094-3a31f103e35f?auto=format&fit=crop&w=300&h=180&q=80" alt="Priya Nair Video" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
-          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); display:flex; justify-content:center; align-items:center;">
-            <button class="play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46px; height:46px; border-radius:50%; background:#fff; border:none; display:flex; justify-content:center; align-items:center; color:var(--orange); cursor:pointer; transition:all 0.25s var(--ease); box-shadow:0 6px 15px rgba(0,0,0,0.2);"><i data-lucide="play" width="18" height="18" fill="currentColor"></i></button>
-          </div>
-        </div>
-
-        <div class="tperson"><div class="tavatar a4">PN</div><div class="who"><div class="nm">Priya Nair</div><div class="rl">Director, Casa Interiors</div></div></div>
-      </div>
-
-      <!-- Card 5 -->
-      <div class="tcard" style="--i:4">
-        <div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div>
-        
-        <div class="t-photo-wrapper" style="border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%;">
-          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&h=180&q=80" alt="Deepak Thakur" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
-        </div>
-        <div class="t-video-wrapper" style="display:none; border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%; position:relative; cursor:pointer;" data-video-url="https://assets.mixkit.co/videos/preview/mixkit-man-working-on-his-laptop-in-a-coffee-shop-42281-large.mp4">
-          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=300&h=180&q=80" alt="Deepak Thakur Video" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
-          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); display:flex; justify-content:center; align-items:center;">
-            <button class="play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46px; height:46px; border-radius:50%; background:#fff; border:none; display:flex; justify-content:center; align-items:center; color:var(--orange); cursor:pointer; transition:all 0.25s var(--ease); box-shadow:0 6px 15px rgba(0,0,0,0.2);"><i data-lucide="play" width="18" height="18" fill="currentColor"></i></button>
-          </div>
-        </div>
-
-        <div class="tperson"><div class="tavatar a5">DT</div><div class="who"><div class="nm">Deepak Thakur</div><div class="rl">CEO, Nova Tech</div></div></div>
-      </div>
-
-      <!-- Card 6 -->
-      <div class="tcard" style="--i:5">
-        <div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div>
-        
-        <div class="t-photo-wrapper" style="border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%;">
-          <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=300&h=180&q=80" alt="Meera Iyer" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
-        </div>
-        <div class="t-video-wrapper" style="display:none; border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%; position:relative; cursor:pointer;" data-video-url="https://assets.mixkit.co/videos/preview/mixkit-businesswoman-talking-on-a-video-call-42352-large.mp4">
-          <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=300&h=180&q=80" alt="Meera Iyer Video" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
-          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); display:flex; justify-content:center; align-items:center;">
-            <button class="play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46px; height:46px; border-radius:50%; background:#fff; border:none; display:flex; justify-content:center; align-items:center; color:var(--orange); cursor:pointer; transition:all 0.25s var(--ease); box-shadow:0 6px 15px rgba(0,0,0,0.2);"><i data-lucide="play" width="18" height="18" fill="currentColor"></i></button>
-          </div>
-        </div>
-
-        <div class="tperson"><div class="tavatar a6">MI</div><div class="who"><div class="nm">Meera Iyer</div><div class="rl">Founder, Bloom Cafe</div></div></div>
-      </div>
-
-      <!-- Card 7 -->
-      <div class="tcard" style="--i:6">
-        <div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div>
-        
-        <div class="t-photo-wrapper" style="border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%;">
-          <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=300&h=180&q=80" alt="Vikram Singh" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
-        </div>
-        <div class="t-video-wrapper" style="display:none; border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%; position:relative; cursor:pointer;" data-video-url="https://assets.mixkit.co/videos/preview/mixkit-young-woman-working-on-a-laptop-in-a-bright-office-42353-large.mp4">
-          <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=300&h=180&q=80" alt="Vikram Singh Video" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
-          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); display:flex; justify-content:center; align-items:center;">
-            <button class="play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46px; height:46px; border-radius:50%; background:#fff; border:none; display:flex; justify-content:center; align-items:center; color:var(--orange); cursor:pointer; transition:all 0.25s var(--ease); box-shadow:0 6px 15px rgba(0,0,0,0.2);"><i data-lucide="play" width="18" height="18" fill="currentColor"></i></button>
-          </div>
-        </div>
-
-        <div class="tperson"><div class="tavatar a7">VS</div><div class="who"><div class="nm">Vikram Singh</div><div class="rl">Partner, Urban Dental</div></div></div>
-      </div>
-
-      <!-- Card 8 -->
-      <div class="tcard" style="--i:7">
-        <div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div>
-        
-        <div class="t-photo-wrapper" style="border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%;">
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&h=180&q=80" alt="Ananya Farah" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
-        </div>
-        <div class="t-video-wrapper" style="display:none; border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%; position:relative; cursor:pointer;" data-video-url="https://assets.mixkit.co/videos/preview/mixkit-executive-smiling-while-looking-at-camera-in-office-42348-large.mp4">
-          <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=300&h=180&q=80" alt="Ananya Farah Video" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
-          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); display:flex; justify-content:center; align-items:center;">
-            <button class="play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46px; height:46px; border-radius:50%; background:#fff; border:none; display:flex; justify-content:center; align-items:center; color:var(--orange); cursor:pointer; transition:all 0.25s var(--ease); box-shadow:0 6px 15px rgba(0,0,0,0.2);"><i data-lucide="play" width="18" height="18" fill="currentColor"></i></button>
-          </div>
-        </div>
-
-        <div class="tperson"><div class="tavatar a8">AF</div><div class="who"><div class="nm">Ananya Farah</div><div class="rl">Head of Growth, Zap Pay</div></div></div>
-      </div>
-
-      <!-- Card 9 -->
-      <div class="tcard" style="--i:8">
-        <div class="stars"><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i><i data-lucide="star" width="15" height="15" fill="currentColor"></i></div>
-        
-        <div class="t-photo-wrapper" style="border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%;">
-          <img src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?auto=format&fit=crop&w=300&h=180&q=80" alt="Harsh Gupta" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
-        </div>
-        <div class="t-video-wrapper" style="display:none; border-radius:12px; overflow:hidden; margin:16px 0; aspect-ratio:16/10; width:100%; position:relative; cursor:pointer;" data-video-url="https://assets.mixkit.co/videos/preview/mixkit-man-working-on-his-laptop-in-a-coffee-shop-42281-large.mp4">
-          <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=300&h=180&q=80" alt="Harsh Gupta Video" style="width:100%; height:100%; object-fit:cover; display:block;" loading="lazy" />
-          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); display:flex; justify-content:center; align-items:center;">
-            <button class="play-btn" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46px; height:46px; border-radius:50%; background:#fff; border:none; display:flex; justify-content:center; align-items:center; color:var(--orange); cursor:pointer; transition:all 0.25s var(--ease); box-shadow:0 6px 15px rgba(0,0,0,0.2);"><i data-lucide="play" width="18" height="18" fill="currentColor"></i></button>
-          </div>
-        </div>
-
-        <div class="tperson"><div class="tavatar a9">HG</div><div class="who"><div class="nm">Harsh Gupta</div><div class="rl">MD, Peak Apparel</div></div></div>
-      </div>
+      <!-- Testimonials -->
     </div>
   </div>
 </section>
@@ -714,7 +493,7 @@
       <div class="blob float" style="width:200px;height:200px;background:var(--blob-orange);top:-40px;left:8%;opacity:.35"></div>
       <div class="blob float" style="width:180px;height:180px;background:var(--blob-navy);bottom:-40px;right:8%;opacity:.4;animation-delay:-4s"></div>
       <h2>Ready to be our next success story?</h2>
-      <p>Join 120+ brands growing with Groot X Media. Let's talk about where you want to go.</p>
+      <p>Join 20+ brands growing with Groot X Media. Let's talk about where you want to go.</p>
       <a href="contact.html" class="btn btn-primary">Get In Touch <i data-lucide="arrow-right" width="16" height="16"></i></a>
     </div>
   </div>
@@ -726,23 +505,7 @@
     <div class="foot-grid">
       <div class="foot-brand">
         <a href="index.html" class="logo" aria-label="Groot X Media Logo">
-          <svg class="gxm-logo-svg" viewBox="0 0 540 120" style="height: 64px; width: auto; display: block;" aria-hidden="true">
-            <!-- Monogram -->
-            <path d="M24 96 L24 46 C24 31 42 27 50 40 L60 57 L70 40 C78 27 96 31 96 46 L96 96" fill="none" stroke="var(--logo-color, #ff5e2e)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M60 40 L60 58" fill="none" stroke="var(--logo-color, #ff5e2e)" stroke-width="12" stroke-linecap="round"/>
-            <path d="M60 58 L60 104 C60 111 68 111 74 105" fill="none" stroke="var(--logo-color, #ff5e2e)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M60 84 L76 84" fill="none" stroke="var(--logo-color, #ff5e2e)" stroke-width="12" stroke-linecap="round"/>
-            
-            <!-- Text "GROOT X MEDIA" -->
-            <text x="130" y="66" font-family="'Poppins', sans-serif" font-size="44" font-weight="800" letter-spacing="0.04em">
-              <tspan fill="var(--logo-color, #ff5e2e)">GROOT</tspan>
-              <tspan fill="var(--logo-color, #ff5e2e)" font-weight="700"> X </tspan>
-              <tspan fill="var(--logo-color, #ff5e2e)">MEDIA</tspan>
-            </text>
-            
-            <!-- Tagline "— YOUR GROWTH PARTNER —" -->
-            <text x="130" y="96" font-family="'Poppins', sans-serif" font-size="14.5" font-weight="600" fill="var(--logo-color, #ff5e2e)" letter-spacing="0.32em">— YOUR GROWTH PARTNER —</text>
-          </svg>
+          <img src="/logo_head.png" alt="Groot X Media Logo" style="height: 80px; width: auto; display: block;" />
         </a>
         <p>Groot X Media is your full-suite digital growth partner, transforming modern platforms into reliable revenue pipelines.</p>
         <div class="socials">
@@ -787,6 +550,12 @@
       mobileDrawer.classList.toggle('open', open);
       drawerOverlay.classList.toggle('open', open);
       document.body.style.overflow = open ? 'hidden' : '';
+      
+      const icon = mobileMenuToggle.querySelector('i');
+      if (icon) {
+        icon.setAttribute('data-lucide', open ? 'x' : 'menu');
+        lucide.createIcons();
+      }
     };
 
     mobileMenuToggle.addEventListener('click', () => {
@@ -810,18 +579,6 @@
   addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>10));
   const io=new IntersectionObserver((e)=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{threshold:.12});
   document.querySelectorAll('.reveal,.stagger').forEach(el=>io.observe(el));
-  const tog=document.querySelector('.theme-toggle');
-  if (tog) {
-    const activeTheme = localStorage.getItem('theme') || 'light';
-    tog.innerHTML = activeTheme === 'dark' ? '<i data-lucide="moon" width="18" height="18"></i>' : '<i data-lucide="sun" width="18" height="18"></i>';
-    tog.addEventListener('click',()=>{
-      const d=document.documentElement.classList.toggle('dark');
-      localStorage.setItem('theme', d ? 'dark' : 'light');
-      tog.innerHTML=d?'<i data-lucide="moon" width="18" height="18"></i>':'<i data-lucide="sun" width="18" height="18"></i>';
-      lucide.createIcons();
-    });
-  }
-
   // Toggle functionality between Photos and Videos
   const btnPhotos = document.getElementById('showPhotos');
   const btnVideos = document.getElementById('showVideos');
@@ -979,6 +736,7 @@
   <i data-lucide="arrow-up" width="20" height="20"></i>
 </button>
 
+<script type="module" src="/src/testimonial-controller.ts"></script>
 <script type="module" src="/src/exit-intent.ts"></script>
 
 </body>

@@ -114,6 +114,54 @@
         }
       },
       "required": ["id", "title", "content", "published"]
+    },
+    "Testimonial": {
+      "title": "Testimonial",
+      "description": "Client testimonials and reviews loaded from Firebase",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique testimonial identifier",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name of the client",
+          "maxLength": 128
+        },
+        "role": {
+          "type": "string",
+          "description": "The title or role of the client",
+          "maxLength": 128
+        },
+        "avatar": {
+          "type": "string",
+          "description": "Two letter client initials",
+          "maxLength": 32
+        },
+        "avatarColor": {
+          "type": "string",
+          "description": "Background color style for the avatar",
+          "maxLength": 256
+        },
+        "photoUrl": {
+          "type": "string",
+          "description": "URL of the client testimonial photo in Storage",
+          "maxLength": 1024
+        },
+        "videoUrl": {
+          "type": "string",
+          "description": "Optional video URL of the client testimonial in Storage",
+          "maxLength": 1024
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of testimonial ('photo' or 'video')",
+          "maxLength": 32
+        }
+      },
+      "required": ["id", "name", "role", "avatar", "avatarColor", "photoUrl"]
     }
   },
   "firestore": {
@@ -124,6 +172,10 @@
     "blogs/{blogId}": {
       "schema": "BlogPost",
       "description": "Collection of cached Blogspot blog posts"
+    },
+    "testimonials/{testimonialId}": {
+      "schema": "Testimonial",
+      "description": "Collection of dynamic client testimonials"
     }
   }
 }
