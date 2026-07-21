@@ -41,7 +41,7 @@
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;font-optical-sizing:auto}
+  body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden;max-width:100%;-webkit-font-smoothing:antialiased;font-optical-sizing:auto}
   h1,h2,h3,h4{text-wrap:balance;line-height:1.15;font-weight:700;color:var(--ink)}
   p{text-wrap:pretty}
   a{text-decoration:none;color:inherit}
@@ -478,7 +478,8 @@
   }
 
   @media(max-width:900px){
-    .hero-grid,.bf-grid,.feat-grid{grid-template-columns:1fr;gap:40px}
+    .hero-grid{grid-template-columns:1fr;gap:40px;max-width:90%}
+    .bf-grid,.feat-grid{grid-template-columns:1fr;gap:40px}
     .hero-media{order:-1}
     .offer-grid,.blog-grid{grid-template-columns:repeat(2,1fr)}
     .foot-grid{grid-template-columns:1fr 1fr;gap:28px}
@@ -692,6 +693,16 @@
   </div>
 </header>
 
+<script>
+  // Fix active link on click
+  document.querySelectorAll('.navlinks a').forEach(link => {
+    link.addEventListener('click', function() {
+      document.querySelectorAll('.navlinks a').forEach(l => l.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
+
 <!-- Overlay for Mobile Drawer -->
 <div class="drawer-overlay" id="drawerOverlay"></div>
 
@@ -860,7 +871,7 @@
   <div class="wrap">
     <div class="feat-grid">
       <div class="reveal text-center">
-        <h2>We provide Important Features for Digital Marketing</h2>
+        <h2>We provide Important Features for<br>Digital Marketing</h2>
         <p class="body">We establish robust systems that continuously analyze, adapt, and amplify your marketing reach. No gaps, no lost opportunities.</p>
         <p class="body">Our multi-platform execution ensures your message is perfectly formatted and timed to hit the right buyers at the exact point of intent.</p>
         <div class="checks stagger reveal">

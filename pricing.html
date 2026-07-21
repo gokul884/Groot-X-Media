@@ -320,7 +320,7 @@
   }
 
   @media(max-width:900px){
-    .plans{grid-template-columns:1fr;max-width:440px;margin:0 auto}
+    .plans{grid-template-columns:1fr;max-width:90%;margin:0 auto}
     .plan.popular{order:-1}
     .assure-grid{grid-template-columns:1fr 1fr}
     .cc-band{grid-template-columns:1fr;gap:32px}
@@ -443,6 +443,23 @@
 
   #home, #services, #testimonials, #blog, #contact {
     scroll-margin-top: 100px;
+  }
+  
+  /* Global Overflow Fixes */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+  .container, .page-wrapper, .content-wrapper {
+    max-width: 100%;
+    overflow-x: hidden;
   }
 </style>
 </head>

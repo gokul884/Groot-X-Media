@@ -568,6 +568,23 @@
     background: rgba(255, 255, 255, 0.2);
     color: #fff;
   }
+  
+  /* Global Overflow Fixes */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+  .container, .page-wrapper, .content-wrapper {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
 </style>
 </head>
 <body>

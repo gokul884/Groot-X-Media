@@ -49,7 +49,7 @@
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;font-optical-sizing:auto}
+  body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden;max-width:100%;-webkit-font-smoothing:antialiased;font-optical-sizing:auto}
   h1,h2,h3,h4{text-wrap:balance;line-height:1.15;font-weight:700;color:var(--ink)}
   p{text-wrap:pretty}
   a{text-decoration:none;color:inherit}
@@ -469,6 +469,23 @@
     border-radius: 50%;
     background: oklch(0.66 0.2 45 / 0.15);
     color: var(--orange);
+  }
+  
+  /* Global Overflow Fixes */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+  .container, .page-wrapper, .content-wrapper {
+    max-width: 100%;
+    overflow-x: hidden;
   }
 </style>
 </head>
