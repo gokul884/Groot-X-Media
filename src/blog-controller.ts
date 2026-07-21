@@ -376,7 +376,19 @@ function renderBlogPostDetail(posts: BlogPost[]) {
     // Inject the raw HTML content, completely preserving rich layouts, lists, and quotes
     // Parse the content and strip the first <img> element (image label) from the top of the blog content
     const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = post.content;
+    tempDiv.innerHTML = post.content.replace(/&nbsp;/gi, " ");
+    
+    // Specifically remove leading &nbsp; or literal space from content
+    if (tempDiv.firstChild && tempDiv.firstChild.textContent?.trim() === "") {
+        tempDiv.firstChild.remove();
+    }
+    
+    // Apply consistent line spacing to all paragraphs
+    tempDiv.querySelectorAll('p').forEach(p => {
+      p.style.lineHeight = '1.7';
+      p.style.marginBottom = '20px';
+    });
+
     const firstImg = tempDiv.querySelector("img");
     if (firstImg) {
       const parent = firstImg.parentElement;

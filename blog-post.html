@@ -419,6 +419,7 @@
       line-height: 1.25 !important;
       word-break: break-word !important;
       overflow-wrap: break-word !important;
+      max-width: 100% !important;
     }
     h2 {
       font-size: clamp(1.4rem, 6vw, 1.8rem) !important;
@@ -445,40 +446,45 @@
     .art-wrap {
       padding-left: 16px !important;
       padding-right: 16px !important;
-      padding-top: 24px !important;
+      padding-top: 16px !important;
     }
     .article {
       padding: 0 !important;
       width: 100% !important;
       max-width: 100% !important;
+      min-width: 0 !important;
     }
     .article p {
-      font-size: 1.05rem !important; /* Meets 16px minimum */
-      line-height: 1.75 !important;
+      font-size: 1.125rem !important;
+      line-height: 1.6 !important;
       margin-bottom: 20px !important;
+      max-width: 100% !important;
+      overflow-wrap: break-word !important;
+      word-wrap: break-word !important;
     }
     .article h2 {
-      font-size: 1.45rem !important;
-      margin: 32px 0 12px !important;
+      font-size: 1.5rem !important;
+      margin: 28px 0 12px !important;
     }
     .article h3 {
-      font-size: 1.2rem !important;
+      font-size: 1.25rem !important;
       margin: 24px 0 10px !important;
     }
     .article blockquote {
-      margin: 24px 0 !important;
-      padding: 20px 20px !important;
-      font-size: 1.1rem !important;
+      margin: 20px 0 !important;
+      padding: 16px 16px !important;
+      font-size: 1rem !important;
     }
     .article blockquote .qmark {
-      left: 12px !important;
-      font-size: 2.8rem !important;
+      left: 10px !important;
+      font-size: 2.2rem !important;
     }
     .article .figure {
-      margin: 24px 0 !important;
+      margin: 20px 0 !important;
     }
     .article .figure .img {
       aspect-ratio: 16/10 !important;
+      border-radius: 12px !important;
     }
 
     .cover {
@@ -487,7 +493,7 @@
     }
     .cover .img {
       aspect-ratio: 16/9 !important;
-      border-radius: 16px !important;
+      border-radius: 12px !important;
     }
 
     .rel-grid{grid-template-columns:1fr !important}
