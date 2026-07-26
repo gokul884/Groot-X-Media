@@ -76,10 +76,17 @@ async function startServer() {
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
-  // Serve static assets from public directory immediately so they load reliably
+  // Serve static assets from public directory immediately with efficient caching headers
   app.use(express.static(path.join(process.cwd(), "public"), {
     maxAge: '1y',
     etag: true,
+    setHeaders: (res, filePath) => {
+      if (filePath.endsWith('.html')) {
+        res.setHeader('Cache-Control', 'no-cache');
+      } else if (filePath.match(/\.(png|jpg|jpeg|webp|gif|svg|ico|woff|woff2|ttf|otf|css|js)$/i)) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      }
+    }
   }));
 
   let useFirestore = true;
@@ -255,6 +262,13 @@ async function startServer() {
     app.use(express.static(distPath, {
       maxAge: '1y',
       etag: true,
+      setHeaders: (res, filePath) => {
+        if (filePath.endsWith('.html')) {
+          res.setHeader('Cache-Control', 'no-cache');
+        } else if (filePath.match(/\.(png|jpg|jpeg|webp|gif|svg|ico|woff|woff2|ttf|otf|css|js)$/i)) {
+          res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+        }
+      }
     }));
     app.get("*", (req, res) => {
       res.sendFile(path.join(distPath, "index.html"));

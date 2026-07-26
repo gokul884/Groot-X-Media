@@ -21,15 +21,26 @@
 }
 </script>
 
+<link rel="preload" as="image" href="/logo_head.png" fetchpriority="high">
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://fonts.gstatic.com">
+<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
 <!-- skill:libraries -->
 <script src="https://cdn.jsdelivr.net/npm/lucide@0.383.0/dist/umd/lucide.min.js" integrity="sha384-wHFvAtjmgnkA2PJcMsDaCgdipf7X7YV44X/igbLHpvGiq6T5/PvFKl93grpvtbQT" crossorigin="anonymous"></script>
-<script>document.addEventListener("DOMContentLoaded",()=>lucide.createIcons())</script>
+<script>document.addEventListener("DOMContentLoaded", () => { if (typeof lucide !== "undefined") lucide.createIcons(); });</script>
 <!-- /skill:libraries -->
 <title>Testimonials — Groot X Media</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#ff5d13">
+<link rel="apple-touch-icon" href="/logo_head.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet"></noscript>
 <style>
+  /* Immediate LCP render for hero elements above the fold */
+  .hero .reveal, .page-head .reveal { opacity: 1 !important; transform: none !important; }
   :root{
     --orange:oklch(0.66 0.2 45);--orange-deep:oklch(0.6 0.2 42);
     --navy:oklch(0.31 0.07 262);--navy-soft:oklch(0.42 0.06 262);
@@ -66,7 +77,7 @@
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;font-optical-sizing:auto}
+  body{font-family:'Poppins',system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-display:swap;background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;font-optical-sizing:auto}
   h1,h2,h3,h4{text-wrap:balance;line-height:1.15;font-weight:700;color:var(--ink)}
   p{text-wrap:pretty}
   a{text-decoration:none;color:inherit}
@@ -387,48 +398,95 @@
       padding: 48px 0 28px !important;
     }
     .foot-grid { 
-      grid-template-columns: repeat(2, 1fr) !important; 
-      gap: 28px 18px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 24px !important;
     }
     .foot-brand {
-      grid-column: 1 / -1 !important;
-      margin-bottom: 8px !important;
-      padding-bottom: 20px !important;
+      grid-column: unset !important;
+      margin-bottom: 0 !important;
+      padding-bottom: 24px !important;
       border-bottom: 1px solid var(--line) !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: flex-start !important;
     }
     .foot-brand p {
       max-width: 100% !important;
-      font-size: 0.88rem !important;
-      line-height: 1.5 !important;
+      font-size: 0.9rem !important;
+      line-height: 1.55 !important;
       margin-top: 12px !important;
+      color: var(--muted) !important;
     }
-    .foot-col:nth-child(5) {
-      grid-column: 1 / -1 !important;
-      margin-top: 4px !important;
-      padding-top: 18px !important;
-      border-top: 1px solid var(--line) !important;
+    .socials {
+      display: flex !important;
+      gap: 12px !important;
+      margin-top: 16px !important;
+    }
+    .socials a {
+      width: 44px !important;
+      height: 44px !important;
+      min-height: 44px !important;
+      min-width: 44px !important;
+      padding: 0 !important;
+      display: grid !important;
+      place-items: center !important;
+    }
+    .foot-col {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      padding-bottom: 20px !important;
+      border-bottom: 1px solid var(--line) !important;
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+      width: 100% !important;
+    }
+    .foot-col:last-child {
+      border-bottom: none !important;
+      padding-bottom: 0 !important;
     }
     .foot-col h5 {
-      font-size: 0.95rem !important;
+      font-size: 1rem !important;
       font-weight: 700 !important;
       margin-bottom: 12px !important;
       color: var(--navy) !important;
+      letter-spacing: 0.01em !important;
+      width: 100% !important;
+      display: block !important;
     }
     .foot-col a {
-      font-size: 0.88rem !important;
-      padding-top: 8px !important;
-      padding-bottom: 8px !important;
-      min-height: 48px !important;
+      color: var(--muted) !important;
+      font-size: 0.9rem !important;
+      margin-bottom: 6px !important;
+      min-height: 38px !important;
+      padding: 4px 0 !important;
       display: inline-flex !important;
       align-items: center !important;
-      margin-bottom: 2px !important;
+      gap: 8px !important;
+      width: 100% !important;
+    }
+    .foot-col span {
+      display: inline-flex !important;
+      align-items: flex-start !important;
+      gap: 8px !important;
+      color: var(--muted) !important;
+      font-size: 0.9rem !important;
+      line-height: 1.45 !important;
+      padding: 4px 0 !important;
+      width: 100% !important;
     }
     .foot-bottom {
+      display: flex !important;
       flex-direction: column !important;
-      text-align: center !important;
-      gap: 10px !important;
-      margin-top: 32px !important;
+      align-items: flex-start !important;
+      gap: 8px !important;
+      margin-top: 24px !important;
       padding-top: 20px !important;
+      border-top: 1px solid var(--line) !important;
+      font-size: 0.85rem !important;
+      color: var(--muted) !important;
+      text-align: left !important;
     }
     .logo .word .tag{display:none}
     .tstats{gap:26px}
@@ -497,7 +555,7 @@
 <header class="nav" id="nav">
   <div class="wrap navbar">
     <a href="index.html" class="logo" aria-label="Groot X Media Logo">
-      <img src="/logo_head.png" alt="Groot X Media Logo" style="height: 80px; width: auto; display: block;" width="200" height="80" fetchpriority="high" />
+      <img src="/logo_head.png" alt="Groot X Media Logo" style="height: 80px; width: auto; display: block;" width="200" height="80" fetchpriority="high" decoding="async" />
     </a>
     <nav class="navlinks">
       <a href="index.html">Home</a>
@@ -585,7 +643,7 @@
     <div class="foot-grid">
       <div class="foot-brand">
         <a href="index.html" class="logo" aria-label="Groot X Media Logo">
-          <img src="/logo_head.png" alt="Groot X Media Logo" style="height: 80px; width: auto; display: block;" width="200" height="80" loading="lazy" />
+          <img src="/logo_head.png" alt="Groot X Media Logo" style="height: 80px; width: auto; display: block;" width="200" height="80" loading="lazy" decoding="async" />
         </a>
         <p>Groot X Media is your full-suite digital growth partner, transforming modern platforms into reliable revenue pipelines.</p>
         <div class="socials">
@@ -616,7 +674,7 @@
 </div>
 
 <script>
-  lucide.createIcons();
+  if (typeof lucide !== 'undefined') lucide.createIcons();
   
   // Mobile drawer toggle handler
   const mobileMenuToggle = document.getElementById('mobileMenuToggle');
@@ -634,7 +692,7 @@
       const icon = mobileMenuToggle.querySelector('i');
       if (icon) {
         icon.setAttribute('data-lucide', open ? 'x' : 'menu');
-        lucide.createIcons();
+        if (typeof lucide !== 'undefined') lucide.createIcons();
       }
     };
 

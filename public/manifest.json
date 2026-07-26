@@ -1,0 +1,25 @@
+{
+  "name": "Groot X Media — Digital Growth Partner",
+  "short_name": "Groot X Media",
+  "description": "Groot X Media: Full-suite digital growth partner transforming modern platforms into reliable revenue pipelines through SEO, PPC, Performance Marketing, and Web Development.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b1329",
+  "theme_color": "#ff5d13",
+  "icons": [
+    {
+      "src": "/logo_head.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo_head.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
