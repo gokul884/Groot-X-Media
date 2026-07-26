@@ -63,13 +63,13 @@ function createTestimonialCardHTML(t: Testimonial): string {
   // Media wrapper: photo wrapper or video wrapper
   const mediaWrapperHtml = isVideo ? `
     <div class="t-video-wrapper" data-video-url="${videoUrl}" style="position: relative; width: 100%; aspect-ratio: 3/2; border-radius: 14px; overflow: hidden; margin-bottom: 20px; cursor: pointer;">
-      <img src="${photo || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80'}" alt="${t.name}" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+      <img src="${photo || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80'}" alt="${t.name}" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy" decoding="async" />
       <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.25); z-index: 2;"></div>
       ${playButtonHtml}
     </div>
   ` : `
     <div class="t-photo-wrapper" style="position: relative; width: 100%; aspect-ratio: 3/2; border-radius: 14px; overflow: hidden; margin-bottom: 20px;">
-      <img src="${photo || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80'}" alt="${t.name}" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+      <img src="${photo || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80'}" alt="${t.name}" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy" decoding="async" />
     </div>
   `;
 
@@ -79,7 +79,7 @@ function createTestimonialCardHTML(t: Testimonial): string {
       
       <div class="tperson" style="display: flex; align-items: center; gap: 12px; margin-top: auto; padding-top: 16px; border-top: 1px solid var(--line); padding-left: 12px; padding-right: 12px;">
         <div class="tavatar ${t.avatarColor || 'a1'}" style="width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 1.1rem; flex-shrink: 0; overflow: hidden; background: #fff; border: 1px solid var(--line);">
-          ${t.avatarUrl ? `<img src="${t.avatarUrl}" alt="${t.name} Logo" style="width: 100%; height: 100%; object-fit: contain; display: block; padding: 4px;" />` : (t.avatar || 'C')}
+          ${t.avatarUrl ? `<img src="${t.avatarUrl}" alt="${t.name} Logo" style="width: 100%; height: 100%; object-fit: contain; display: block; padding: 4px;" loading="lazy" decoding="async" />` : (t.avatar || 'C')}
         </div>
         <div class="who">
           <div class="nm" style="font-weight: 600; font-size: 0.95rem; color: var(--navy);">${t.name}</div>
