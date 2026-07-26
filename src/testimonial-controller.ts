@@ -161,6 +161,8 @@ function initializeHomepageSliderLogic(cardCount: number) {
     const visibleCards = getVisibleCardsCount();
     currentIndex = Math.max(0, currentIndex - visibleCards);
     updateSlider();
+    stopAutoPlay();
+    startAutoPlay();
   };
 
   nextBtn.onclick = () => {
@@ -168,10 +170,78 @@ function initializeHomepageSliderLogic(cardCount: number) {
     const maxIndex = Math.max(0, cardCount - visibleCards);
     currentIndex = Math.min(maxIndex, currentIndex + visibleCards);
     updateSlider();
+    stopAutoPlay();
+    startAutoPlay();
   };
+
+  // Auto-play and touch swipe support
+  let autoPlayTimer: number | null = null;
+
+  const startAutoPlay = () => {
+    if (autoPlayTimer) clearInterval(autoPlayTimer);
+    autoPlayTimer = window.setInterval(() => {
+      const visibleCards = getVisibleCardsCount();
+      const maxIndex = Math.max(0, cardCount - visibleCards);
+      if (currentIndex >= maxIndex) {
+        currentIndex = 0;
+      } else {
+        currentIndex = Math.min(maxIndex, currentIndex + 1);
+      }
+      updateSlider();
+    }, 4500);
+  };
+
+  const stopAutoPlay = () => {
+    if (autoPlayTimer) {
+      clearInterval(autoPlayTimer);
+      autoPlayTimer = null;
+    }
+  };
+
+  const container = document.querySelector(".tst-slider-container");
+  if (container) {
+    container.addEventListener("mouseenter", stopAutoPlay);
+    container.addEventListener("mouseleave", startAutoPlay);
+    container.addEventListener("touchstart", stopAutoPlay, { passive: true });
+    container.addEventListener("touchend", () => {
+      setTimeout(startAutoPlay, 3000);
+    }, { passive: true });
+  }
+
+  // Touch swipe support for mobile users
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  track.addEventListener("touchstart", (e: TouchEvent) => {
+    touchStartX = e.touches[0].clientX;
+    stopAutoPlay();
+  }, { passive: true });
+
+  track.addEventListener("touchmove", (e: TouchEvent) => {
+    touchEndX = e.touches[0].clientX;
+  }, { passive: true });
+
+  track.addEventListener("touchend", () => {
+    const diff = touchStartX - touchEndX;
+    const threshold = 40;
+    if (Math.abs(diff) > threshold) {
+      const visibleCards = getVisibleCardsCount();
+      const maxIndex = Math.max(0, cardCount - visibleCards);
+      if (diff > 0) {
+        // Swiped left -> next
+        currentIndex = Math.min(maxIndex, currentIndex + 1);
+      } else {
+        // Swiped right -> prev
+        currentIndex = Math.max(0, currentIndex - 1);
+      }
+      updateSlider();
+    }
+    startAutoPlay();
+  }, { passive: true });
 
   window.addEventListener("resize", updateSlider);
   updateSlider();
+  startAutoPlay();
 }
 
 /**

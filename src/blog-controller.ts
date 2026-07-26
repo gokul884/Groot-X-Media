@@ -115,7 +115,7 @@ function renderHomepage(posts: BlogPost[]) {
           </div>
           <h3><a href="${postUrl}">${post.title}</a></h3>
           <p>${post.description || ""}</p>
-          <a href="${postUrl}" class="post-more" aria-label="Read full article on ${post.title}">Read Article <span class="sr-only">: ${post.title}</span> <i data-lucide="arrow-right" width="15" height="15"></i></a>
+          <a href="${postUrl}" class="post-more" aria-label="Read More about ${post.title}">Read More <i data-lucide="arrow-right" width="15" height="15"></i></a>
         </div>
       </article>
     `;
@@ -230,7 +230,7 @@ function renderBlogpage() {
           </div>
           <h3><a href="${postUrl}">${post.title}</a></h3>
           <p>${post.description || ""}</p>
-          <a href="${postUrl}" class="post-more" aria-label="Read full article on ${post.title}">Read Article <span class="sr-only">: ${post.title}</span> <i data-lucide="arrow-right" width="15" height="15"></i></a>
+          <a href="${postUrl}" class="post-more" aria-label="Read More about ${post.title}">Read More <i data-lucide="arrow-right" width="15" height="15"></i></a>
         </div>
       </article>
     `;
