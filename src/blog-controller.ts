@@ -190,7 +190,7 @@ function renderBlogpage() {
       <div class="wrap">
         <article class="feat-card reveal in">
           <a href="${postUrl}" class="media">
-            <div class="img lazy-img" data-src="${featuredPost.image}" style="background-size: cover; background-position: center;"></div>
+            <div class="img lazy-img" data-src="${featuredPost.image}" style="background-size: cover; background-position: center; width: 100%; height: 100%;"></div>
             <span class="tag">Featured</span>
           </a>
           <div class="body">
@@ -365,9 +365,8 @@ function renderBlogPostDetail(posts: BlogPost[]) {
   const coverImg = document.querySelector(".cover .img") as HTMLElement;
   if (coverImg) {
     coverImg.classList.remove("skeleton-card");
+    coverImg.innerHTML = "";
     coverImg.style.backgroundImage = `url('${post.image}')`;
-    coverImg.style.backgroundSize = "cover";
-    coverImg.style.backgroundPosition = "center";
   }
 
   // 5. Populate Main Article HTML Body

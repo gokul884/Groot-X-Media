@@ -546,10 +546,19 @@
     .cover {
       padding: 0 16px !important;
       margin: 10px auto 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
     }
     .cover .img {
-      aspect-ratio: 16/9 !important;
-      border-radius: 12px !important;
+      width: 100% !important;
+      height: auto !important;
+      aspect-ratio: 16 / 9 !important;
+      border-radius: 16px !important;
+      background-size: cover !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
+      display: block !important;
     }
 
     .rel-grid{grid-template-columns:1fr !important}

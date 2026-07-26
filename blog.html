@@ -381,7 +381,24 @@
 
   @media(max-width:900px){
     .feat-card,.news-band{grid-template-columns:1fr}
-    .feat-card .media{min-height:240px}
+    .feat-card .media{
+      width: 100% !important;
+      min-height: unset !important;
+      height: auto !important;
+      aspect-ratio: 16 / 9 !important;
+      position: relative !important;
+      overflow: hidden !important;
+      border-radius: 24px 24px 0 0 !important;
+    }
+    .feat-card .media .img{
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      background-size: cover !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
+    }
     .blog-grid{grid-template-columns:repeat(2,1fr)}
     .foot-grid{grid-template-columns:1fr 1fr;gap:28px}.foot-brand{grid-column:1/-1}
     .navlinks { display: none !important; }
