@@ -3,6 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  window.addEventListener('unhandledrejection', (event) => {
+    if (
+      event.reason &&
+      (String(event.reason?.message || event.reason).includes('WebSocket') ||
+       String(event.reason?.message || event.reason).includes('vite') ||
+       String(event.reason?.message || event.reason).includes('closed without opened'))
+    ) {
+      event.preventDefault();
+    }
+  });
+</script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -43,7 +55,10 @@
   /* Immediate LCP render for hero elements above the fold */
   .hero .reveal, .page-head .reveal { opacity: 1 !important; transform: none !important; }
   :root{
-    --orange:oklch(0.66 0.2 45);--orange-deep:oklch(0.6 0.2 42);
+    --orange:oklch(0.66 0.2 45);--orange-deep:oklch(0.58 0.2 42);
+    --orange-btn:oklch(0.50 0.22 40);
+    --orange-btn-hover:oklch(0.44 0.22 38);
+    --orange-text:oklch(0.46 0.22 40);
     --navy:oklch(0.31 0.07 262);--navy-soft:oklch(0.42 0.06 262);
     --ink:oklch(0.28 0.05 262);--ink-soft:oklch(0.35 0.05 262);
     --muted:oklch(0.42 0.04 262);--muted-2:oklch(0.48 0.03 262);
@@ -100,8 +115,8 @@
   .navlinks a:hover::after,.navlinks a.active::after{width:100%}
   .nav-right{display:flex;align-items:center;gap:16px}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;font-weight:600;font-size:.94rem;cursor:pointer;border:none;border-radius:999px;padding:14px 28px;transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .25s}
-  .btn-primary{background:var(--orange);color:#fff;box-shadow:0 12px 28px -12px oklch(0.66 0.2 45 / .7)}
-  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 34px -12px oklch(0.66 0.2 45 / .85);background:var(--orange-deep)}
+  .btn-primary{background:var(--orange-btn);color:#ffffff;box-shadow:0 12px 28px -12px oklch(0.50 0.22 40 / .7)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 34px -12px oklch(0.50 0.22 40 / .85);background:var(--orange-btn-hover)}
   .btn-ghost{background:transparent;color:var(--navy);border:1.5px solid var(--line)}
   .btn-ghost:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-2px)}
   .btn-white{background:#fff;color:var(--navy)}

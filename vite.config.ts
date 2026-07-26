@@ -2,7 +2,32 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import viteCompression from 'vite-plugin-compression';
 import path from 'path';
-import {defineConfig} from 'vite';
+import {defineConfig, Plugin} from 'vite';
+import {minify} from 'html-minifier-terser';
+
+function htmlMinifierPlugin(): Plugin {
+  return {
+    name: 'vite-plugin-html-minification',
+    enforce: 'post',
+    async transformIndexHtml(html: string) {
+      try {
+        return await minify(html, {
+          collapseWhitespace: true,
+          removeComments: true,
+          removeRedundantAttributes: true,
+          removeScriptTypeAttributes: true,
+          removeStyleLinkTypeAttributes: true,
+          useShortDoctype: true,
+          minifyCSS: true,
+          minifyJS: true,
+        });
+      } catch (err) {
+        console.warn('[HTML Minifier] Error during HTML minification:', err);
+        return html;
+      }
+    },
+  };
+}
 
 export default defineConfig(() => {
   return {
@@ -17,6 +42,7 @@ export default defineConfig(() => {
         algorithm: 'brotliCompress',
         ext: '.br',
       }),
+      htmlMinifierPlugin(),
     ],
     resolve: {
       alias: {
