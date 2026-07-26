@@ -56,19 +56,19 @@ const generateAndDownloadDoc = (type: string, filename: string) => {
       <style>
         body { font-family: 'Poppins', sans-serif; background: #fafafa; color: #1e1e24; margin: 0; padding: 40px; line-height: 1.6; }
         .container { max-width: 800px; margin: 0 auto; background: #ffffff; padding: 50px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); border: 1px solid #eee; }
-        .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #F26522; padding-bottom: 30px; }
-        .logo { font-size: 2.2rem; font-weight: 800; color: #F26522; text-decoration: none; display: inline-block; }
+        .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid var(--orange, #ff5d13); padding-bottom: 30px; }
+        .logo { font-size: 2.2rem; font-weight: 800; color: var(--orange, #ff5d13); text-decoration: none; display: inline-block; }
         .logo span { color: #1e1e24; }
         .tagline { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.2em; color: #666; margin-top: 5px; text-transform: uppercase; }
         h1 { color: #111; font-size: 2rem; margin-top: 30px; font-weight: 800; }
-        h2 { color: #F26522; font-size: 1.4rem; margin-top: 30px; border-left: 4px solid #F26522; padding-left: 15px; }
+        h2 { color: var(--orange, #ff5d13); font-size: 1.4rem; margin-top: 30px; border-left: 4px solid var(--orange, #ff5d13); padding-left: 15px; }
         p { color: #444; font-size: 1rem; margin-bottom: 20px; }
         .checklist-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0; }
-        .checkbox { width: 20px; height: 20px; border: 2px solid #F26522; border-radius: 4px; flex-shrink: 0; display: inline-block; cursor: pointer; }
+        .checkbox { width: 20px; height: 20px; border: 2px solid var(--orange, #ff6600); border-radius: 4px; flex-shrink: 0; display: inline-block; cursor: pointer; }
         .text { font-size: 1rem; color: #444; }
         .text strong { color: #111; }
-        .btn-print { background: #F26522; color: white; border: none; padding: 12px 24px; font-size: 1rem; border-radius: 30px; cursor: pointer; font-weight: 600; margin-bottom: 30px; display: inline-block; text-decoration: none; }
-        .btn-print:hover { background: #e05413; }
+        .btn-print { background: var(--orange-btn, #ff6600); color: white; border: none; padding: 12px 24px; font-size: 1rem; border-radius: 30px; cursor: pointer; font-weight: 600; margin-bottom: 30px; display: inline-block; text-decoration: none; }
+        .btn-print:hover { background: var(--orange-btn-hover, #e65c00); }
         @media print { .btn-print { display: none; } body { padding: 0; background: white; } .container { box-shadow: none; border: none; padding: 0; } }
       </style>
     </head>
@@ -154,7 +154,7 @@ const showFallbackNotice = (containerElement: HTMLElement, errorDetails: string)
 
   notice.innerHTML = `
     <div style="display: flex; align-items: flex-start; gap: 6px; margin-bottom: 6px;">
-      <span style="color: oklch(0.66 0.2 45); font-weight: bold; font-size: 1rem; line-height: 1;">⚠️</span>
+      <span style="color: var(--orange); font-weight: bold; font-size: 1rem; line-height: 1;">⚠️</span>
       <div style="font-weight: 600; color: var(--navy); font-size: 0.86rem;">Email dispatch pending key configuration</div>
     </div>
     <div style="color: var(--ink-soft); margin-bottom: 6px; line-height: 1.4;">
@@ -337,12 +337,12 @@ const injectExitIntentStyles = () => {
       align-items: center;
       gap: 6px;
       padding: 6px 14px;
-      background: oklch(0.66 0.2 45 / 0.1);
-      border: 1px solid oklch(0.66 0.2 45 / 0.25);
+      background: color-mix(in srgb, var(--orange) 10%, transparent);
+      border: 1px solid color-mix(in srgb, var(--orange) 25%, transparent);
       border-radius: 99px;
       font-size: 0.72rem;
       font-weight: 700;
-      color: var(--orange, oklch(0.66 0.2 45));
+      color: var(--orange);
       margin-bottom: 20px;
       text-transform: uppercase;
       letter-spacing: 0.06em;
@@ -383,7 +383,7 @@ const injectExitIntentStyles = () => {
     }
     .exit-intent-bullet:hover {
       transform: translateX(4px);
-      border-color: oklch(0.66 0.2 45 / 0.3);
+      border-color: color-mix(in srgb, var(--orange) 30%, transparent);
     }
     .exit-intent-bullet-icon {
       color: var(--orange, oklch(0.66 0.2 45));
@@ -454,14 +454,14 @@ const injectExitIntentStyles = () => {
     }
     .exit-intent-field input:focus {
       outline: none;
-      border-color: var(--orange, oklch(0.66 0.2 45));
-      box-shadow: 0 0 0 4px oklch(0.66 0.2 45 / 0.15);
+      border-color: var(--orange);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--orange) 15%, transparent);
       background: var(--card, #ffffff);
     }
     .exit-intent-submit {
       width: 100%;
       padding: 14px 28px;
-      background: var(--orange, oklch(0.66 0.2 45));
+      background: var(--orange-btn);
       color: #ffffff;
       border: none;
       border-radius: 12px;
@@ -473,12 +473,12 @@ const injectExitIntentStyles = () => {
       align-items: center;
       justify-content: center;
       gap: 10px;
-      box-shadow: 0 10px 24px -10px oklch(0.66 0.2 45 / 0.7);
+      box-shadow: 0 10px 24px -10px color-mix(in srgb, var(--orange-btn) 70%, transparent);
     }
     .exit-intent-submit:hover {
-      background: var(--orange-deep, oklch(0.6 0.2 42));
+      background: var(--orange-btn-hover);
       transform: translateY(-2px);
-      box-shadow: 0 14px 30px -10px oklch(0.66 0.2 45 / 0.85);
+      box-shadow: 0 14px 30px -10px color-mix(in srgb, var(--orange-btn) 85%, transparent);
     }
     .exit-intent-submit:active {
       transform: translateY(0);
@@ -548,24 +548,24 @@ const injectExitIntentStyles = () => {
       max-width: 440px;
     }
     .exit-intent-success-desc strong {
-      color: var(--orange, oklch(0.66 0.2 45));
+      color: var(--orange-text);
       font-weight: 600;
     }
     .exit-intent-success-btn {
       padding: 12px 30px;
-      background: var(--orange, oklch(0.66 0.2 45));
+      background: var(--orange-btn);
       color: #ffffff;
       border: none;
       border-radius: 12px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.25s ease;
-      box-shadow: 0 10px 24px -10px oklch(0.66 0.2 45 / 0.5);
+      box-shadow: 0 10px 24px -10px color-mix(in srgb, var(--orange-btn) 50%, transparent);
     }
     .exit-intent-success-btn:hover {
-      background: var(--orange-deep, oklch(0.6 0.2 42));
+      background: var(--orange-btn-hover);
       transform: translateY(-2px);
-      box-shadow: 0 14px 30px -10px oklch(0.66 0.2 45 / 0.75);
+      box-shadow: 0 14px 30px -10px color-mix(in srgb, var(--orange-btn) 75%, transparent);
     }
 
     /* Spinning animation for submit button loading */

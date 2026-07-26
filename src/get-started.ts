@@ -60,18 +60,18 @@ const generateAndDownloadDoc = (type: string, filename: string) => {
         <style>
           body { font-family: 'Poppins', sans-serif; background: #fafafa; color: #1e1e24; margin: 0; padding: 40px; line-height: 1.6; }
           .container { max-width: 800px; margin: 0 auto; background: #ffffff; padding: 50px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); border: 1px solid #eee; }
-          .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #F26522; padding-bottom: 30px; }
-          .logo { font-size: 2.2rem; font-weight: 800; color: #F26522; text-decoration: none; display: inline-block; }
+          .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid var(--orange, #ff6600); padding-bottom: 30px; }
+          .logo { font-size: 2.2rem; font-weight: 800; color: var(--orange, #ff6600); text-decoration: none; display: inline-block; }
           .logo span { color: #1e1e24; }
           .tagline { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.2em; color: #666; margin-top: 5px; text-transform: uppercase; }
           h1 { color: #111; font-size: 2rem; margin-top: 30px; font-weight: 800; }
-          h2 { color: #F26522; font-size: 1.4rem; margin-top: 30px; border-left: 4px solid #F26522; padding-left: 15px; }
+          h2 { color: var(--orange, #ff6600); font-size: 1.4rem; margin-top: 30px; border-left: 4px solid var(--orange, #ff6600); padding-left: 15px; }
           p { color: #444; font-size: 1rem; margin-bottom: 20px; }
           .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
           .card { background: #fafafa; padding: 20px; border-radius: 12px; border: 1px solid #eee; }
           .card h3 { margin-top: 0; color: #111; }
-          .btn-print { background: #F26522; color: white; border: none; padding: 12px 24px; font-size: 1rem; border-radius: 30px; cursor: pointer; font-weight: 600; margin-bottom: 30px; display: inline-block; text-decoration: none; }
-          .btn-print:hover { background: #e05413; }
+          .btn-print { background: var(--orange-btn, #ff6600); color: white; border: none; padding: 12px 24px; font-size: 1rem; border-radius: 30px; cursor: pointer; font-weight: 600; margin-bottom: 30px; display: inline-block; text-decoration: none; }
+          .btn-print:hover { background: var(--orange-btn-hover, #e65c00); }
           @media print { .btn-print { display: none; } body { padding: 0; background: white; } .container { box-shadow: none; border: none; padding: 0; } }
         </style>
       </head>
@@ -127,18 +127,18 @@ const generateAndDownloadDoc = (type: string, filename: string) => {
         <style>
           body { font-family: 'Poppins', sans-serif; background: #fafafa; color: #1e1e24; margin: 0; padding: 40px; line-height: 1.6; }
           .container { max-width: 800px; margin: 0 auto; background: #ffffff; padding: 50px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); border: 1px solid #eee; }
-          .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #F26522; padding-bottom: 30px; }
-          .logo { font-size: 2.2rem; font-weight: 800; color: #F26522; text-decoration: none; display: inline-block; }
+          .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid var(--orange, #ff6600); padding-bottom: 30px; }
+          .logo { font-size: 2.2rem; font-weight: 800; color: var(--orange, #ff6600); text-decoration: none; display: inline-block; }
           .logo span { color: #1e1e24; }
           .tagline { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.2em; color: #666; margin-top: 5px; text-transform: uppercase; }
           h1 { color: #111; font-size: 2rem; margin-top: 30px; font-weight: 800; }
-          h2 { color: #F26522; font-size: 1.4rem; margin-top: 30px; border-left: 4px solid #F26522; padding-left: 15px; }
+          h2 { color: var(--orange, #ff6600); font-size: 1.4rem; margin-top: 30px; border-left: 4px solid var(--orange, #ff6600); padding-left: 15px; }
           p { color: #444; font-size: 1rem; margin-bottom: 20px; }
           ul { padding-left: 20px; margin-bottom: 30px; }
           li { margin-bottom: 15px; font-size: 1rem; color: #444; }
           li strong { color: #111; }
-          .btn-print { background: #F26522; color: white; border: none; padding: 12px 24px; font-size: 1rem; border-radius: 30px; cursor: pointer; font-weight: 600; margin-bottom: 30px; display: inline-block; text-decoration: none; }
-          .btn-print:hover { background: #e05413; }
+          .btn-print { background: var(--orange-btn, #ff6600); color: white; border: none; padding: 12px 24px; font-size: 1rem; border-radius: 30px; cursor: pointer; font-weight: 600; margin-bottom: 30px; display: inline-block; text-decoration: none; }
+          .btn-print:hover { background: var(--orange-btn-hover, #e65c00); }
           @media print { .btn-print { display: none; } body { padding: 0; background: white; } .container { box-shadow: none; border: none; padding: 0; } }
         </style>
       </head>
@@ -181,19 +181,19 @@ const generateAndDownloadDoc = (type: string, filename: string) => {
         <style>
           body { font-family: 'Poppins', sans-serif; background: #fafafa; color: #1e1e24; margin: 0; padding: 40px; line-height: 1.6; }
           .container { max-width: 800px; margin: 0 auto; background: #ffffff; padding: 50px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); border: 1px solid #eee; }
-          .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #F26522; padding-bottom: 30px; }
-          .logo { font-size: 2.2rem; font-weight: 800; color: #F26522; text-decoration: none; display: inline-block; }
+          .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid var(--orange, #ff6600); padding-bottom: 30px; }
+          .logo { font-size: 2.2rem; font-weight: 800; color: var(--orange, #ff6600); text-decoration: none; display: inline-block; }
           .logo span { color: #1e1e24; }
           .tagline { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.2em; color: #666; margin-top: 5px; text-transform: uppercase; }
           h1 { color: #111; font-size: 2rem; margin-top: 30px; font-weight: 800; }
-          h2 { color: #F26522; font-size: 1.4rem; margin-top: 30px; border-left: 4px solid #F26522; padding-left: 15px; }
+          h2 { color: var(--orange, #ff6600); font-size: 1.4rem; margin-top: 30px; border-left: 4px solid var(--orange, #ff6600); padding-left: 15px; }
           p { color: #444; font-size: 1rem; margin-bottom: 20px; }
           .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
           .card { background: #fafafa; padding: 20px; border-radius: 12px; border: 1px solid #eee; }
           .card h3 { margin-top: 0; color: #111; }
-          .price { font-size: 1.8rem; font-weight: 800; color: #F26522; margin: 10px 0; }
-          .btn-print { background: #F26522; color: white; border: none; padding: 12px 24px; font-size: 1rem; border-radius: 30px; cursor: pointer; font-weight: 600; margin-bottom: 30px; display: inline-block; text-decoration: none; }
-          .btn-print:hover { background: #e05413; }
+          .price { font-size: 1.8rem; font-weight: 800; color: var(--orange, #ff6600); margin: 10px 0; }
+          .btn-print { background: var(--orange-btn, #ff6600); color: white; border: none; padding: 12px 24px; font-size: 1rem; border-radius: 30px; cursor: pointer; font-weight: 600; margin-bottom: 30px; display: inline-block; text-decoration: none; }
+          .btn-print:hover { background: var(--orange-btn-hover, #e65c00); }
           @media print { .btn-print { display: none; } body { padding: 0; background: white; } .container { box-shadow: none; border: none; padding: 0; } }
         </style>
       </head>
@@ -294,7 +294,7 @@ const showFallbackNotice = (formElement: HTMLElement, documentType: string, erro
 
   notice.innerHTML = `
     <div style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px;">
-      <span style="color: oklch(0.66 0.2 45); font-weight: bold; font-size: 1.1rem; line-height: 1;">⚠️</span>
+      <span style="color: var(--orange); font-weight: bold; font-size: 1.1rem; line-height: 1;">⚠️</span>
       <div style="font-weight: 600; color: var(--navy);">${title}</div>
     </div>
     <div style="color: var(--ink-soft); margin-bottom: 8px; line-height: 1.45;">

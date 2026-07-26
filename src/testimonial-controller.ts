@@ -53,7 +53,7 @@ function createTestimonialCardHTML(t: Testimonial): string {
 
   // Play overlay button for videos
   const playButtonHtml = isVideo ? `
-    <div class="play-btn" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 54px; height: 54px; border-radius: 50%; background: var(--orange); color: #fff; display: grid; place-items: center; border: 2px solid #fff; box-shadow: 0 8px 24px oklch(0.66 0.2 45 / 0.4); transition: all 0.3s var(--ease); z-index: 3; cursor: pointer;">
+    <div class="play-btn" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 54px; height: 54px; border-radius: 50%; background: var(--orange-btn); color: #fff; display: grid; place-items: center; border: 2px solid #fff; box-shadow: 0 8px 24px color-mix(in srgb, var(--orange-btn) 40%, transparent); transition: all 0.3s var(--ease); z-index: 3; cursor: pointer;">
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" class="lucide lucide-play">
         <polygon points="6 3 20 12 6 21 6 3"/>
       </svg>

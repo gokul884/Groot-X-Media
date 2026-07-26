@@ -53,11 +53,11 @@
   /* Immediate LCP render for hero elements above the fold */
   .hero .reveal, .page-head .reveal { opacity: 1 !important; transform: none !important; }
   :root{
-    --orange:oklch(0.66 0.2 45);
-    --orange-deep:oklch(0.58 0.2 42);
-    --orange-btn:oklch(0.50 0.22 40);
-    --orange-btn-hover:oklch(0.44 0.22 38);
-    --orange-text:oklch(0.46 0.22 40);
+    --orange:oklch(0.67 0.22 52);
+    --orange-deep:oklch(0.60 0.22 48);
+    --orange-btn:oklch(0.63 0.22 50);
+    --orange-btn-hover:oklch(0.56 0.22 46);
+    --orange-text:oklch(0.56 0.22 46);
     --navy:oklch(0.31 0.07 262);
     --navy-soft:oklch(0.42 0.06 262);
     --ink:oklch(0.28 0.05 262);
@@ -76,7 +76,7 @@
     --shadow:0 18px 50px -20px oklch(0.35 0.06 262 / .28);
     --header-bg:oklch(0.995 0.003 262 / .82);
     --footer-bg:oklch(0.985 0.005 262);
-    --logo-color: #ff5e2e;
+    --logo-color: var(--orange-btn);
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -91,7 +91,7 @@
   .float{animation:float 14s var(--ease) infinite alternate}
   @keyframes float{to{transform:translate(24px,-30px) scale(1.08)}}
 
-  .logo{display:flex;align-items:center;gap:11px;--logo-color:#ff5e2e}
+  .logo{display:flex;align-items:center;gap:11px;--logo-color:var(--orange-btn)}
 
   header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:var(--header-bg);border-bottom:1px solid transparent;transition:border-color .3s,box-shadow .3s,background .3s}
   header.nav.scrolled{border-color:var(--line);box-shadow:0 6px 24px -18px oklch(0.35 0.05 262 / .5)}
@@ -103,8 +103,8 @@
   .navlinks a:hover::after,.navlinks a.active::after{width:100%}
   .nav-right{display:flex;align-items:center;gap:16px}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;font-weight:600;font-size:.94rem;cursor:pointer;border:none;border-radius:999px;padding:14px 28px;transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .25s}
-  .btn-primary{background:var(--orange-btn);color:#ffffff;box-shadow:0 12px 28px -12px oklch(0.50 0.22 40 / .7)}
-  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 34px -12px oklch(0.50 0.22 40 / .85);background:var(--orange-btn-hover)}
+  .btn-primary{background:var(--orange-btn);color:#ffffff;box-shadow:0 12px 28px -12px color-mix(in srgb, var(--orange-btn) 70%, transparent)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 34px -12px color-mix(in srgb, var(--orange-btn) 85%, transparent);background:var(--orange-btn-hover)}
   .btn-ghost{background:transparent;color:var(--navy);border:1.5px solid var(--line)}
   .btn-ghost:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-2px)}
   /* Semi-transparent overlay behind the drawer with backdrop blur */
@@ -204,15 +204,15 @@
     transition: opacity 0.35s ease, transform 0.35s ease !important;
   }
   .mobile-drawer-links a.active {
-    color: #ff5e2e !important;
-    background: rgba(255, 94, 46, 0.15) !important;
-    border-left: 3px solid #ff5e2e !important;
+    color: var(--orange-text) !important;
+    background: color-mix(in srgb, var(--orange) 15%, transparent) !important;
+    border-left: 3px solid var(--orange) !important;
     font-weight: 700 !important;
     padding-left: 13px !important;
   }
   .mobile-drawer-links a:hover {
-    color: #ff5e2e !important;
-    background: rgba(255, 94, 46, 0.08) !important;
+    color: var(--orange-text) !important;
+    background: color-mix(in srgb, var(--orange) 8%, transparent) !important;
   }
 
   .mobile-drawer-cta {
@@ -481,7 +481,7 @@
   .post-meta span{display:flex;align-items:center;gap:5px}
   .post-body h3{font-size:1.08rem;line-height:1.35}
   .post-body h3 a{transition:color .2s}
-  .post-card:hover .post-body h3 a{color:var(--orange)}
+  .post-card:hover .post-body h3 a{color:var(--orange-text)}
   .post-body p{color:var(--muted);font-size:.87rem;margin-top:9px;flex:1}
   .post-more{margin-top:16px;display:inline-flex;align-items:center;gap:6px;color:var(--orange-text);font-weight:600;font-size:.86rem}
   .post-more i{transition:transform .25s var(--ease)}
@@ -799,7 +799,7 @@
     pointer-events: none;
     transform: translateY(15px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 14px oklch(0.66 0.2 45 / 0.4);
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--orange) 40%, transparent);
   }
   .back-to-top.visible {
     opacity: 1;
@@ -1092,7 +1092,7 @@
           </div>
           <h3><a href="blog-post.html?post=why-every-business-needs-digital">Why Every Business Needs Digital Marketing in 2026</a></h3>
           <p>Discover why an active, optimized digital footprint is no longer a luxury, but the single most critical driver of enterprise revenue and customer acquisition.</p>
-          <a href="blog-post.html?post=why-every-business-needs-digital" class="post-more">Read more about Why Every Business Needs Digital Marketing in 2026 <i data-lucide="arrow-right" width="15" height="15"></i></a>
+          <a href="blog-post.html?post=why-every-business-needs-digital" class="post-more" aria-label="Read More about Why Every Business Needs Digital Marketing in 2026">Read More <i data-lucide="arrow-right" width="15" height="15"></i></a>
         </div>
       </article>
       <article class="post-card" style="--i:1">
@@ -1107,7 +1107,7 @@
           </div>
           <h3><a href="blog-post.html?post=7-social-media-trends-to-define-growth">7 Social Media Trends to Define Growth in 2026</a></h3>
           <p>Short-form vertical video dominance, conversational commerce, micro-community hubs, and AI-assisted creation. The playbooks defining the new media paradigm.</p>
-          <a href="blog-post.html?post=7-social-media-trends-to-define-growth" class="post-more">Read more about 7 Social Media Trends to Define Growth in 2026 <i data-lucide="arrow-right" width="15" height="15"></i></a>
+          <a href="blog-post.html?post=7-social-media-trends-to-define-growth" class="post-more" aria-label="Read More about 7 Social Media Trends to Define Growth in 2026">Read More <i data-lucide="arrow-right" width="15" height="15"></i></a>
         </div>
       </article>
       <article class="post-card" style="--i:2">
@@ -1122,7 +1122,7 @@
           </div>
           <h3><a href="blog-post.html?post=building-marketing-funnel-that-actually">Building a Marketing Funnel That Actually Converts</a></h3>
           <p>Most funnels leak at the same three points. We break down the exact strategies, lead-qualification rules, and automated workflows that turn traffic into enterprise value.</p>
-          <a href="blog-post.html?post=building-marketing-funnel-that-actually" class="post-more">Read more about Building a Marketing Funnel That Actually Converts <i data-lucide="arrow-right" width="15" height="15"></i></a>
+          <a href="blog-post.html?post=building-marketing-funnel-that-actually" class="post-more" aria-label="Read More about Building a Marketing Funnel That Actually Converts">Read More <i data-lucide="arrow-right" width="15" height="15"></i></a>
         </div>
       </article>
     </div>

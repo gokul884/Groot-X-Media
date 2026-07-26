@@ -115,7 +115,7 @@ function renderHomepage(posts: BlogPost[]) {
           </div>
           <h3><a href="${postUrl}">${post.title}</a></h3>
           <p>${post.description || ""}</p>
-          <a href="${postUrl}" class="post-more">Read more about ${post.title} <i data-lucide="arrow-right" width="15" height="15"></i></a>
+          <a href="${postUrl}" class="post-more" aria-label="Read More about ${post.title}">Read More <i data-lucide="arrow-right" width="15" height="15"></i></a>
         </div>
       </article>
     `;
@@ -205,7 +205,7 @@ function renderBlogpage() {
               <span><i data-lucide="calendar" width="14" height="14"></i>${featuredPost.date}</span>
               <span><i data-lucide="clock" width="14" height="14"></i>${featuredPost.readTime}</span>
             </div>
-            <a href="${postUrl}" class="btn btn-primary">Read article <i data-lucide="arrow-right" width="16" height="16"></i></a>
+            <a href="${postUrl}" class="btn btn-primary">Read More <i data-lucide="arrow-right" width="16" height="16"></i></a>
           </div>
         </article>
       </div>
@@ -230,7 +230,7 @@ function renderBlogpage() {
           </div>
           <h3><a href="${postUrl}">${post.title}</a></h3>
           <p>${post.description || ""}</p>
-          <a href="${postUrl}" class="post-more">Read more about ${post.title} <i data-lucide="arrow-right" width="15" height="15"></i></a>
+          <a href="${postUrl}" class="post-more" aria-label="Read More about ${post.title}">Read More <i data-lucide="arrow-right" width="15" height="15"></i></a>
         </div>
       </article>
     `;
@@ -525,7 +525,7 @@ function renderFailureState(errorMsg: string, retryFn: () => void) {
   const isPostPage = !!document.querySelector(".art-wrap");
 
   const errorHtml = `
-    <div style="grid-column: 1 / -1; text-align: center; padding: 50px 24px; background: var(--card); border: 1px dashed oklch(0.66 0.2 45 / 0.3); border-radius: 20px; max-width: 600px; margin: 30px auto; width: calc(100% - 40px); box-shadow: var(--shadow-sm);">
+    <div style="grid-column: 1 / -1; text-align: center; padding: 50px 24px; background: var(--card); border: 1px dashed color-mix(in srgb, var(--orange) 30%, transparent); border-radius: 20px; max-width: 600px; margin: 30px auto; width: calc(100% - 40px); box-shadow: var(--shadow-sm);">
       <div style="background: oklch(0.95 0.03 55 / 0.15); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; color: var(--orange);">
         <i data-lucide="alert-circle" width="30" height="30"></i>
       </div>
