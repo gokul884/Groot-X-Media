@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -20,9 +22,7 @@
   document.addEventListener("DOMContentLoaded",()=>lucide.createIcons())
 </script>
 <!-- /skill:libraries -->
-<meta charset="UTF-8">
 <meta name="description" content="Groot X Media: Your trusted digital marketing partner. We drive real growth with data-driven SEO, PPC, and content strategies. Elevate your online presence today.">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Groot X Media — Your Growth Partner</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,9 +34,9 @@
     --navy:oklch(0.31 0.07 262);
     --navy-soft:oklch(0.42 0.06 262);
     --ink:oklch(0.28 0.05 262);
-    --ink-soft:oklch(0.4 0.04 262);
-    --muted:oklch(0.58 0.02 262);
-    --muted-2:oklch(0.66 0.015 262);
+    --ink-soft:oklch(0.35 0.05 262);
+    --muted:oklch(0.42 0.04 262);
+    --muted-2:oklch(0.48 0.03 262);
     --line:oklch(0.92 0.006 262);
     --bg:oklch(0.995 0.003 262);
     --card:oklch(1 0 0);
@@ -80,15 +80,17 @@
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 34px -12px oklch(0.66 0.2 45 / .85);background:var(--orange-deep)}
   .btn-ghost{background:transparent;color:var(--navy);border:1.5px solid var(--line)}
   .btn-ghost:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-2px)}
-  /* Semi-transparent overlay behind the drawer */
+  /* Semi-transparent overlay behind the drawer with backdrop blur */
   .drawer-overlay {
     position: fixed;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(16, 22, 42, 0.6);
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
     z-index: 98;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.35s ease;
   }
   .drawer-overlay.open {
     opacity: 1;
@@ -117,31 +119,35 @@
     outline-offset: 2px;
   }
 
-  /* Right-side sliding drawer with blur backdrop */
+  /* Right-side sliding drawer with blur backdrop & smooth internal scroll */
   .mobile-drawer {
     position: fixed;
     top: 0;
     right: 0;
-    width: 300px;
+    width: 320px;
     max-width: 85vw;
     height: 100vh;
-    background: rgba(16, 22, 42, 0.75);
-    backdrop-filter: blur(18px) saturate(140%);
-    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    height: 100dvh;
+    background: rgba(16, 22, 42, 0.82);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
     z-index: 99;
     display: flex;
     flex-direction: column;
-    padding: 100px 24px 40px;
+    padding: 90px 24px 32px;
     box-sizing: border-box;
     transform: translate3d(100%, 0, 0);
     opacity: 1;
     pointer-events: none;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform;
     overflow-y: auto;
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
     border-top: none;
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
+    box-shadow: -12px 0 36px rgba(0, 0, 0, 0.45);
   }
   .mobile-drawer.open {
     transform: translate3d(0, 0, 0);
@@ -154,6 +160,7 @@
     flex-direction: column;
     gap: 8px;
     margin-bottom: 24px;
+    flex-shrink: 0;
   }
   .mobile-drawer-links a {
     font-size: 1.15rem;
@@ -604,15 +611,58 @@
       width: 28px !important;
       height: 28px !important;
     }
+    footer {
+      padding: 48px 0 28px !important;
+    }
     .foot-grid { 
-      grid-template-columns: 1fr !important; 
-      gap: 32px !important;
+      grid-template-columns: repeat(2, 1fr) !important; 
+      gap: 28px 18px !important;
     }
     .foot-brand {
-      grid-column: 1/-1 !important;
+      grid-column: 1 / -1 !important;
+      margin-bottom: 8px !important;
+      padding-bottom: 20px !important;
+      border-bottom: 1px solid var(--line) !important;
+    }
+    .foot-brand p {
+      max-width: 100% !important;
+      font-size: 0.88rem !important;
+      line-height: 1.5 !important;
+      margin-top: 12px !important;
+    }
+    .foot-col:nth-child(5) {
+      grid-column: 1 / -1 !important;
+      margin-top: 4px !important;
+      padding-top: 18px !important;
+      border-top: 1px solid var(--line) !important;
+    }
+    .foot-col h5 {
+      font-size: 0.95rem !important;
+      font-weight: 700 !important;
       margin-bottom: 12px !important;
+      color: var(--navy) !important;
     }
     .logo .word .tag { display: none !important; }
+    /* Mobile Touch target accessibility optimization (min 48x48px) */
+    .socials a, .mobile-drawer a, .mobile-menu-toggle, .post-more, .foot-col a {
+      min-height: 48px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .mobile-menu-toggle, .socials a {
+      min-width: 48px;
+      min-height: 48px;
+      justify-content: center;
+    }
+    .foot-bottom {
+      flex-direction: column !important;
+      text-align: center !important;
+      gap: 10px !important;
+      margin-top: 32px !important;
+      padding-top: 20px !important;
+    }
   }
   @media(max-width:480px){
     .wrap { padding: 0 16px !important; }
@@ -769,48 +819,48 @@
       <div class="carousel-track">
         <div class="carousel-group">
           <div class="logo-item" data-tooltip="Luxewalls — Premium Wallpaper & Luxury Wallcoverings" title="Luxewalls">
-            <img src="/luxewalls.webp" alt="Luxewalls Logo" loading="lazy" />
+            <img src="/luxewalls.webp" alt="Luxewalls Logo" loading="lazy" width="160" height="60" />
           </div>
           <div class="logo-item" data-tooltip="Bestcars_cbe — Quality Certified Pre-Owned Automotive" title="Bestcars_cbe">
-            <img src="/bestcars.webp" alt="Bestcars_cbe Logo" loading="lazy" />
+            <img src="/bestcars.webp" alt="Bestcars_cbe Logo" loading="lazy" width="160" height="60" />
           </div>
           <div class="logo-item" data-tooltip="LinoCars — Premium Performance Vehicle Services" title="LinoCars">
-            <img src="/lingocars.webp" alt="LinoCars Logo" loading="lazy" />
+            <img src="/lingocars.webp" alt="LinoCars Logo" loading="lazy" width="160" height="60" />
           </div>
           <div class="logo-item" data-tooltip="OnTime — Expert Handyman, Clockwork Services" title="OnTime">
-            <img src="/On_Time.webp" alt="OnTime Logo" loading="lazy" />
+            <img src="/On_Time.webp" alt="OnTime Logo" loading="lazy" width="160" height="60" />
           </div>
           <div class="logo-item" data-tooltip="Aria — Creative Design Agency" title="Aria">
-            <img src="/aria.webp" alt="Aria Logo" loading="lazy" />
+            <img src="/aria.webp" alt="Aria Logo" loading="lazy" width="160" height="60" />
           </div>
           <div class="logo-item" data-tooltip="Car Castle — Trusted Car Dealership" title="Car Castle">
-            <img src="/carcastle.webp" alt="Car Castle Logo" loading="lazy" />
+            <img src="/carcastle.webp" alt="Car Castle Logo" loading="lazy" width="160" height="60" />
           </div>
           <div class="logo-item" data-tooltip="Decathlon — Quality Sports Gear" title="Decathlon">
-            <img src="/decathlon.webp" alt="Decathlon Logo" loading="lazy" />
+            <img src="/decathlon.webp" alt="Decathlon Logo" loading="lazy" width="160" height="60" />
           </div>
         </div>
         <div class="carousel-group">
           <div class="logo-item" data-tooltip="Luxewalls — Premium Wallpaper & Luxury Wallcoverings" title="Luxewalls">
-            <img src="/luxewalls.webp" alt="Luxewalls Logo" loading="lazy" />
+            <img src="/luxewalls.webp" alt="Luxewalls Logo" loading="lazy" width="160" height="60" />
           </div>
           <div class="logo-item" data-tooltip="Bestcars_cbe — Quality Certified Pre-Owned Automotive" title="Bestcars_cbe">
-            <img src="/bestcars.webp" alt="Bestcars_cbe Logo" loading="lazy" />
+            <img src="/bestcars.webp" alt="Bestcars_cbe Logo" loading="lazy" width="160" height="60" />
           </div>
           <div class="logo-item" data-tooltip="LinoCars — Premium Performance Vehicle Services" title="LinoCars">
-            <img src="/lingocars.webp" alt="LinoCars Logo" loading="lazy" />
+            <img src="/lingocars.webp" alt="LinoCars Logo" loading="lazy" width="160" height="60" />
           </div>
           <div class="logo-item" data-tooltip="OnTime — Expert Handyman, Clockwork Services" title="OnTime">
-            <img src="/On_Time.webp" alt="OnTime Logo" loading="lazy" />
+            <img src="/On_Time.webp" alt="OnTime Logo" loading="lazy" width="160" height="60" />
           </div>
           <div class="logo-item" data-tooltip="Aria — Creative Design Agency" title="Aria">
-            <img src="/aria.webp" alt="Aria Logo" loading="lazy" />
+            <img src="/aria.webp" alt="Aria Logo" loading="lazy" width="160" height="60" />
           </div>
           <div class="logo-item" data-tooltip="Car Castle — Trusted Car Dealership" title="Car Castle">
-            <img src="/carcastle.webp" alt="Car Castle Logo" loading="lazy" />
+            <img src="/carcastle.webp" alt="Car Castle Logo" loading="lazy" width="160" height="60" />
           </div>
           <div class="logo-item" data-tooltip="Decathlon — Quality Sports Gear" title="Decathlon">
-            <img src="/decathlon.webp" alt="Decathlon Logo" loading="lazy" />
+            <img src="/decathlon.webp" alt="Decathlon Logo" loading="lazy" width="160" height="60" />
           </div>
         </div>
       </div>

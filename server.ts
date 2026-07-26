@@ -1,4 +1,5 @@
 import express from "express";
+import compression from "compression";
 import path from "path";
 import dotenv from "dotenv";
 import fs from "fs";
@@ -68,12 +69,18 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
+  // Compress all responses (gzip/brotli)
+  app.use(compression());
+
   // Enable JSON request bodies with a higher limit for base64 image fallbacks
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
   // Serve static assets from public directory immediately so they load reliably
-  app.use(express.static(path.join(process.cwd(), "public")));
+  app.use(express.static(path.join(process.cwd(), "public"), {
+    maxAge: '1y',
+    etag: true,
+  }));
 
   let useFirestore = true;
   let lastFirestoreCheck = 0;
@@ -245,7 +252,10 @@ async function startServer() {
   } else {
     console.log("[Server] Serving production static assets from /dist...");
     const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
+    app.use(express.static(distPath, {
+      maxAge: '1y',
+      etag: true,
+    }));
     app.get("*", (req, res) => {
       res.sendFile(path.join(distPath, "index.html"));
     });
