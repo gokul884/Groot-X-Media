@@ -75,8 +75,9 @@ async function startServer() {
   // Enable JSON request bodies with a higher limit for base64 image fallbacks
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
-  // 301 Permanent Redirects for legacy .html URLs
+  // 301 Permanent Redirects for legacy .html URLs and legacy /blogs URL
   app.get([
+    '/blogs',
     '/index.html',
     '/pricing.html',
     '/blog.html',
@@ -86,16 +87,17 @@ async function startServer() {
     '/design-system.html',
     '/blog-post.html'
   ], (req, res) => {
+    if (req.path === '/blogs' || req.path === '/blogs.html' || req.path === '/blog.html') {
+      return res.redirect(301, '/blog' + (req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : ''));
+    }
     let cleanPath = req.path.replace(/\.html$/i, '');
     if (cleanPath === '/index') cleanPath = '/';
-    if (cleanPath === '/blog' || cleanPath === '/blogs') cleanPath = '/blogs';
     res.redirect(301, cleanPath + (req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : ''));
   });
 
   // Clean URL mapping middleware
   const cleanUrlMap: Record<string, string> = {
     '/pricing': '/pricing.html',
-    '/blogs': '/blog.html',
     '/blog': '/blog.html',
     '/testimonials': '/testimonials.html',
     '/contact': '/contact.html',
@@ -331,7 +333,7 @@ async function startServer() {
       let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
       xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
       
-      const staticPages = ["", "/blogs", "/pricing", "/testimonials", "/contact"];
+      const staticPages = ["", "/blog", "/pricing", "/testimonials", "/contact"];
       for (const p of staticPages) {
         xml += `  <url><loc>${baseUrl}${p}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
       }

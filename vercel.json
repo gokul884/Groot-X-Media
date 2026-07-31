@@ -1,8 +1,17 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/blogs", "destination": "/blog", "permanent": true },
+    { "source": "/blogs.html", "destination": "/blog", "permanent": true },
+    { "source": "/blog.html", "destination": "/blog", "permanent": true },
+    { "source": "/pricing.html", "destination": "/pricing", "permanent": true },
+    { "source": "/testimonials.html", "destination": "/testimonials", "permanent": true },
+    { "source": "/contact.html", "destination": "/contact", "permanent": true },
+    { "source": "/design-system.html", "destination": "/design-system", "permanent": true },
+    { "source": "/blog-post.html", "destination": "/blog-post", "permanent": true }
+  ],
   "rewrites": [
-    { "source": "/blogs", "destination": "/blog.html" },
     { "source": "/blog", "destination": "/blog.html" },
     { "source": "/pricing", "destination": "/pricing.html" },
     { "source": "/testimonials", "destination": "/testimonials.html" },
