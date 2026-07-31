@@ -75,6 +75,41 @@ async function startServer() {
   // Enable JSON request bodies with a higher limit for base64 image fallbacks
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
+  // 301 Permanent Redirects for legacy .html URLs
+  app.get([
+    '/index.html',
+    '/pricing.html',
+    '/blog.html',
+    '/blogs.html',
+    '/testimonials.html',
+    '/contact.html',
+    '/design-system.html',
+    '/blog-post.html'
+  ], (req, res) => {
+    let cleanPath = req.path.replace(/\.html$/i, '');
+    if (cleanPath === '/index') cleanPath = '/';
+    if (cleanPath === '/blog' || cleanPath === '/blogs') cleanPath = '/blogs';
+    res.redirect(301, cleanPath + (req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : ''));
+  });
+
+  // Clean URL mapping middleware
+  const cleanUrlMap: Record<string, string> = {
+    '/pricing': '/pricing.html',
+    '/blogs': '/blog.html',
+    '/blog': '/blog.html',
+    '/testimonials': '/testimonials.html',
+    '/contact': '/contact.html',
+    '/design-system': '/design-system.html',
+    '/blog-post': '/blog-post.html',
+  };
+
+  app.use((req, res, next) => {
+    if (cleanUrlMap[req.path]) {
+      req.url = cleanUrlMap[req.path] + (req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '');
+    }
+    next();
+  });
+
 
   // Serve static assets from public directory immediately with efficient caching headers
   app.use(express.static(path.join(process.cwd(), "public"), {
@@ -174,6 +209,145 @@ async function startServer() {
    * API Route: Trigger Automated Backend Sync
    * Secure endpoint that checks for ?secret=CRON_SECRET and syncs posts with Firestore.
    */
+  
+  /**
+   * API Route: Get single post by ID or slug
+   */
+  app.get("/api/post/:slug", async (req, res) => {
+    const slug = req.params.slug;
+    try {
+      const docRef = collection(db, "blogs");
+      const snapshot = await getDocs(docRef);
+      let foundPost = null;
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        if (doc.id === slug || data.id === slug) {
+          foundPost = { ...data, id: data.id || doc.id };
+        }
+      });
+      if (foundPost) {
+        return res.json(foundPost);
+      }
+      // Fallback check from Blogger feed directly
+      const response = await fetch("https://grootxmediainsight.blogspot.com/feeds/posts/default?alt=json&max-results=50");
+      if (response.ok) {
+        const data = await response.json();
+        const entries = data.feed?.entry || [];
+        for (const entry of entries) {
+          const formatted = formatBloggerPost(entry);
+          if (formatted.id === slug) {
+            return res.json(formatted);
+          }
+        }
+      }
+      return res.status(404).json({ error: "Post not found" });
+    } catch (err: any) {
+      return res.status(500).json({ error: err.message || "Failed to fetch post" });
+    }
+  });
+
+  /**
+   * API Route: Get latest N posts
+   */
+  app.get("/api/latest", async (req, res) => {
+    try {
+      const limit = parseInt(String(req.query.limit || "3")) || 3;
+      const blogsCol = collection(db, "blogs");
+      const snapshot = await getDocs(blogsCol);
+      const posts = [];
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        posts.push({ ...data, id: data.id || doc.id });
+      });
+      posts.sort((a, b) => new Date(b.published || b.date).getTime() - new Date(a.published || a.date).getTime());
+      return res.json(posts.slice(0, limit));
+    } catch (err: any) {
+      return res.status(500).json({ error: err.message || "Failed to fetch latest posts" });
+    }
+  });
+
+  /**
+   * API Route: Get posts by category
+   */
+  app.get("/api/category/:category", async (req, res) => {
+    const cat = req.params.category.toLowerCase();
+    try {
+      const blogsCol = collection(db, "blogs");
+      const snapshot = await getDocs(blogsCol);
+      const posts = [];
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        const category = (data.category || "").toLowerCase();
+        const labels = (data.labels || []).map((l: string) => l.toLowerCase());
+        if (category === cat || labels.includes(cat)) {
+          posts.push({ ...data, id: data.id || doc.id });
+        }
+      });
+      return res.json(posts);
+    } catch (err: any) {
+      return res.status(500).json({ error: err.message || "Failed to fetch category posts" });
+    }
+  });
+
+  /**
+   * API Route: Search posts
+   */
+  app.get("/api/search", async (req, res) => {
+    const query = (String(req.query.q || "")).toString().toLowerCase();
+    if (!query) return res.json([]);
+    try {
+      const blogsCol = collection(db, "blogs");
+      const snapshot = await getDocs(blogsCol);
+      const posts = [];
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        const title = (data.title || "").toLowerCase();
+        const desc = (data.description || "").toLowerCase();
+        const content = (data.content || "").toLowerCase();
+        if (title.includes(query) || desc.includes(query) || content.includes(query)) {
+          posts.push({ ...data, id: data.id || doc.id });
+        }
+      });
+      return res.json(posts);
+    } catch (err: any) {
+      return res.status(500).json({ error: err.message || "Search failed" });
+    }
+  });
+
+  /**
+   * API Route: XML Sitemap generation for SEO indexing
+   */
+  app.get("/api/sitemap", async (req, res) => {
+    try {
+      const blogsCol = collection(db, "blogs");
+      const snapshot = await getDocs(blogsCol);
+      const posts = [];
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        posts.push({ ...data, id: data.id || doc.id });
+      });
+
+      const baseUrl = "https://ais-dev-j4ymoxfd3uepp7wojsbwrg-18535937309.asia-southeast1.run.app";
+      let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+      xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+      
+      const staticPages = ["", "/blogs", "/pricing", "/testimonials", "/contact"];
+      for (const p of staticPages) {
+        xml += `  <url><loc>${baseUrl}${p}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
+      }
+
+      for (const post of posts) {
+        xml += `  <url><loc>${baseUrl}/blog-post?id=${post.id}</loc><lastmod>${post.updated || post.published || new Date().toISOString()}</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>\n`;
+      }
+      xml += '</urlset>';
+
+      res.header('Content-Type', 'application/xml');
+      return res.send(xml);
+    } catch (err: any) {
+      return res.status(500).send("Error generating sitemap");
+    }
+  });
+
   app.get("/api/sync-blog", async (req, res) => {
     const providedSecret = req.query.secret;
     const expectedSecret = process.env.CRON_SECRET || "grootx_sync_token_88df92a";

@@ -245,7 +245,7 @@
 <h2><span class="n">8.</span> Pricing reference</h2>
 <table>
 <tr><th>Plan</th><th>Monthly</th><th>Position</th></tr>
-<tr><td>Starter</td><td>₹16,999</td><td>Entry, ghost button</td></tr>
+<tr><td>Starter</td><td>₹17,999</td><td>Entry, ghost button</td></tr>
 <tr><td>Professional</td><td>₹24,999</td><td><strong>Most Popular</strong>, navy fill, white button</td></tr>
 <tr><td>Premium</td><td>₹39,999</td><td>Full-service, ghost button</td></tr>
 </table>
@@ -275,5 +275,20 @@
 <li>Use em dashes in copy.</li>
 </ul>
 </div>
+
+<script>
+window.addEventListener('pageshow', (e) => {
+  document.body.classList.remove('page-exit');
+  document.body.style.opacity = '1';
+});
+window.addEventListener('popstate', () => {
+  document.body.classList.remove('page-exit');
+  document.body.style.opacity = '1';
+});
+window.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.remove('page-exit');
+  document.body.style.opacity = '1';
+});
+</script>
 </body>
 </html>
