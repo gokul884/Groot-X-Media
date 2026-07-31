@@ -100,7 +100,7 @@ function renderHomepage(posts: BlogPost[]) {
   let htmlContent = "";
 
   postsToRender.forEach((post, index) => {
-    const postUrl = `blog-post.html?post=${post.id}`;
+    const postUrl = `/blog-post?post=${post.id}`;
 
     htmlContent += `
       <article class="post-card" style="--i:${index}">
@@ -182,7 +182,7 @@ function renderBlogpage() {
 
   // Render Featured Card
   if (featuredPost && featuredSection) {
-    const postUrl = `blog-post.html?post=${featuredPost.id}`;
+    const postUrl = `/blog-post?post=${featuredPost.id}`;
     const authorName = featuredPost.author || "Groot X Team";
     const authorAvatarHtml = `<div style="width: 100%; height: 100%; border-radius: 50%; background: var(--orange); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 600;">${authorName.charAt(0).toUpperCase()}</div>`;
 
@@ -215,7 +215,7 @@ function renderBlogpage() {
   // Render Grid Cards
   let gridHtml = "";
   gridPosts.forEach((post, index) => {
-    const postUrl = `blog-post.html?post=${post.id}`;
+    const postUrl = `/blog-post?post=${post.id}`;
 
     gridHtml += `
       <article class="post-card" style="--i:${index}">
@@ -254,7 +254,7 @@ function renderBlogpage() {
 function renderBlogPostDetail(posts: BlogPost[]) {
   // Extract slug/ID from query parameter ?post=xxx
   const urlParams = new URLSearchParams(window.location.search);
-  const postParam = urlParams.get("post") || "";
+  const postParam = (urlParams.get("post") || urlParams.get("id")) || "";
   
   // Find matching article (either by slug ID or originalUrl match as fallback)
   let post = posts.find(
