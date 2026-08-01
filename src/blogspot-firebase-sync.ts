@@ -12,7 +12,7 @@ import { initializeApp, getApps, getApp } from "firebase/app";
 import { getFirestore, initializeFirestore, doc, getDoc, setDoc, collection, getDocs, setLogLevel } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { BlogPost } from "./types";
-import { extractExcerpt, calculateReadTime, formatDisplayDate, extractSlugFromUrl, getHighResImage, restructureContentToStandard } from "./lib/blogger";
+import { extractExcerpt, calculateReadTime, formatDisplayDate, extractSlugFromUrl, getHighResImage, restructureContentToStandard, stripFeaturedImageFromContent, generateAndValidateSeo } from "./lib/blogger";
 
 // Ensure Firebase is initialized (Replace with your custom config if needed)
 const firebaseConfig = {
@@ -282,15 +282,29 @@ export async function runBlogspotToFirebaseSync(): Promise<{
 
       console.log(`[Sync Pipeline] Syncing new/updated post: "${title}" (ID: ${postId})`);
 
-      // --- Step 4: Determine high-res original cover image and use original content body ---
+      // --- Step 4: Determine high-res original cover image and clean content body ---
       const coverImageUrl = getHighResImage(entry, contentHtmlRaw);
-      const contentHtmlRewritten = contentHtmlRaw;
+      const contentHtmlRewritten = stripFeaturedImageFromContent(contentHtmlRaw);
+      const excerpt = extractExcerpt(contentHtmlRewritten, 150);
+
+      const seoData = generateAndValidateSeo({
+        id: postId,
+        title,
+        description: excerpt,
+        content: contentHtmlRewritten,
+        category: labels[0] || "General",
+        image: coverImageUrl,
+        labels,
+        published: publishedAt,
+        updated: updatedAt,
+        author: authorName
+      });
 
       // --- Step 5: Save post document in "blogs" Firestore collection ---
       const blogPostData: BlogPost = {
         id: postId,
         title,
-        description: extractExcerpt(contentHtmlRewritten, 150),
+        description: excerpt,
         content: contentHtmlRewritten,
         category: labels[0] || "General",
         date: formatDisplayDate(publishedAt),
@@ -300,7 +314,8 @@ export async function runBlogspotToFirebaseSync(): Promise<{
         originalUrl: sourceUrl,
         published: publishedAt,
         updated: updatedAt,
-        labels
+        labels,
+        seo: seoData
       };
 
       try {

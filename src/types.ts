@@ -1,3 +1,20 @@
+export interface BlogPostSeo {
+  seoTitle: string; // 50-60 characters
+  metaDescription: string; // 140-160 characters
+  slug: string; // 3-8 words, lowercase hyphenated
+  canonicalUrl: string; // e.g. https://grootxmedia.com/blog-post?post=slug
+  ogTitle: string;
+  ogDescription: string;
+  ogImage: string;
+  ogUrl: string;
+  twitterTitle: string;
+  twitterDescription: string;
+  twitterImage: string;
+  altText: string;
+  imageTitle: string;
+  keywords: string[];
+}
+
 export interface BlogPost {
   id: string; // Unique slug identifier
   title: string;
@@ -12,4 +29,5 @@ export interface BlogPost {
   published?: string; // Original published date ISO string
   updated?: string; // Original updated date ISO string
   labels?: string[]; // All labels/tags
+  seo?: BlogPostSeo; // Auto-generated SEO Metadata
 }

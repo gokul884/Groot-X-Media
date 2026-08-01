@@ -1,5 +1,5 @@
 import { BlogPost } from "./types";
-import { fetchBlogPosts } from "./lib/blogger";
+import { fetchBlogPosts, stripFeaturedImageFromContent, sanitizeImageUrl } from "./lib/blogger";
 
 // --- Global State ---
 let allPosts: BlogPost[] = [];
@@ -41,7 +41,11 @@ function initLazyLoading() {
     lazyImages.forEach((img) => {
       const src = img.getAttribute("data-src");
       if (src) {
-        (img as HTMLElement).style.backgroundImage = `url('${src}')`;
+        const el = img as HTMLElement;
+        el.style.backgroundImage = `url('${src}')`;
+        el.style.backgroundRepeat = "no-repeat";
+        el.style.backgroundSize = "cover";
+        el.style.backgroundPosition = "center";
         img.classList.add("loaded");
       }
     });
@@ -58,10 +62,17 @@ function initLazyLoading() {
           preloader.src = src;
           preloader.onload = () => {
             img.style.backgroundImage = `url('${src}')`;
+            img.style.backgroundRepeat = "no-repeat";
+            img.style.backgroundSize = "cover";
+            img.style.backgroundPosition = "center";
             img.classList.add("loaded");
           };
           preloader.onerror = () => {
-            img.style.backgroundImage = `url('${src}')`;
+            const fallbackSrc = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80";
+            img.style.backgroundImage = `url('${fallbackSrc}')`;
+            img.style.backgroundRepeat = "no-repeat";
+            img.style.backgroundSize = "cover";
+            img.style.backgroundPosition = "center";
             img.classList.add("loaded");
           };
         }
@@ -276,8 +287,105 @@ function renderBlogPostDetail(posts: BlogPost[]) {
 
   console.log(`[Blog Detail] Successfully loaded post: "${post.title}"`);
 
-  // 1. Update Document Title
-  document.title = `${post.title} — Groot X Media`;
+  // 1. Update Document Title & SEO Meta Tags
+  const seo = post.seo;
+  const seoTitle = seo?.seoTitle || `${post.title} | Groot X Media`;
+  const metaDesc = seo?.metaDescription || post.description;
+  const canonicalUrl = seo?.canonicalUrl || `https://grootxmedia.com/blog-post?post=${post.id}`;
+  const coverImageUrl = post.image || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80";
+
+  document.title = seoTitle;
+
+  const setMeta = (attr: string, key: string, content: string) => {
+    let el = document.querySelector(`meta[${attr}="${key}"]`);
+    if (!el) {
+      el = document.createElement("meta");
+      el.setAttribute(attr, key);
+      document.head.appendChild(el);
+    }
+    el.setAttribute("content", content);
+  };
+
+  const setLink = (rel: string, href: string) => {
+    let el = document.querySelector(`link[rel="${rel}"]`);
+    if (!el) {
+      el = document.createElement("link");
+      el.setAttribute("rel", rel);
+      document.head.appendChild(el);
+    }
+    el.setAttribute("href", href);
+  };
+
+  setMeta("name", "description", metaDesc);
+  setMeta("name", "robots", "index, follow");
+  setLink("canonical", canonicalUrl);
+
+  // Open Graph
+  setMeta("property", "og:type", "article");
+  setMeta("property", "og:title", seoTitle);
+  setMeta("property", "og:description", metaDesc);
+  setMeta("property", "og:image", coverImageUrl);
+  setMeta("property", "og:url", canonicalUrl);
+
+  // Twitter
+  setMeta("name", "twitter:card", "summary_large_image");
+  setMeta("name", "twitter:title", seoTitle);
+  setMeta("name", "twitter:description", metaDesc);
+  setMeta("name", "twitter:image", coverImageUrl);
+
+  // Article JSON-LD Schema
+  let articleSchemaScript = document.getElementById("jsonld-article-schema");
+  if (!articleSchemaScript) {
+    articleSchemaScript = document.createElement("script");
+    articleSchemaScript.id = "jsonld-article-schema";
+    articleSchemaScript.setAttribute("type", "application/ld+json");
+    document.head.appendChild(articleSchemaScript);
+  }
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": canonicalUrl
+    },
+    "headline": seoTitle,
+    "description": metaDesc,
+    "image": [coverImageUrl],
+    "datePublished": post.published || new Date().toISOString(),
+    "dateModified": post.updated || post.published || new Date().toISOString(),
+    "author": {
+      "@type": "Person",
+      "name": post.author || "Groot X Team"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Groot X Media",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://grootxmedia.com/logo_head.png"
+      }
+    }
+  };
+  articleSchemaScript.textContent = JSON.stringify(articleSchema, null, 2);
+
+  // Breadcrumb JSON-LD Schema
+  let breadcrumbSchemaScript = document.getElementById("jsonld-breadcrumb-schema");
+  if (!breadcrumbSchemaScript) {
+    breadcrumbSchemaScript = document.createElement("script");
+    breadcrumbSchemaScript.id = "jsonld-breadcrumb-schema";
+    breadcrumbSchemaScript.setAttribute("type", "application/ld+json");
+    document.head.appendChild(breadcrumbSchemaScript);
+  }
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://grootxmedia.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://grootxmedia.com/blog" },
+      { "@type": "ListItem", "position": 3, "name": post.title, "item": canonicalUrl }
+    ]
+  };
+  breadcrumbSchemaScript.textContent = JSON.stringify(breadcrumbSchema, null, 2);
 
   // 2. Update Breadcrumbs & Category Badge
   const crumbsSpan = document.querySelector(".crumbs span");
@@ -361,25 +469,31 @@ function renderBlogPostDetail(posts: BlogPost[]) {
     });
   }
 
-  // 4. Update Cover Image
+  // 4. Update Cover Image (single img element, no background-image tiling)
   const coverImg = document.querySelector(".cover .img") as HTMLElement;
   if (coverImg) {
     coverImg.classList.remove("skeleton-card");
-    coverImg.innerHTML = "";
-    coverImg.style.backgroundImage = `url('${post.image}')`;
+    coverImg.style.backgroundImage = "none";
+    coverImg.style.backgroundRepeat = "no-repeat";
+    coverImg.style.backgroundSize = "cover";
+    coverImg.style.backgroundPosition = "center";
+    const coverUrl = sanitizeImageUrl(post.image);
+    const fallbackUrl = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80";
+    coverImg.innerHTML = `<img src="${coverUrl}" alt="${post.title}" onerror="this.onerror=null; this.src='${fallbackUrl}';" style="width: 100%; height: 100%; object-fit: cover; border-radius: 24px; display: block;" />`;
   }
 
   // 5. Populate Main Article HTML Body
   const articleContainer = document.querySelector(".article");
   if (articleContainer) {
-    // Inject the raw HTML content, completely preserving rich layouts, lists, and quotes
-    // Parse the content and strip the first <img> element (image label) from the top of the blog content
+    // Strip featured image from post content using robust helper
+    const cleanedHtml = stripFeaturedImageFromContent(post.content);
+
     const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = post.content.replace(/&nbsp;/gi, " ");
+    tempDiv.innerHTML = cleanedHtml.replace(/&nbsp;/gi, " ");
     
-    // Specifically remove leading &nbsp; or literal space from content
-    if (tempDiv.firstChild && tempDiv.firstChild.textContent?.trim() === "") {
-        tempDiv.firstChild.remove();
+    // Specifically remove leading &nbsp; or literal empty nodes from content
+    while (tempDiv.firstElementChild && tempDiv.firstElementChild.textContent?.trim() === "" && !tempDiv.firstElementChild.querySelector("img, iframe, video")) {
+        tempDiv.firstElementChild.remove();
     }
     
     // Apply consistent line spacing to all paragraphs
@@ -388,15 +502,35 @@ function renderBlogPostDetail(posts: BlogPost[]) {
       p.style.marginBottom = '20px';
     });
 
+    // Secondary safety check: ensure no residual featured image is left at the top of the body
     const firstImg = tempDiv.querySelector("img");
     if (firstImg) {
-      const parent = firstImg.parentElement;
-      if (parent && (parent.tagName === "P" || parent.tagName === "DIV") && parent.textContent?.trim() === "") {
-        parent.remove();
-      } else {
-        firstImg.remove();
+      let isAtTop = true;
+      let prev = firstImg.previousSibling;
+      while (prev) {
+        if (prev.textContent && prev.textContent.trim() !== "") {
+          isAtTop = false;
+          break;
+        }
+        prev = prev.previousSibling;
+      }
+      
+      if (isAtTop) {
+        let nodeToRemove: Element = firstImg;
+        let current: Element | null = firstImg.parentElement;
+        while (current && current !== tempDiv) {
+          const textWithoutImg = current.textContent?.replace(/\s+/g, "") || "";
+          if (textWithoutImg === "") {
+            nodeToRemove = current;
+            current = current.parentElement;
+          } else {
+            break;
+          }
+        }
+        nodeToRemove.remove();
       }
     }
+
     articleContainer.innerHTML = tempDiv.innerHTML;
     articleContainer.classList.add("in");
 
@@ -406,7 +540,7 @@ function renderBlogPostDetail(posts: BlogPost[]) {
       tagsContainer.className = "tags";
       post.labels.forEach((tag) => {
         const tagLink = document.createElement("a");
-        tagLink.href = "blog.html";
+        tagLink.href = "/blog";
         tagLink.textContent = `#${tag}`;
         tagsContainer.appendChild(tagLink);
       });
