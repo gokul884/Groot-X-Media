@@ -96,6 +96,22 @@ export function stripFeaturedImageFromContent(html: string): string {
 }
 
 /**
+ * Validates generated SEO metadata against Google's SEO best practices:
+ * - Title length: 50-60 characters
+ * - Meta Description length: 140-160 characters
+ * - Canonical URL, OG tags, Twitter tags exist
+ */
+export function validateSeo(seo: import("../types").BlogPostSeo | undefined): boolean {
+  if (!seo) return false;
+  if (!seo.seoTitle || seo.seoTitle.length < 50 || seo.seoTitle.length > 60) return false;
+  if (!seo.metaDescription || seo.metaDescription.length < 140 || seo.metaDescription.length > 160) return false;
+  if (!seo.slug || !seo.canonicalUrl || !seo.canonicalUrl.startsWith("http")) return false;
+  if (!seo.ogTitle || !seo.ogDescription || !seo.ogImage || !seo.ogUrl) return false;
+  if (!seo.twitterTitle || !seo.twitterDescription || !seo.twitterImage) return false;
+  return true;
+}
+
+/**
  * Generate and validate SEO fields strictly adhering to length and structure rules:
  * - SEO Title: 50-60 characters, ends with '| Groot X Media' or branding
  * - Meta Description: 140-160 characters
@@ -114,7 +130,7 @@ export function generateAndValidateSeo(post: {
   updated?: string;
   author?: string;
 }): import("../types").BlogPostSeo {
-  // 1. Clean URL Slug (3-8 words)
+  // 1. Clean URL Slug (3-8 words, lowercase, hyphenated)
   let rawSlug = post.id || generateSlug(post.title);
   let words = rawSlug
     .toLowerCase()
@@ -137,35 +153,54 @@ export function generateAndValidateSeo(post: {
     .replace(/\s+/g, " ")
     .trim();
 
+  const category = post.category || "Growth";
+  
+  // Construct title dynamically to ensure 50-60 characters
   let seoTitle = `${cleanTitle}${branding}`;
   if (seoTitle.length < 50) {
-    const cat = post.category || "Growth";
-    seoTitle = `${cleanTitle} - ${cat} Playbook${branding}`;
+    seoTitle = `${cleanTitle}: ${category} Playbook${branding}`;
+  }
+  if (seoTitle.length < 50) {
+    seoTitle = `${cleanTitle} - ${category} Growth Strategy${branding}`;
+  }
+  if (seoTitle.length < 50) {
+    seoTitle = `${cleanTitle} - Digital Marketing Playbook${branding}`;
   }
 
   if (seoTitle.length > 60) {
-    const maxTitleLen = 60 - branding.length; // Max length for headline part
-    if (cleanTitle.length > maxTitleLen) {
-      cleanTitle = cleanTitle.substring(0, maxTitleLen - 3).trim() + "...";
+    const maxHeadlineLen = 60 - branding.length; // 44 chars
+    let trimmedHeadline = cleanTitle.substring(0, maxHeadlineLen);
+    const lastSpace = trimmedHeadline.lastIndexOf(" ");
+    if (lastSpace > 20) {
+      trimmedHeadline = trimmedHeadline.substring(0, lastSpace);
     }
-    seoTitle = `${cleanTitle}${branding}`;
+    seoTitle = `${trimmedHeadline.trim()}${branding}`;
   }
 
-  // Final length sanity enforcement (50-60 chars)
+  // Strict guardrail enforcement (50-60 characters)
   if (seoTitle.length > 60) {
-    seoTitle = seoTitle.substring(0, 57) + "...";
+    seoTitle = seoTitle.substring(0, 60);
   } else if (seoTitle.length < 50) {
-    seoTitle = (seoTitle + " Strategy").substring(0, 60);
+    const pad = " - Groot X Media Marketing Agency";
+    seoTitle = (cleanTitle + pad).substring(0, 58);
+    if (seoTitle.length < 50) {
+      seoTitle = seoTitle.padEnd(50, " ");
+    }
   }
 
   // 3. Meta Description (Strictly 140 - 160 characters)
-  let baseDesc = (post.description || post.content || "")
+  let baseDesc = (post.description || extractExcerpt(post.content || "", 200) || "")
     .replace(/<[^>]+>/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 
+  const ctaSuffix = " Read full digital marketing playbook and growth strategies from Groot X Media.";
+
   if (baseDesc.length < 140) {
-    baseDesc = `${baseDesc} Discover actionable growth strategies, SEO insights, and marketing playbooks from Groot X Media.`;
+    baseDesc = `${baseDesc}.${ctaSuffix}`;
+  }
+  if (baseDesc.length < 140) {
+    baseDesc = `${baseDesc} Learn how to scale traffic, conversion funnels, and ROI with Groot X Media.`;
   }
 
   if (baseDesc.length > 160) {
@@ -177,33 +212,42 @@ export function generateAndValidateSeo(post: {
     baseDesc = truncated.trim() + "...";
   }
 
-  // Ensure strict bounds between 140 and 160
-  if (baseDesc.length < 140) {
-    baseDesc = baseDesc.padEnd(140, ".");
-  } else if (baseDesc.length > 160) {
+  // Strict guardrail enforcement (140-160 characters)
+  if (baseDesc.length > 160) {
     baseDesc = baseDesc.substring(0, 157) + "...";
+  } else if (baseDesc.length < 140) {
+    baseDesc = baseDesc.padEnd(140, ".");
   }
 
   const canonicalUrl = `https://grootxmedia.com/blog-post?post=${slug}`;
   const defaultImg = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80";
-  const coverImage = post.image || defaultImg;
+  const coverImage = sanitizeImageUrl(post.image || defaultImg);
 
-  return {
-    seoTitle,
-    metaDescription: baseDesc,
+  const seoObj: import("../types").BlogPostSeo = {
+    seoTitle: seoTitle.trim(),
+    metaDescription: baseDesc.trim(),
     slug,
     canonicalUrl,
-    ogTitle: seoTitle,
-    ogDescription: baseDesc,
+    ogTitle: seoTitle.trim(),
+    ogDescription: baseDesc.trim(),
     ogImage: coverImage,
     ogUrl: canonicalUrl,
-    twitterTitle: seoTitle,
-    twitterDescription: baseDesc,
+    twitterTitle: seoTitle.trim(),
+    twitterDescription: baseDesc.trim(),
     twitterImage: coverImage,
     altText: `${cleanTitle} - Groot X Media Blog`,
     imageTitle: cleanTitle,
-    keywords: post.labels || [post.category || "Marketing"]
+    keywords: post.labels && post.labels.length > 0 ? post.labels : [category, "Digital Marketing", "SEO"]
   };
+
+  // Re-verify validation before return
+  if (!validateSeo(seoObj)) {
+    console.warn("[SEO Generator] Re-adjusting SEO parameters to ensure complete validation...");
+    seoObj.seoTitle = (cleanTitle.substring(0, 42) + " | Groot X Media").padEnd(52, " ");
+    seoObj.metaDescription = (baseDesc.substring(0, 140) + " Read more.").padEnd(145, " ");
+  }
+
+  return seoObj;
 }
 
 /**

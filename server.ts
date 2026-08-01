@@ -6,7 +6,9 @@ import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import { collection, getDocs } from "firebase/firestore";
 import { db, runBlogspotToFirebaseSync } from "./src/blogspot-firebase-sync";
-import { formatBloggerPost } from "./src/lib/blogger";
+import { formatBloggerPost, generateAndValidateSeo, validateSeo, sanitizeImageUrl } from "./src/lib/blogger";
+import { generateSitemapXml } from "./src/lib/sitemap";
+import { BlogPost } from "./src/types";
 
 // Load environment variables
 dotenv.config();
@@ -317,36 +319,40 @@ async function startServer() {
   });
 
   /**
-   * API Route: XML Sitemap generation for SEO indexing
+   * Dynamic XML Sitemap Route (serves /sitemap.xml and /api/sitemap)
    */
-  app.get("/api/sitemap", async (req, res) => {
+  app.get(["/sitemap.xml", "/api/sitemap"], async (req, res) => {
     try {
-      const blogsCol = collection(db, "blogs");
-      const snapshot = await getDocs(blogsCol);
-      const posts = [];
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        posts.push({ ...data, id: data.id || doc.id });
-      });
+      const host = req.get("host");
+      const protocol = req.protocol;
+      const requestDomain = host ? `${protocol}://${host}` : undefined;
+      const { xml } = await generateSitemapXml({ writeToFile: true, domain: requestDomain });
 
-      const baseUrl = "https://ais-dev-j4ymoxfd3uepp7wojsbwrg-18535937309.asia-southeast1.run.app";
-      let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
-      xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
-      
-      const staticPages = ["", "/blog", "/pricing", "/testimonials", "/contact"];
-      for (const p of staticPages) {
-        xml += `  <url><loc>${baseUrl}${p}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
-      }
-
-      for (const post of posts) {
-        xml += `  <url><loc>${baseUrl}/blog-post?id=${post.id}</loc><lastmod>${post.updated || post.published || new Date().toISOString()}</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>\n`;
-      }
-      xml += '</urlset>';
-
-      res.header('Content-Type', 'application/xml');
+      res.header("Content-Type", "application/xml; charset=utf-8");
+      res.header("Cache-Control", "public, max-age=3600, s-maxage=3600");
       return res.send(xml);
     } catch (err: any) {
-      return res.status(500).send("Error generating sitemap");
+      console.error("[Sitemap Route Error]", err);
+      return res.status(500).send("<?xml version=\"1.0\" encoding=\"UTF-8\"?><error>Error generating sitemap</error>");
+    }
+  });
+
+  /**
+   * On-demand Sitemap Update Trigger (/api/update-sitemap)
+   */
+  app.all("/api/update-sitemap", async (req, res) => {
+    try {
+      const { totalUrls } = await generateSitemapXml({ writeToFile: true });
+      return res.json({
+        success: true,
+        message: "Sitemap updated and synchronized successfully.",
+        totalUrls,
+        updatedAt: new Date().toISOString(),
+        sitemapUrl: "https://grootxmedia.com/sitemap.xml"
+      });
+    } catch (err: any) {
+      console.error("[Sitemap Update Error]", err);
+      return res.status(500).json({ success: false, error: err.message || "Failed to update sitemap" });
     }
   });
 
@@ -363,9 +369,21 @@ async function startServer() {
     try {
       const result = await runBlogspotToFirebaseSync();
       console.log(`[API Sync] Synchronization complete. Fetched: ${result.totalFetched}, Synced: ${result.syncedCount}, Failed: ${result.failedCount}`);
+
+      // Auto-update sitemap after sync
+      let sitemapTotal = 0;
+      try {
+        const sitemapResult = await generateSitemapXml({ writeToFile: true });
+        sitemapTotal = sitemapResult.totalUrls;
+        console.log(`[API Sync] Sitemap automatically updated with ${sitemapTotal} URLs.`);
+      } catch (sitemapErr) {
+        console.warn("[API Sync] Sitemap auto-update warning:", sitemapErr);
+      }
+
       return res.json({
         success: true,
         message: "Synchronization completed successfully.",
+        sitemapTotalUrls: sitemapTotal,
         ...result,
       });
     } catch (syncError: any) {
@@ -424,6 +442,167 @@ async function startServer() {
     return res.json(DEFAULT_TESTIMONIALS);
   });
 
+  /**
+   * SSR Dynamic HTML route for blog posts
+   * Handles /blog-post, /blog-post.html, /blogs/:slug, and /blog/:slug
+   * Injects pre-rendered title, meta description, OG tags, Twitter cards, and JSON-LD schema
+   */
+  app.get(["/blog-post", "/blog-post.html", "/blogs/:slug", "/blog/:slug"], async (req, res, next) => {
+    const postSlug = String(req.params.slug || req.query.post || req.query.id || "").trim();
+    const blogPostHtmlPath = path.join(process.cwd(), process.env.NODE_ENV === "production" ? "dist" : "", "blog-post.html");
+    
+    let html = "";
+    try {
+      html = fs.readFileSync(blogPostHtmlPath, "utf-8");
+    } catch (e) {
+      return next(); // Fallback to Vite or static middleware
+    }
+
+    if (!postSlug) {
+      return res.send(html);
+    }
+
+    try {
+      let foundPost: BlogPost | null = null;
+
+      // 1. Search Firestore
+      try {
+        const docRef = collection(db, "blogs");
+        const snapshot = await getDocs(docRef);
+        snapshot.forEach((doc) => {
+          const data = doc.data() as BlogPost;
+          if (doc.id === postSlug || data.id === postSlug || data.seo?.slug === postSlug) {
+            foundPost = { ...data, id: data.id || doc.id };
+          }
+        });
+      } catch (err) {
+        console.warn("[SSR Route] Firestore read error:", err);
+      }
+
+      // 2. Fallback check from Blogger feed
+      if (!foundPost) {
+        try {
+          const response = await fetch("https://grootxmediainsight.blogspot.com/feeds/posts/default?alt=json&max-results=50");
+          if (response.ok) {
+            const data = await response.json();
+            const entries = data.feed?.entry || [];
+            for (const entry of entries) {
+              const formatted = formatBloggerPost(entry);
+              if (formatted.id === postSlug || formatted.seo?.slug === postSlug) {
+                foundPost = formatted;
+                break;
+              }
+            }
+          }
+        } catch (fetchErr) {
+          console.warn("[SSR Route] Blogger feed fallback error:", fetchErr);
+        }
+      }
+
+      if (foundPost) {
+        // Ensure valid SEO metadata
+        const seo = (foundPost.seo && validateSeo(foundPost.seo)) ? foundPost.seo : generateAndValidateSeo(foundPost);
+        const coverImg = sanitizeImageUrl(foundPost.image);
+        const imageType = coverImg.endsWith(".png") ? "image/png" : "image/jpeg";
+
+        // Replace Title
+        html = html.replace(/<title>.*?<\/title>/gi, `<title>${seo.seoTitle}</title>`);
+        
+        // Replace Meta Description
+        if (html.includes('name="description"')) {
+          html = html.replace(/<meta\s+name="description"\s+content="[^"]*">/gi, `<meta name="description" content="${seo.metaDescription}">`);
+        } else {
+          html = html.replace("</head>", `<meta name="description" content="${seo.metaDescription}">\n</head>`);
+        }
+
+        // Canonical URL
+        if (html.includes('rel="canonical"')) {
+          html = html.replace(/<link\s+rel="canonical"\s+href="[^"]*">/gi, `<link rel="canonical" href="${seo.canonicalUrl}">`);
+        } else {
+          html = html.replace("</head>", `<link rel="canonical" href="${seo.canonicalUrl}">\n</head>`);
+        }
+
+        // Complete OG and Twitter tags for WhatsApp, LinkedIn, Facebook, Discord, Twitter/X, Slack, MS Teams
+        const ogAndTwitterMeta = `
+<!-- Open Graph / Facebook / WhatsApp / LinkedIn / Slack -->
+<meta property="og:site_name" content="Groot X Media">
+<meta property="og:type" content="article">
+<meta property="og:url" content="${seo.canonicalUrl}">
+<meta property="og:title" content="${seo.ogTitle}">
+<meta property="og:description" content="${seo.ogDescription}">
+<meta property="og:image" content="${coverImg}">
+<meta property="og:image:secure_url" content="${coverImg}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="${imageType}">
+<meta property="og:image:alt" content="${seo.altText || seo.ogTitle}">
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@GrootXMedia">
+<meta name="twitter:creator" content="@GrootXMedia">
+<meta name="twitter:url" content="${seo.canonicalUrl}">
+<meta name="twitter:title" content="${seo.twitterTitle}">
+<meta name="twitter:description" content="${seo.twitterDescription}">
+<meta name="twitter:image" content="${coverImg}">
+`;
+        html = html.replace("</head>", `${ogAndTwitterMeta}\n</head>`);
+
+        // Article & Breadcrumb JSON-LD
+        const articleSchema = {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": seo.canonicalUrl
+          },
+          "headline": seo.seoTitle,
+          "description": seo.metaDescription,
+          "image": [coverImg],
+          "datePublished": foundPost.published || new Date().toISOString(),
+          "dateModified": foundPost.updated || foundPost.published || new Date().toISOString(),
+          "author": {
+            "@type": "Person",
+            "name": foundPost.author || "Groot X Team"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "Groot X Media",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://grootxmedia.com/logo_head.png"
+            }
+          }
+        };
+
+        const breadcrumbSchema = {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://grootxmedia.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://grootxmedia.com/blog" },
+            { "@type": "ListItem", "position": 3, "name": foundPost.title, "item": seo.canonicalUrl }
+          ]
+        };
+
+        const schemasHtml = `
+<script type="application/ld+json" id="jsonld-article-schema">
+${JSON.stringify(articleSchema, null, 2)}
+</script>
+<script type="application/ld+json" id="jsonld-breadcrumb-schema">
+${JSON.stringify(breadcrumbSchema, null, 2)}
+</script>
+`;
+        html = html.replace("</head>", `${schemasHtml}\n</head>`);
+      }
+
+      return res.send(html);
+    } catch (err) {
+      console.error("[SSR Route Error]", err);
+      return res.send(html);
+    }
+  });
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     console.log("[Server] Mounting Vite middleware in DEVELOPMENT mode...");
@@ -453,6 +632,9 @@ async function startServer() {
 
   app.listen(PORT, "0.0.0.0", () => {
     console.log(`[Server] Express server running on http://localhost:${PORT}`);
+    generateSitemapXml({ writeToFile: true })
+      .then((res) => console.log(`[Server Boot] Initial sitemap generated with ${res.totalUrls} URLs.`))
+      .catch((err) => console.warn("[Server Boot] Initial sitemap generation warning:", err));
   });
 }
 
