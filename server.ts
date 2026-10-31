@@ -122,6 +122,9 @@ async function startServer() {
     setHeaders: (res, filePath) => {
       if (filePath.endsWith('.html')) {
         res.setHeader('Cache-Control', 'no-cache');
+      } else if (filePath.endsWith('.webg')) {
+        res.setHeader('Content-Type', 'image/webp');
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
       } else if (filePath.match(/\.(png|jpg|jpeg|webp|gif|svg|ico|woff|woff2|ttf|otf|css|js)$/i)) {
         res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
       }
@@ -132,121 +135,102 @@ async function startServer() {
   let lastFirestoreCheck = 0;
   const FIRESTORE_RETRY_INTERVAL = 5 * 60 * 1000; // Retry after 5 minutes
 
+  let cachedPosts: BlogPost[] = [];
+  let lastPostsFetch = 0;
+  const POSTS_CACHE_TTL = 30 * 1000; // 30s cache
+
   /**
-   * API Route: Get all blog posts
-   * Fast, reliable proxy that reads directly from Firestore, falling back to direct Blogger API if needed.
+   * Resilient Post Fetcher
+   * Reads from Firestore when accessible, gracefully falling back to Blogger API without crashing or emitting error traces.
    */
-  app.get("/api/posts", async (req, res) => {
+  async function getOrFetchPosts(): Promise<BlogPost[]> {
     const now = Date.now();
+    if (cachedPosts.length > 0 && (now - lastPostsFetch < POSTS_CACHE_TTL)) {
+      return cachedPosts;
+    }
+
     const shouldTryFirestore = useFirestore || (now - lastFirestoreCheck > FIRESTORE_RETRY_INTERVAL);
 
     if (shouldTryFirestore) {
       try {
-        console.log("[API Proxy] Fetching posts from Firestore...");
         const blogsCol = collection(db, "blogs");
         const snapshot = await getDocs(blogsCol);
-        const posts: any[] = [];
+        const posts: BlogPost[] = [];
         
         snapshot.forEach((doc) => {
-          const data = doc.data();
+          const data = doc.data() as BlogPost;
           posts.push({
             ...data,
-            id: data.id || doc.id // Ensure correct mapping of Firestore document ID to post content fields
+            id: data.id || doc.id
           });
         });
 
         if (posts.length > 0) {
-          // Sort posts by original published date descending
           posts.sort((a, b) => new Date(b.published || b.date).getTime() - new Date(a.published || a.date).getTime());
-          console.log(`[API Proxy] Successfully returned ${posts.length} posts from Firestore.`);
           useFirestore = true;
-          return res.json(posts);
+          cachedPosts = posts;
+          lastPostsFetch = now;
+          return posts;
         }
-        
-        console.log("[API Proxy] No posts found in Firestore. Triggering auto-sync and fetching direct fallback from Blogger...");
-        
-        // Trigger auto-sync
-        try {
-          await runBlogspotToFirebaseSync();
-        } catch (syncErr: any) {
-          console.error("[API Proxy] Auto-sync failed:", syncErr.message || syncErr);
-        }
-        
-        throw new Error("No posts in Firestore");
       } catch (error: any) {
-        const errMsg = error.message || String(error);
+        const errMsg = error?.message || String(error);
         const isPermissionError = errMsg.toLowerCase().includes("permission") || errMsg.toLowerCase().includes("insufficient");
 
         if (isPermissionError) {
           useFirestore = false;
           lastFirestoreCheck = now;
-          console.info("[API Proxy] Firestore access is locked or unconfigured on custom project. Defaulting to resilient direct Blogger feed proxy.");
-          try {
-            handleFirestoreError(error, OperationType.LIST, "blogs");
-          } catch (nestedErr) {
-            console.log("[API Proxy] Caught throw from handleFirestoreError, proceeding to Blogger fallback.");
-          }
+          console.info("[API Proxy] Firestore database access restricted. Defaulting to Blogger API fallback.");
         } else {
-          console.warn("[API Proxy] Firestore fetch failed, pulling directly from Blogger feed as fallback:", errMsg);
+          console.info("[API Proxy] Firestore read unavailable, defaulting to Blogger API fallback:", errMsg);
         }
       }
     }
 
     // Direct Blogger Fallback Proxy
     try {
-      console.log("[API Proxy] Proxying Blogger feed directly...");
       const response = await fetch("https://grootxmediainsight.blogspot.com/feeds/posts/default?alt=json&max-results=50");
-      if (!response.ok) {
-        throw new Error(`Blogger returned status ${response.status}`);
+      if (response.ok) {
+        const data: any = await response.json();
+        const entries = data.feed?.entry || [];
+        const posts: BlogPost[] = entries.map((entry: any) => formatBloggerPost(entry));
+        posts.sort((a, b) => new Date(b.published || b.date).getTime() - new Date(a.published || a.date).getTime());
+        cachedPosts = posts;
+        lastPostsFetch = now;
+        return posts;
       }
-      const data: any = await response.json();
-      const entries = data.feed?.entry || [];
-      const posts = entries.map((entry: any) => formatBloggerPost(entry));
-      return res.json(posts);
     } catch (fallbackError: any) {
-      console.error("[API Proxy] All fallback channels failed:", fallbackError.message || fallbackError);
-      return res.status(502).json({ error: "Failed to load posts from all channels." });
+      console.warn("[API Proxy] Blogger feed fallback fetch notice:", fallbackError?.message || fallbackError);
+    }
+
+    return cachedPosts;
+  }
+
+  /**
+   * API Route: Get all blog posts
+   */
+  app.get("/api/posts", async (req, res) => {
+    try {
+      const posts = await getOrFetchPosts();
+      return res.json(posts);
+    } catch (err: any) {
+      return res.status(500).json({ error: "Failed to retrieve blog posts." });
     }
   });
 
-  /**
-   * API Route: Trigger Automated Backend Sync
-   * Secure endpoint that checks for ?secret=CRON_SECRET and syncs posts with Firestore.
-   */
-  
   /**
    * API Route: Get single post by ID or slug
    */
   app.get("/api/post/:slug", async (req, res) => {
     const slug = req.params.slug;
     try {
-      const docRef = collection(db, "blogs");
-      const snapshot = await getDocs(docRef);
-      let foundPost = null;
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        if (doc.id === slug || data.id === slug) {
-          foundPost = { ...data, id: data.id || doc.id };
-        }
-      });
+      const posts = await getOrFetchPosts();
+      const foundPost = posts.find(p => p.id === slug || p.seo?.slug === slug);
       if (foundPost) {
         return res.json(foundPost);
       }
-      // Fallback check from Blogger feed directly
-      const response = await fetch("https://grootxmediainsight.blogspot.com/feeds/posts/default?alt=json&max-results=50");
-      if (response.ok) {
-        const data = await response.json();
-        const entries = data.feed?.entry || [];
-        for (const entry of entries) {
-          const formatted = formatBloggerPost(entry);
-          if (formatted.id === slug) {
-            return res.json(formatted);
-          }
-        }
-      }
       return res.status(404).json({ error: "Post not found" });
     } catch (err: any) {
-      return res.status(500).json({ error: err.message || "Failed to fetch post" });
+      return res.status(500).json({ error: err?.message || "Failed to fetch post" });
     }
   });
 
@@ -256,17 +240,10 @@ async function startServer() {
   app.get("/api/latest", async (req, res) => {
     try {
       const limit = parseInt(String(req.query.limit || "3")) || 3;
-      const blogsCol = collection(db, "blogs");
-      const snapshot = await getDocs(blogsCol);
-      const posts = [];
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        posts.push({ ...data, id: data.id || doc.id });
-      });
-      posts.sort((a, b) => new Date(b.published || b.date).getTime() - new Date(a.published || a.date).getTime());
+      const posts = await getOrFetchPosts();
       return res.json(posts.slice(0, limit));
     } catch (err: any) {
-      return res.status(500).json({ error: err.message || "Failed to fetch latest posts" });
+      return res.status(500).json({ error: err?.message || "Failed to fetch latest posts" });
     }
   });
 
@@ -276,20 +253,15 @@ async function startServer() {
   app.get("/api/category/:category", async (req, res) => {
     const cat = req.params.category.toLowerCase();
     try {
-      const blogsCol = collection(db, "blogs");
-      const snapshot = await getDocs(blogsCol);
-      const posts = [];
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        const category = (data.category || "").toLowerCase();
-        const labels = (data.labels || []).map((l: string) => l.toLowerCase());
-        if (category === cat || labels.includes(cat)) {
-          posts.push({ ...data, id: data.id || doc.id });
-        }
+      const posts = await getOrFetchPosts();
+      const filtered = posts.filter(p => {
+        const category = (p.category || "").toLowerCase();
+        const labels = (p.labels || []).map((l: string) => l.toLowerCase());
+        return category === cat || labels.includes(cat);
       });
-      return res.json(posts);
+      return res.json(filtered);
     } catch (err: any) {
-      return res.status(500).json({ error: err.message || "Failed to fetch category posts" });
+      return res.status(500).json({ error: err?.message || "Failed to fetch category posts" });
     }
   });
 
@@ -300,21 +272,16 @@ async function startServer() {
     const query = (String(req.query.q || "")).toString().toLowerCase();
     if (!query) return res.json([]);
     try {
-      const blogsCol = collection(db, "blogs");
-      const snapshot = await getDocs(blogsCol);
-      const posts = [];
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        const title = (data.title || "").toLowerCase();
-        const desc = (data.description || "").toLowerCase();
-        const content = (data.content || "").toLowerCase();
-        if (title.includes(query) || desc.includes(query) || content.includes(query)) {
-          posts.push({ ...data, id: data.id || doc.id });
-        }
+      const posts = await getOrFetchPosts();
+      const results = posts.filter(p => {
+        const title = (p.title || "").toLowerCase();
+        const desc = (p.description || "").toLowerCase();
+        const content = (p.content || "").toLowerCase();
+        return title.includes(query) || desc.includes(query) || content.includes(query);
       });
-      return res.json(posts);
+      return res.json(results);
     } catch (err: any) {
-      return res.status(500).json({ error: err.message || "Search failed" });
+      return res.status(500).json({ error: err?.message || "Search failed" });
     }
   });
 
@@ -463,41 +430,8 @@ async function startServer() {
     }
 
     try {
-      let foundPost: BlogPost | null = null;
-
-      // 1. Search Firestore
-      try {
-        const docRef = collection(db, "blogs");
-        const snapshot = await getDocs(docRef);
-        snapshot.forEach((doc) => {
-          const data = doc.data() as BlogPost;
-          if (doc.id === postSlug || data.id === postSlug || data.seo?.slug === postSlug) {
-            foundPost = { ...data, id: data.id || doc.id };
-          }
-        });
-      } catch (err) {
-        console.warn("[SSR Route] Firestore read error:", err);
-      }
-
-      // 2. Fallback check from Blogger feed
-      if (!foundPost) {
-        try {
-          const response = await fetch("https://grootxmediainsight.blogspot.com/feeds/posts/default?alt=json&max-results=50");
-          if (response.ok) {
-            const data = await response.json();
-            const entries = data.feed?.entry || [];
-            for (const entry of entries) {
-              const formatted = formatBloggerPost(entry);
-              if (formatted.id === postSlug || formatted.seo?.slug === postSlug) {
-                foundPost = formatted;
-                break;
-              }
-            }
-          }
-        } catch (fetchErr) {
-          console.warn("[SSR Route] Blogger feed fallback error:", fetchErr);
-        }
-      }
+      const posts = await getOrFetchPosts();
+      const foundPost = posts.find(p => p.id === postSlug || p.seo?.slug === postSlug) || null;
 
       if (foundPost) {
         // Ensure valid SEO metadata

@@ -42,7 +42,7 @@ export async function generateSitemapXml(options: { writeToFile?: boolean; domai
 
   let blogPosts: BlogPost[] = [];
 
-  // 1. Fetch posts from Firestore
+  // 1. Fetch posts from Firestore if available
   try {
     const docRef = collection(db, "blogs");
     const snapshot = await getDocs(docRef);
@@ -50,22 +50,28 @@ export async function generateSitemapXml(options: { writeToFile?: boolean; domai
       const data = doc.data() as BlogPost;
       blogPosts.push({ ...data, id: data.id || doc.id });
     });
-  } catch (err) {
-    console.warn("[Sitemap Engine] Firestore fetch error:", err);
+  } catch (err: any) {
+    const errMsg = err?.message || String(err);
+    const isPerm = errMsg.toLowerCase().includes("permission") || errMsg.toLowerCase().includes("insufficient");
+    if (isPerm) {
+      console.info("[Sitemap Engine] Firestore database access restricted. Using direct Blogger feed as source.");
+    } else {
+      console.info("[Sitemap Engine] Firestore read skipped, using Blogger feed:", errMsg);
+    }
   }
 
-  // 2. Fallback: Fetch directly from Blogger API if Firestore is empty
+  // 2. Fallback: Fetch directly from Blogger API if Firestore is empty or restricted
   if (blogPosts.length === 0) {
     try {
-      console.log("[Sitemap Engine] Fetching posts from Blogger fallback...");
+      console.info("[Sitemap Engine] Fetching posts from Blogger feed...");
       const response = await fetch("https://grootxmediainsight.blogspot.com/feeds/posts/default?alt=json&max-results=100");
       if (response.ok) {
         const data = await response.json();
         const entries = data.feed?.entry || [];
         blogPosts = entries.map(formatBloggerPost);
       }
-    } catch (bloggerErr) {
-      console.error("[Sitemap Engine] Blogger fallback fetch error:", bloggerErr);
+    } catch (bloggerErr: any) {
+      console.warn("[Sitemap Engine] Blogger fallback fetch notice:", bloggerErr?.message || bloggerErr);
     }
   }
 
